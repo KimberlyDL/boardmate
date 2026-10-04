@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Notifications\Contracts\NotificationService;
+use App\Services\Properties\UnitStatusService;
 use App\Support\ManilaDate;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\UploadedFile;
@@ -39,7 +40,103 @@ class BookingService
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
         private readonly FileService $files,
+        private readonly UnitStatusService $unitStatus,
     ) {}
+
+    /**
+     * A property was deleted: its pending applications are declined and the
+     * boarders told. (Reservations block deletion, so none are open.)
+     */
+    public function closeForDeletedProperty(Property $property, User $actor): int
+    {
+        return $this->declinePending([$property->id], $actor, 'This place is no longer listed.');
+    }
+
+    /**
+     * An owner was suspended: nobody can review their applicants, so pending
+     * applications on all their properties are declined (freeing the
+     * boarders' application slots). Reservations stay until they expire.
+     */
+    public function closeForSuspendedOwner(User $owner, User $admin): int
+    {
+        $propertyIds = Property::withTrashed()->where('owner_id', $owner->id)->pluck('id')->all();
+
+        return $this->declinePending($propertyIds, $admin, 'This place is not taking bookings right now.');
+    }
+
+    /** @param  list<int>  $propertyIds */
+    private function declinePending(array $propertyIds, User $actor, string $reason): int
+    {
+        $pending = BookingApplication::with(['boarder', 'property' => fn ($q) => $q->withTrashed()])
+            ->whereIn('property_id', $propertyIds)
+            ->where('status', Status::Pending)
+            ->get();
+
+        $declined = 0;
+        foreach ($pending as $application) {
+            $stillPending = DB::transaction(function () use ($application, $actor, $reason) {
+                $locked = BookingApplication::whereKey($application->id)->lockForUpdate()->firstOrFail();
+                if ($locked->status !== Status::Pending) {
+                    return false;
+                }
+                $this->close($application, Status::Declined, $actor, $reason);
+
+                return true;
+            });
+            if (! $stillPending) {
+                continue;
+            }
+            $declined++;
+            $this->notifications->send($application->boarder, NotificationEvent::BookingDeclined, [
+                'property_name' => $application->property->name,
+                'reason' => $reason,
+            ]);
+        }
+
+        return $declined;
+    }
+
+    /**
+     * An account was suspended: their pending applications and reservation
+     * are cancelled, reserved units freed, and the owners told.
+     */
+    public function closeForSuspendedBoarder(User $boarder, User $admin): int
+    {
+        $open = BookingApplication::with(['property.owner', 'unit'])
+            ->where('boarder_id', $boarder->id)
+            ->open()
+            ->get();
+
+        $closed = 0;
+        foreach ($open as $application) {
+            $stillOpen = DB::transaction(function () use ($application, $admin) {
+                $locked = BookingApplication::whereKey($application->id)->lockForUpdate()->firstOrFail();
+                if (! $locked->status->isOpen()) {
+                    return false; // decided meanwhile
+                }
+                $this->releaseUnit($locked);
+                $this->close($application, Status::Cancelled, $admin, 'The applicant\'s account was suspended.');
+
+                return true;
+            });
+            if (! $stillOpen) {
+                continue;
+            }
+            $closed++;
+
+            $this->notifications->send($application->property->bookingApprovers(), NotificationEvent::BookingCancelled, [
+                'property_name' => $application->property->name,
+                'unit_label' => $application->unit?->label ?? 'a place',
+                'reason' => 'The applicant\'s account was suspended by BoardMate.',
+                'cancelled_by' => 'BoardMate',
+                'action_url' => '/applications',
+            ]);
+            $this->audit->record(AuditEvent::BookingCancelled, $application, owner: $application->property->owner,
+                reason: 'Account suspended', note: "{$boarder->name} → {$application->property->name}");
+        }
+
+        return $closed;
+    }
 
     /** @param  array{planned_move_in_on: string, message?: string|null, contact_phone: string}  $data */
     public function apply(User $boarder, Property $property, array $data, ?UploadedFile $idDocument): BookingApplication
@@ -73,13 +170,19 @@ class BookingService
             // Always lock in the same order: boarder → property → application →
             // unit. Approvals for the same boarder or the same property queue up
             // instead of deadlocking, and a bed can never be reserved twice.
-            User::whereKey($application->boarder_id)->lockForUpdate()->first();
-            Property::withTrashed()->whereKey($application->property_id)->lockForUpdate()->first();
+            $boarder = User::whereKey($application->boarder_id)->lockForUpdate()->first();
+            $property = Property::withTrashed()->whereKey($application->property_id)->lockForUpdate()->first();
             $application = BookingApplication::whereKey($application->id)->lockForUpdate()->firstOrFail();
             $unit = RentableUnit::whereKey($unitId)->where('property_id', $application->property_id)->lockForUpdate()->first();
 
             if ($application->status !== Status::Pending) {
                 throw ValidationException::withMessages(['application' => "This application is already {$application->status->label()}."]);
+            }
+            if ($property->trashed()) {
+                throw ValidationException::withMessages(['application' => 'This property was deleted.']);
+            }
+            if ($boarder?->suspended_at !== null) {
+                throw ValidationException::withMessages(['application' => 'This applicant\'s account is suspended.']);
             }
             if (! $unit) {
                 throw ValidationException::withMessages(['unit_id' => 'Choose a unit of this property.']);
@@ -103,7 +206,7 @@ class BookingService
                 'reserved_until' => $start->addDays($settings?->reservation_expiry_days ?? 7)->toDateString(),
             ])->save();
 
-            $unit->forceFill(['status' => UnitStatus::Reserved])->save();
+            $this->unitStatus->move($unit, UnitStatus::Reserved);
 
             // One reservation per boarder: withdraw their other pending applications.
             $withdrawn = BookingApplication::with('property')
@@ -297,9 +400,7 @@ class BookingService
     private function releaseUnit(BookingApplication $application): void
     {
         if ($application->status === Status::Approved && $application->unit_id) {
-            RentableUnit::whereKey($application->unit_id)
-                ->where('status', UnitStatus::Reserved->value)
-                ->update(['status' => UnitStatus::Available->value, 'updated_at' => now()]);
+            $this->unitStatus->releaseReservation($application->unit_id);
         }
     }
 

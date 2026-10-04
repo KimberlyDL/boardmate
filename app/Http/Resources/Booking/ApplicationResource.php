@@ -7,6 +7,7 @@ use App\Enums\FilePurpose;
 use App\Models\BookingApplication;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Pricing\PriceBook;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,11 +25,28 @@ class ApplicationResource extends JsonResource
         parent::__construct($resource);
     }
 
+    /**
+     * Eager-load what every row shows, for a whole list at once.
+     *
+     * @param  iterable<BookingApplication>  $applications
+     */
+    public static function prepare(iterable $applications, string $view = 'boarder'): void
+    {
+        $list = new EloquentCollection(collect($applications)->all());
+        $list->loadMissing(array_merge(
+            ['property.owner.ownerProfile', 'property.photos', 'unit'],
+            $view === 'reviewer' ? ['boarder', 'decider'] : [],
+        ));
+        app(PriceBook::class)->preload($list->pluck('unit')->filter());
+    }
+
     public function toArray(Request $request): array
     {
         $files = app(FileService::class);
         $property = $this->property;
-        $cover = $property->photos()->orderByDesc('is_cover')->orderBy('sort_order')->first();
+        $cover = $property->relationLoaded('photos')
+            ? $property->photos->sortBy([['is_cover', 'desc'], ['sort_order', 'asc']])->first()
+            : $property->photos()->orderByDesc('is_cover')->orderBy('sort_order')->first();
         $reserved = $this->status === ApplicationStatus::Approved;
 
         $data = [
@@ -40,7 +58,7 @@ class ApplicationResource extends JsonResource
                 'name' => $property->name,
                 'area' => collect([$property->barangay, $property->city])->filter()->implode(', '),
                 'address' => $reserved || $this->view === 'reviewer' ? $property->fullAddress() : null,
-                'cover_photo_url' => $cover ? $files->url($cover->path, FilePurpose::ListingPhoto) : null,
+                'cover_photo_url' => $cover ? $files->url($cover->thumbOrLargePath(), FilePurpose::ListingPhoto) : null,
                 'rental_mode' => $property->rental_mode->value,
                 'owner_name' => $property->owner->ownerDisplayName(),
             ],

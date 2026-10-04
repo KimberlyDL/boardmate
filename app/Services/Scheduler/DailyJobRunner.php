@@ -24,13 +24,16 @@ class DailyJobRunner
     public function __construct(private readonly array $jobs) {}
 
     /**
+     * With $record false (a simulation), jobs run but nothing is written to
+     * scheduler_runs, so the real run on that day is not skipped.
+     *
      * @return list<array{job: string, status: string, summary: string|null}>
      */
-    public function run(CarbonImmutable $day): array
+    public function run(CarbonImmutable $day, bool $record = true): array
     {
         $results = [];
         foreach ($this->jobs as $job) {
-            $results[] = ['job' => $job->key()] + $this->runOne($job, $day);
+            $results[] = ['job' => $job->key()] + ($record ? $this->runOne($job, $day) : $this->simulateOne($job, $day));
         }
 
         return $results;
@@ -52,6 +55,18 @@ class DailyJobRunner
             report($e);
             Log::error('Daily job failed', ['job' => $job->key(), 'day' => $day->toDateString(), 'error' => $e->getMessage()]);
             $this->finish($job->key(), $day, 'failed', null, $e->getMessage());
+
+            return ['status' => 'failed', 'summary' => $e->getMessage()];
+        }
+    }
+
+    /** @return array{status: string, summary: string|null} */
+    private function simulateOne(DailyJob $job, CarbonImmutable $day): array
+    {
+        try {
+            return ['status' => 'succeeded', 'summary' => $job->run($day)];
+        } catch (Throwable $e) {
+            report($e);
 
             return ['status' => 'failed', 'summary' => $e->getMessage()];
         }

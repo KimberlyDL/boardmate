@@ -2139,7 +2139,7 @@ and search by name, email or business name.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"suspended\",
+    \"status\": \"rejected\",
     \"search\": \"b\"
 }"
 </code></pre></div>
@@ -2157,7 +2157,7 @@ const headers = {
 };
 
 let body = {
-    "status": "suspended",
+    "status": "rejected",
     "search": "b"
 };
 
@@ -2278,10 +2278,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="GETapi-v1-admin-owners"
-               value="suspended"
+               value="rejected"
                data-component="body">
     <br>
-<p>Example: <code>suspended</code></p>
+<p>Example: <code>rejected</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>verified</code></li> <li><code>rejected</code></li> <li><code>suspended</code></li></ul>
         </div>
@@ -2918,8 +2918,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"search\": \"b\",
-    \"role\": \"platform_admin\",
-    \"suspended\": false
+    \"role\": \"owner\",
+    \"suspended\": true
 }"
 </code></pre></div>
 
@@ -2937,8 +2937,8 @@ const headers = {
 
 let body = {
     "search": "b",
-    "role": "platform_admin",
-    "suspended": false
+    "role": "owner",
+    "suspended": true
 };
 
 fetch(url, {
@@ -3070,10 +3070,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="GETapi-v1-admin-users"
-               value="platform_admin"
+               value="owner"
                data-component="body">
     <br>
-<p>Example: <code>platform_admin</code></p>
+<p>Example: <code>owner</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>platform_admin</code></li> <li><code>owner</code></li> <li><code>caretaker</code></li> <li><code>boarder</code></li></ul>
         </div>
@@ -3097,7 +3097,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
         </form>
 
@@ -4499,7 +4499,7 @@ and nothing is created.</p>
     --header "Accept: application/json" \
     --data "{
     \"id_token\": \"architecto\",
-    \"consent\": true,
+    \"consent\": false,
     \"device_name\": \"n\"
 }"
 </code></pre></div>
@@ -4517,7 +4517,7 @@ const headers = {
 
 let body = {
     "id_token": "architecto",
-    "consent": true,
+    "consent": false,
     "device_name": "n"
 };
 
@@ -4635,7 +4635,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>device_name</code></b>&nbsp;&nbsp;
@@ -5471,7 +5471,7 @@ oldest first. <code>meta.pending_count</code> counts all pending ones.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"pending\",
+    \"status\": \"expired\",
     \"property_id\": 16
 }"
 </code></pre></div>
@@ -5489,7 +5489,7 @@ const headers = {
 };
 
 let body = {
-    "status": "pending",
+    "status": "expired",
     "property_id": 16
 };
 
@@ -5610,10 +5610,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="GETapi-v1-applications"
-               value="pending"
+               value="expired"
                data-component="body">
     <br>
-<p>Example: <code>pending</code></p>
+<p>Example: <code>expired</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>approved</code></li> <li><code>declined</code></li> <li><code>cancelled</code></li> <li><code>expired</code></li></ul>
         </div>
@@ -8256,6 +8256,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Any signed-in account can apply. The account gets the owner role right
 away (so the owner can start setting up), but listings stay hidden until
 a platform admin verifies the account. A rejected owner can apply again.</p>
+<p>Multipart. Proof files go in <code>documents[i][kind]</code> + <code>documents[i][file]</code>
+(jpg, png, webp or pdf, 5 MB each, up to 5 in all): a <code>government_id</code>
+and a <code>property_proof</code> are required; <code>business_permit</code> and <code>other</code> are
+optional. When applying again, <code>remove_document_ids[]</code> drops earlier files.</p>
 
 <span id="example-requests-POSTapi-v1-owner-application">
 <blockquote>Example request:</blockquote>
@@ -8803,7 +8807,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"access_level\": \"collector\"
+    \"access_level\": \"manager\"
 }"
 </code></pre></div>
 
@@ -8820,7 +8824,7 @@ const headers = {
 };
 
 let body = {
-    "access_level": "collector"
+    "access_level": "manager"
 };
 
 fetch(url, {
@@ -8937,10 +8941,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="access_level"                data-endpoint="PATCHapi-v1-owner-caretakers--id-"
-               value="collector"
+               value="manager"
                data-component="body">
     <br>
-<p>Example: <code>collector</code></p>
+<p>Example: <code>manager</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>collector</code></li> <li><code>manager</code></li></ul>
         </div>
@@ -9106,7 +9110,7 @@ invite. Inviting the same email again replaces the earlier invitation.</p>
     --header "Accept: application/json" \
     --data "{
     \"email\": \"gbailey@example.net\",
-    \"access_level\": \"manager\",
+    \"access_level\": \"collector\",
     \"property_ids\": [
         16
     ]
@@ -9127,7 +9131,7 @@ const headers = {
 
 let body = {
     "email": "gbailey@example.net",
-    "access_level": "manager",
+    "access_level": "collector",
     "property_ids": [
         16
     ]
@@ -9246,10 +9250,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="access_level"                data-endpoint="POSTapi-v1-owner-caretaker-invitations"
-               value="manager"
+               value="collector"
                data-component="body">
     <br>
-<p>Example: <code>manager</code></p>
+<p>Example: <code>collector</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>collector</code></li> <li><code>manager</code></li></ul>
         </div>
@@ -11291,8 +11295,9 @@ Must be one of:
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-<p>One or more <code>photos[]</code> (jpg, png or webp, up to 5 MB each). The first
-photo of a property becomes its cover.</p>
+<p>One or more <code>photos[]</code> (jpg, png or webp, up to 5 MB and 8200 px a side).
+Each is saved as WebP within 1600 px and 480 px (longer side), without its
+EXIF data. The first photo of a property becomes its cover.</p>
 
 <span id="example-requests-POSTapi-v1-properties--property_id--photos">
 <blockquote>Example request:</blockquote>
@@ -11932,7 +11937,7 @@ Only the owner's active caretakers can be assigned.</p>
     \"assignments\": [
         {
             \"caretaker_id\": 16,
-            \"access_level\": \"collector\"
+            \"access_level\": \"manager\"
         }
     ]
 }"
@@ -11954,7 +11959,7 @@ let body = {
     "assignments": [
         {
             "caretaker_id": 16,
-            "access_level": "collector"
+            "access_level": "manager"
         }
     ]
 };
@@ -12095,10 +12100,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="assignments.0.access_level"                data-endpoint="PUTapi-v1-properties--property_id--caretakers"
-               value="collector"
+               value="manager"
                data-component="body">
     <br>
-<p>Example: <code>collector</code></p>
+<p>Example: <code>manager</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>collector</code></li> <li><code>manager</code></li></ul>
                     </div>
@@ -12618,7 +12623,7 @@ vary: Origin
         &quot;app&quot;: &quot;BoardMate&quot;,
         &quot;api_version&quot;: &quot;v1&quot;,
         &quot;database&quot;: &quot;ok&quot;,
-        &quot;server_time&quot;: &quot;2026-10-04T10:27:32+08:00&quot;,
+        &quot;server_time&quot;: &quot;2026-10-04T12:12:53+08:00&quot;,
         &quot;timezone&quot;: &quot;Asia/Manila&quot;
     }
 }</code>
@@ -13408,7 +13413,7 @@ not change anyone's tenancy.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"not_ready\": false,
+    \"not_ready\": true,
     \"reason\": \"b\"
 }"
 </code></pre></div>
@@ -13426,7 +13431,7 @@ const headers = {
 };
 
 let body = {
-    "not_ready": false,
+    "not_ready": true,
     "reason": "b"
 };
 
@@ -13557,7 +13562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>reason</code></b>&nbsp;&nbsp;

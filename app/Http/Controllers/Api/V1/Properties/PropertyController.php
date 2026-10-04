@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Properties;
 
+use App\Authorization\PropertyAccess;
 use App\Enums\AuditEvent;
 use App\Enums\PropertyAbility as A;
 use App\Enums\PropertyType;
@@ -15,6 +16,7 @@ use App\Models\Building;
 use App\Models\Property;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Booking\BookingService;
 use App\Services\Properties\PropertySetup;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,7 +45,9 @@ class PropertyController extends Controller
             ->orderBy('name')
             ->get();
 
-        return ApiResponse::ok($properties->map(fn (Property $p) => new PropertyResource($p)));
+        $roles = PropertyAccess::rolesOn($request->user(), $properties);
+
+        return ApiResponse::ok($properties->map(fn (Property $p) => new PropertyResource($p, role: $roles[$p->id])));
     }
 
     /**
@@ -118,20 +122,22 @@ class PropertyController extends Controller
      * Owner only, and only when nobody is booked into or living in it. The
      * property is archived; its history stays.
      */
-    public function destroy(Request $request, Property $property): JsonResponse
+    public function destroy(Request $request, Property $property, BookingService $bookings): JsonResponse
     {
         $this->authorizeProperty($request, $property, A::DeleteProperty);
 
-        if ($property->hasUnitsInUse()) {
+        $blocks = $this->setup->deleteIfFree($property);
+
+        if ($blocks->isNotEmpty()) {
             return response()->json([
-                'message' => 'Someone is booked into or living in this property. It can be deleted once all units are free.',
+                'message' => 'Someone is booked into or living in this property ('.$blocks->pluck('label')->implode(', ').'). It can be deleted once all units are free.',
                 'code' => 'property_in_use',
             ], 409);
         }
 
-        $property->forceFill(['is_published' => false])->save();
-        $property->delete();
-        $this->audit->record(AuditEvent::PropertyDeleted, $property, owner: $property->owner, note: $property->name);
+        $declined = $bookings->closeForDeletedProperty($property, $request->user());
+        $this->audit->record(AuditEvent::PropertyDeleted, $property, owner: $property->owner,
+            note: $property->name.($declined ? " · {$declined} pending application(s) declined" : ''));
 
         return ApiResponse::message("{$property->name} was deleted.");
     }

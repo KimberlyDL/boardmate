@@ -118,3 +118,19 @@ it('lets the boarders handle a utility themselves (billed by group, SC-31)', fun
             'type' => 'internet', 'method' => 'actual_bill', 'billed_by' => 'group',
         ])->assertCreated()->assertJsonPath('data.billed_by', 'group');
 });
+
+it('gives the same current and upcoming price when preloaded for a list', function () {
+    $this->prices->set($this->unit, 200000, '2026-11-01', $this->owner);
+    $this->prices->set($this->unit, 210000, '2026-12-01', $this->owner);
+    $fresh = $this->unit->fresh();
+
+    $this->prices->preload([$fresh]);
+
+    expect($this->prices->amountOn($fresh))->toBe(180000)
+        ->and($this->prices->upcoming($fresh)->amount_centavos)->toBe(200000)
+        ->and($this->prices->amountsOn([$this->unit->fresh()]))->toBe([$this->unit->id => 180000]);
+
+    // Changing the price drops the preloaded values instead of serving stale ones.
+    $this->prices->set($fresh, 190000, null, $this->owner);
+    expect($this->prices->amountOn($fresh))->toBe(190000);
+});

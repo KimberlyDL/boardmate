@@ -382,7 +382,7 @@ endpoints:
         name: consent
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -401,7 +401,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       id_token: architecto
-      consent: true
+      consent: false
       device_name: 'n'
     fileParameters: []
     responses: []

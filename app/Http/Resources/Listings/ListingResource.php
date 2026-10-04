@@ -58,7 +58,7 @@ class ListingResource extends JsonResource
                     : "{$bookable->count()} of {$this->units->count()} bedspaces available",
             ],
             'included_utilities' => $included,
-            'cover_photo_url' => $photos->first() ? $files->url($photos->first()->path, FilePurpose::ListingPhoto) : null,
+            'cover_photo_url' => $photos->first() ? $files->url($photos->first()->thumbOrLargePath(), FilePurpose::ListingPhoto) : null,
             'owner_name' => $this->owner->ownerDisplayName(),
             'published_at' => $this->published_at?->toIso8601String(),
         ];
@@ -68,11 +68,14 @@ class ListingResource extends JsonResource
         }
 
         $settings = $this->settings;
+        $prices->preload($bookable);
+        $prices->preload($this->utilityAccounts);
 
         return $summary + [
             'description' => $this->description,
             'street' => $this->showStreet ? $this->street : null,
             'photos' => $photos->map(fn ($p) => $files->url($p->path, FilePurpose::ListingPhoto)),
+            'photo_thumbs' => $photos->map(fn ($p) => $files->url($p->thumbOrLargePath(), FilePurpose::ListingPhoto)),
             'slots' => $bookable->values()->map(fn (RentableUnit $u) => [
                 'id' => $u->id,
                 'label' => $u->label,

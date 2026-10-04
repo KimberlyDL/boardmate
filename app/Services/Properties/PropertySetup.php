@@ -52,18 +52,39 @@ class PropertySetup
      *
      * @param  array{capacity?: int, rent_centavos?: int|null, count?: int, label_pattern?: string, start_number?: int}  $units
      */
+    /**
+     * Unpublish and archive (soft-delete) the property, unless a unit is in
+     * use. Checked under the property lock that booking approval also takes.
+     *
+     * @return Collection<int, RentableUnit> the units in use (empty when deleted)
+     */
+    public function deleteIfFree(Property $property): Collection
+    {
+        return DB::transaction(function () use ($property) {
+            $property->lockForOccupancyChange();
+            $blocks = $property->occupancyBlocks();
+            if ($blocks->isEmpty()) {
+                $property->forceFill(['is_published' => false])->save();
+                $property->delete();
+            }
+
+            return $blocks;
+        });
+    }
+
     public function switchMode(Property $property, RentalMode $mode, array $units, User $by): void
     {
         if ($property->rental_mode === $mode) {
             throw ValidationException::withMessages(['mode' => 'The property already uses this rental mode.']);
         }
-        if ($property->hasUnitsInUse()) {
-            throw ValidationException::withMessages([
-                'mode' => 'Someone is booked into or living in a unit. Switch the rental mode once all units are free.',
-            ]);
-        }
-
         DB::transaction(function () use ($property, $mode, $units, $by) {
+            $property->lockForOccupancyChange();
+            if ($property->hasUnitsInUse()) {
+                throw ValidationException::withMessages([
+                    'mode' => 'Someone is booked into or living in a unit. Switch the rental mode once all units are free.',
+                ]);
+            }
+
             $property->units()->get()->each->delete();
             $property->forceFill(['rental_mode' => $mode])->save();
             $this->createUnitsFor($property, $mode, $units, $by);
@@ -115,13 +136,16 @@ class PropertySetup
      */
     public function publishChecklist(Property $property): array
     {
-        $units = $property->units()->get();
+        // Reuse what the caller already loaded (the property detail view).
+        $units = $property->relationLoaded('units') ? $property->units : $property->units()->get();
+        $this->prices->preload($units); // no-op for units the caller already preloaded
         $unpriced = $units->filter(fn (RentableUnit $u) => $this->prices->amountOn($u) === null)->count();
+        $hasPhoto = $property->relationLoaded('photos') ? $property->photos->isNotEmpty() : $property->photos()->exists();
 
         return [
             ['key' => 'owner_verified', 'label' => 'Your owner account is verified', 'ok' => $property->owner->isVerifiedOwner()],
             ['key' => 'location', 'label' => 'Location pinned on the map', 'ok' => $property->latitude !== null && $property->longitude !== null],
-            ['key' => 'photo', 'label' => 'At least one photo', 'ok' => $property->photos()->exists()],
+            ['key' => 'photo', 'label' => 'At least one photo', 'ok' => $hasPhoto],
             ['key' => 'rent', 'label' => 'Rent set for every unit', 'ok' => $units->isNotEmpty() && $unpriced === 0],
             ['key' => 'ready_unit', 'label' => 'At least one unit ready to rent', 'ok' => $units->contains(fn ($u) => ! $u->not_ready)],
         ];

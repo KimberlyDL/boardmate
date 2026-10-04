@@ -32,7 +32,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: suspended
+        example: rejected
         type: string
         enumValues:
           - pending
@@ -54,7 +54,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: suspended
+      status: rejected
       search: b
     fileParameters: []
     responses:
@@ -329,7 +329,7 @@ endpoints:
         name: role
         description: ''
         required: false
-        example: platform_admin
+        example: owner
         type: string
         enumValues:
           - platform_admin
@@ -344,7 +344,7 @@ endpoints:
         name: suspended
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -352,8 +352,8 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       search: b
-      role: platform_admin
-      suspended: false
+      role: owner
+      suspended: true
     fileParameters: []
     responses:
       -

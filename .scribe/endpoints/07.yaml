@@ -408,8 +408,9 @@ endpoints:
       subgroupDescription: ''
       title: 'Upload photos'
       description: |-
-        One or more `photos[]` (jpg, png or webp, up to 5 MB each). The first
-        photo of a property becomes its cover.
+        One or more `photos[]` (jpg, png or webp, up to 5 MB and 8200 px a side).
+        Each is saved as WebP within 1600 px and 480 px (longer side), without its
+        EXIF data. The first photo of a property becomes its cover.
       authenticated: true
       deprecated: false
     headers:
@@ -699,7 +700,7 @@ endpoints:
         name: 'assignments[].access_level'
         description: ''
         required: true
-        example: collector
+        example: manager
         type: string
         enumValues:
           - collector
@@ -711,7 +712,7 @@ endpoints:
       assignments:
         -
           caretaker_id: 16
-          access_level: collector
+          access_level: manager
     fileParameters: []
     responses: []
     responseFields: []

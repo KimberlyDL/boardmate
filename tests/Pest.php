@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Properties\PropertySetup;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Concerns\SeedsRoles;
 use Tests\TestCase;
 
 /*
@@ -55,5 +56,5 @@ function assignCaretaker(Property $property, User $caretaker, string $level): vo
 | data, so they truncate tables instead of rolling back a transaction.
 */
 pest()->extend(TestCase::class)
-    ->use(DatabaseTruncation::class)
+    ->use(DatabaseTruncation::class, SeedsRoles::class)
     ->in('Concurrency');

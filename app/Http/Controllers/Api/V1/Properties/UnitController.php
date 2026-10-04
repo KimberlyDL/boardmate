@@ -19,6 +19,7 @@ use App\Services\Properties\PropertySetup;
 use App\Support\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 
@@ -38,7 +39,7 @@ class UnitController extends Controller
     {
         $this->authorizeProperty($request, $property, A::View);
 
-        return ApiResponse::ok(UnitResource::collection($property->units()->get()));
+        return ApiResponse::ok(UnitResource::collection(UnitResource::prepare($property->units()->get())));
     }
 
     /**
@@ -67,7 +68,7 @@ class UnitController extends Controller
         $this->audit->record(AuditEvent::UnitsAdded, $property, owner: $property->owner,
             note: $units->count().' bedspace(s): '.$units->pluck('label')->implode(', '));
 
-        return ApiResponse::created(UnitResource::collection($units), $units->count().' bedspace(s) added.');
+        return ApiResponse::created(UnitResource::collection(UnitResource::prepare($units)), $units->count().' bedspace(s) added.');
     }
 
     /**
@@ -113,14 +114,17 @@ class UnitController extends Controller
         if ($property->rental_mode === RentalMode::Whole) {
             throw ValidationException::withMessages(['unit' => 'A whole-property listing has exactly one unit. Switch to bedspaces instead.']);
         }
-        if ($unit->status->isInUse()) {
-            throw ValidationException::withMessages(['unit' => 'Someone is booked into or living in this bedspace.']);
-        }
-        if ($property->units()->count() <= 1) {
-            throw ValidationException::withMessages(['unit' => 'A property needs at least one bedspace.']);
-        }
+        DB::transaction(function () use ($property, $unit) {
+            $property->lockForOccupancyChange();
+            if ($unit->refresh()->isInUse()) {
+                throw ValidationException::withMessages(['unit' => 'Someone is booked into or living in this bedspace.']);
+            }
+            if ($property->units()->count() <= 1) {
+                throw ValidationException::withMessages(['unit' => 'A property needs at least one bedspace.']);
+            }
 
-        $unit->delete();
+            $unit->delete();
+        });
         $this->audit->record(AuditEvent::UnitRemoved, $unit, owner: $property->owner, note: "{$property->name} · {$unit->label}");
 
         return ApiResponse::message("{$unit->label} removed.");

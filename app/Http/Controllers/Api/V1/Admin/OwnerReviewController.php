@@ -11,6 +11,7 @@ use App\Http\Responses\ApiResponse;
 use App\Models\OwnerProfile;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Booking\BookingService;
 use App\Services\Notifications\Contracts\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -45,7 +46,7 @@ class OwnerReviewController extends Controller
                     ->orWhereRaw('lower(email) like ?', [$term])
                     ->orWhereHas('ownerProfile', fn ($p) => $p->whereRaw('lower(business_name) like ?', [$term])));
             })
-            ->with('ownerProfile', 'roles')
+            ->with('ownerProfile.documents', 'roles')
             ->orderBy(
                 OwnerProfile::select('submitted_at')->whereColumn('owner_profiles.user_id', 'users.id'),
                 $status === Status::Pending ? 'asc' : 'desc',
@@ -95,7 +96,11 @@ class OwnerReviewController extends Controller
         $reason = $this->reason($request);
 
         return $this->transition($request, $user, [Status::Pending, Status::Verified], Status::Suspended, $reason, AuditEvent::OwnerSuspended,
-            fn () => $notifications->send($user, NotificationEvent::OwnerSuspended, ['reason' => $reason]));
+            function () use ($notifications, $user, $reason, $request) {
+                $notifications->send($user, NotificationEvent::OwnerSuspended, ['reason' => $reason]);
+                // Nobody can review their applicants now; free the boarders' slots.
+                app(BookingService::class)->closeForSuspendedOwner($user, $request->user());
+            });
     }
 
     /**

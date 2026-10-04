@@ -60,6 +60,36 @@ final class PropertyAccess
         return $assignment?->access_level;
     }
 
+    /**
+     * roleOn() for a whole list in one query.
+     *
+     * @param  iterable<Property>  $properties
+     * @return array<int, string|null> property id => role
+     */
+    public static function rolesOn(User $user, iterable $properties): array
+    {
+        $properties = collect($properties);
+        $roles = $properties->mapWithKeys(fn (Property $p) => [$p->id => $p->owner_id === $user->id ? 'owner' : null])->all();
+        $others = $properties->filter(fn (Property $p) => $roles[$p->id] === null);
+
+        if ($others->isNotEmpty() && $user->hasAccountRole(UserRole::Caretaker)) {
+            PropertyCaretaker::query()
+                ->join('properties', 'properties.id', '=', 'property_caretakers.property_id')
+                ->whereIn('property_caretakers.property_id', $others->map->getKey()->all())
+                ->where('property_caretakers.caretaker_id', $user->id)
+                ->whereExists(fn ($q) => $q->from('owner_caretakers')
+                    ->whereColumn('owner_caretakers.caretaker_id', 'property_caretakers.caretaker_id')
+                    ->whereColumn('owner_caretakers.owner_id', 'properties.owner_id')
+                    ->whereNull('owner_caretakers.removed_at'))
+                ->get(['property_caretakers.property_id', 'property_caretakers.access_level'])
+                ->each(function (PropertyCaretaker $a) use (&$roles) {
+                    $roles[$a->property_id] = $a->access_level->value;
+                });
+        }
+
+        return $roles;
+    }
+
     /** How the user relates to the property: owner, manager, collector, or null. */
     public static function roleOn(User $user, Property $property): ?string
     {

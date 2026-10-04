@@ -17,7 +17,14 @@ class PriceRule extends Model
             'amount_centavos' => 'integer',
             'effective_from' => 'immutable_date',
             'effective_to' => 'immutable_date',
+            'locked_at' => 'datetime',
         ];
+    }
+
+    /** Used by a bill: never deleted or re-dated except by closing it. */
+    public function isLocked(): bool
+    {
+        return $this->locked_at !== null;
     }
 
     public function priceable(): MorphTo

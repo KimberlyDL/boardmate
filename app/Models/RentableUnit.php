@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\ApplicationStatus;
 use App\Enums\UnitKind;
 use App\Enums\UnitStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,8 +42,29 @@ class RentableUnit extends Model
     }
 
     /** Shown to the public: "Available now", "Leaving" etc. are computed in F1/F2. */
+    /** The approved application holding this unit (F2), if it is reserved. */
+    public function activeReservation(): HasOne
+    {
+        return $this->hasOne(BookingApplication::class, 'unit_id')->where('status', ApplicationStatus::Approved);
+    }
+
     public function isAvailable(): bool
     {
         return $this->status === UnitStatus::Available && ! $this->not_ready;
+    }
+
+    /**
+     * Someone is booked into or living in this unit, so it cannot be removed
+     * or switched. The one place this is decided (tenancies will extend it);
+     * see Property::occupancyBlocks().
+     */
+    public function isInUse(): bool
+    {
+        return $this->status->isInUse();
+    }
+
+    public function scopeInUse(Builder $query): Builder
+    {
+        return $query->whereIn('status', UnitStatus::inUseValues());
     }
 }

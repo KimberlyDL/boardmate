@@ -36,7 +36,7 @@ class CaretakerController extends Controller
     {
         $owner = $request->user();
 
-        $caretakers = $owner->caretakerLinks()->active()->with('caretaker')->latest()->get();
+        $caretakers = $owner->caretakerLinks()->active()->with(['caretaker', 'caretakerAssignments.property:id,name,owner_id'])->latest()->get();
         $invitations = CaretakerInvitation::where('owner_id', $owner->id)
             ->whereNull('accepted_at')
             ->latest()
@@ -155,11 +155,20 @@ class CaretakerController extends Controller
         $before = $caretaker->access_level;
         $caretaker->update(['access_level' => $data['access_level']]);
 
-        if ($before !== $caretaker->access_level) {
-            $this->audit()->record(AuditEvent::CaretakerAccessChanged, $caretaker,
-                ['access_level' => [$before, $caretaker->access_level]],
-                owner: $request->user(), note: $caretaker->caretaker->name);
+        // The per-property level is what controls permissions, so a change here
+        // applies to every property they help with (and is the default for new ones).
+        $assignments = PropertyCaretaker::where('caretaker_id', $caretaker->caretaker_id)
+            ->whereIn('property_id', Property::withTrashed()->where('owner_id', $caretaker->owner_id)->select('id'))
+            ->where('access_level', '!=', $caretaker->access_level->value)
+            ->update(['access_level' => $caretaker->access_level->value, 'updated_at' => now()]);
+
+        if ($before === $caretaker->access_level && $assignments === 0) {
+            return ApiResponse::ok(new CaretakerLinkResource($caretaker->load('caretaker'), 'caretaker'), 'That is already their access level.');
         }
+
+        $this->audit()->record(AuditEvent::CaretakerAccessChanged, $caretaker,
+            ['access_level' => [$before, $caretaker->access_level]],
+            owner: $request->user(), note: $caretaker->caretaker->name.($assignments ? " · {$assignments} property assignment(s) aligned" : ''));
 
         $notifications->send($caretaker->caretaker, NotificationEvent::CaretakerAccessChanged, [
             'owner_name' => $request->user()->ownerDisplayName(),

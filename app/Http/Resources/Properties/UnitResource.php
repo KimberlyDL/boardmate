@@ -2,17 +2,32 @@
 
 namespace App\Http\Resources\Properties;
 
-use App\Enums\ApplicationStatus;
 use App\Enums\UnitStatus;
-use App\Models\BookingApplication;
 use App\Models\RentableUnit;
 use App\Services\Pricing\PriceBook;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 /** @mixin RentableUnit */
 class UnitResource extends JsonResource
 {
+    /**
+     * Load what every unit row shows (rents, reservation holder) for the
+     * whole list at once. Call before rendering a list of units.
+     *
+     * @param  Collection<int, RentableUnit>  $units
+     * @return Collection<int, RentableUnit>
+     */
+    public static function prepare(Collection $units): Collection
+    {
+        app(PriceBook::class)->preload($units);
+        (new EloquentCollection($units->all()))->loadMissing('activeReservation.boarder:id,name');
+
+        return $units;
+    }
+
     public function toArray(Request $request): array
     {
         $prices = app(PriceBook::class);
@@ -45,10 +60,7 @@ class UnitResource extends JsonResource
             return null;
         }
 
-        $application = BookingApplication::with('boarder:id,name')
-            ->where('unit_id', $this->id)
-            ->where('status', ApplicationStatus::Approved)
-            ->first();
+        $application = $this->activeReservation;
 
         return $application ? [
             'application_id' => $application->id,

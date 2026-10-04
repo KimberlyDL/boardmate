@@ -6,6 +6,7 @@ use App\Enums\OwnerVerificationStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'business_name', 'application_notes',
@@ -30,6 +31,12 @@ class OwnerProfile extends Model
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    /** Proof files sent with the application, oldest first (purged ones included, without a file). */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(OwnerDocument::class)->orderBy('id');
     }
 
     public function isVerified(): bool

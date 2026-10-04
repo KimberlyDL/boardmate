@@ -26,6 +26,15 @@ class CaretakerLinkResource extends JsonResource
     {
         $person = $this->side === 'caretaker' ? $this->caretaker : $this->owner;
 
+        // The owner's properties this caretaker is assigned to, with the level for each.
+        $properties = $this->resource->assignmentsHere()
+            ->map(fn (PropertyCaretaker $a) => [
+                'id' => $a->property_id,
+                'name' => $a->property->name,
+                'access_level' => $a->access_level->value,
+                'access_level_label' => $a->access_level->label(),
+            ])->values();
+
         return [
             'id' => $this->id,
             'access_level' => $this->access_level->value,
@@ -38,18 +47,10 @@ class CaretakerLinkResource extends JsonResource
                 'photo_url' => app(FileService::class)->url($person->photo_path, FilePurpose::ProfilePhoto),
                 'business_name' => $this->side === 'owner' ? $person->ownerProfile?->business_name : null,
             ],
-            // The owner's properties this caretaker is assigned to, with the level for each.
-            'properties' => PropertyCaretaker::query()
-                ->where('caretaker_id', $this->caretaker_id)
-                ->whereHas('property', fn ($q) => $q->where('owner_id', $this->owner_id))
-                ->with('property:id,name')
-                ->get()
-                ->map(fn (PropertyCaretaker $a) => [
-                    'id' => $a->property_id,
-                    'name' => $a->property->name,
-                    'access_level' => $a->access_level->value,
-                    'access_level_label' => $a->access_level->label(),
-                ])->values(),
+            'properties' => $properties,
+            // Set per property on each property's Caretakers tab; true when they no longer all match.
+            'levels_differ' => $properties->pluck('access_level')->unique()->count() > 1
+                || $properties->contains(fn ($p) => $p['access_level'] !== $this->access_level->value),
             'since' => $this->created_at?->toIso8601String(),
         ];
     }

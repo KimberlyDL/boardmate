@@ -8,6 +8,7 @@ use App\Enums\FilePurpose;
 use App\Models\Property;
 use App\Models\PropertyPhoto;
 use App\Services\Files\Contracts\FileService;
+use App\Services\Pricing\PriceBook;
 use App\Services\Properties\PropertySetup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,7 +22,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PropertyResource extends JsonResource
 {
-    public function __construct($resource, private readonly bool $detail = false)
+    /** @param  string|null  $role  the viewer's role, when already worked out for a list (PropertyAccess::rolesOn) */
+    public function __construct($resource, private readonly bool $detail = false, private readonly ?string $role = null)
     {
         parent::__construct($resource);
     }
@@ -30,8 +32,12 @@ class PropertyResource extends JsonResource
     {
         $files = app(FileService::class);
         $user = $request->user();
-        $role = PropertyAccess::roleOn($user, $this->resource);
+        $role = $this->role ?? PropertyAccess::roleOn($user, $this->resource);
         $units = $this->relationLoaded('units') ? $this->units : $this->units()->get();
+        if ($this->detail) {
+            UnitResource::prepare($units);
+            app(PriceBook::class)->preload($this->utilityAccounts);
+        }
         $cover = $this->relationLoaded('photos')
             ? ($this->photos->firstWhere('is_cover', true) ?? $this->photos->first())
             : ($this->photos()->where('is_cover', true)->first() ?? $this->photos()->first());
@@ -46,7 +52,7 @@ class PropertyResource extends JsonResource
             'building' => $this->building ? ['id' => $this->building->id, 'name' => $this->building->name] : null,
             'city' => $this->city,
             'is_published' => $this->is_published,
-            'cover_photo_url' => $cover ? $files->url($cover->path, FilePurpose::ListingPhoto) : null,
+            'cover_photo_url' => $cover ? $files->url($cover->thumbOrLargePath(), FilePurpose::ListingPhoto) : null,
             'counts' => [
                 'units' => $units->count(),
                 'available' => $units->filter->isAvailable()->count(),
@@ -76,6 +82,7 @@ class PropertyResource extends JsonResource
             'photos' => $this->photos->map(fn (PropertyPhoto $p) => [
                 'id' => $p->id,
                 'url' => $files->url($p->path, FilePurpose::ListingPhoto),
+                'thumb_url' => $files->url($p->thumbOrLargePath(), FilePurpose::ListingPhoto),
                 'is_cover' => $p->is_cover,
                 'sort_order' => $p->sort_order,
             ]),

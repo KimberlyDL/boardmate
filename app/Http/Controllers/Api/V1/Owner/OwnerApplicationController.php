@@ -9,10 +9,12 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Responses\ApiResponse;
+use App\Models\OwnerProfile;
 use App\Models\User;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Notifications\Contracts\NotificationService;
+use App\Services\Owners\OwnerDocuments;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,26 +30,24 @@ class OwnerApplicationController extends Controller
      * Any signed-in account can apply. The account gets the owner role right
      * away (so the owner can start setting up), but listings stay hidden until
      * a platform admin verifies the account. A rejected owner can apply again.
+     *
+     * Multipart. Proof files go in `documents[i][kind]` + `documents[i][file]`
+     * (jpg, png, webp or pdf, 5 MB each, up to 5 in all): a `government_id`
+     * and a `property_proof` are required; `business_permit` and `other` are
+     * optional. When applying again, `remove_document_ids[]` drops earlier files.
      */
-    public function store(Request $request, NotificationService $notifications): JsonResponse
+    public function store(Request $request, NotificationService $notifications, OwnerDocuments $documents): JsonResponse
     {
         $user = $request->user();
-        $profile = $user->ownerProfile;
-
-        if ($profile && $profile->verification_status !== OwnerVerificationStatus::Rejected) {
-            $message = match ($profile->verification_status) {
-                OwnerVerificationStatus::Pending => 'Your application is already being reviewed.',
-                OwnerVerificationStatus::Verified => 'Your owner account is already verified.',
-                default => 'Your owner account is suspended. Contact BoardMate support.',
-            };
-
-            return response()->json(['message' => $message, 'code' => 'owner_application_exists'], 409);
+        if ($refusal = $this->applicationRefusal($user->ownerProfile)) {
+            return $refusal;
         }
 
         $data = $request->validate([
             'business_name' => ['nullable', 'string', 'max:120'],
             'application_notes' => ['required', 'string', 'min:20', 'max:2000'],
             'phone' => [$user->phone ? 'nullable' : 'required', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+            ...$documents->rules(),
         ], [
             'application_notes.required' => 'Tell us about your property: where it is and how many rooms or beds it has.',
             'application_notes.min' => 'Please add a little more detail about your property.',
@@ -55,7 +55,13 @@ class OwnerApplicationController extends Controller
             'phone.regex' => 'Enter a valid phone number.',
         ]);
 
-        DB::transaction(function () use ($user, $data) {
+        $refusal = DB::transaction(function () use ($user, $data, $documents) {
+            // Checked again under a lock: a double submit must not apply twice.
+            User::whereKey($user->id)->lockForUpdate()->first();
+            if ($refusal = $this->applicationRefusal($user->ownerProfile()->first())) {
+                return $refusal;
+            }
+
             if (! empty($data['phone'])) {
                 $user->phone = $data['phone'];
             }
@@ -73,10 +79,18 @@ class OwnerApplicationController extends Controller
                 'review_reason' => null,
             ])->save();
 
+            $documents->sync($profile, $data['documents'] ?? [], $data['remove_document_ids'] ?? []);
+
             $user->assignRole(UserRole::Owner->value);
             $user->active_role = UserRole::Owner->value;
             $user->save();
+
+            return null;
         });
+        if ($refusal) {
+            return $refusal;
+        }
+        $user->load('ownerProfile'); // the copy read before saving may be null (first application)
 
         app(AuditService::class)->record(AuditEvent::OwnerApplied, $user->ownerProfile, owner: $user);
 
@@ -90,6 +104,22 @@ class OwnerApplicationController extends Controller
             new UserResource($user->load(['boarderProfile', 'ownerProfile'])),
             'Application sent. You can start setting up while we review it.',
         );
+    }
+
+    /** A 409 when the account already has an application that is not rejected. */
+    private function applicationRefusal(?OwnerProfile $profile): ?JsonResponse
+    {
+        if (! $profile || $profile->verification_status === OwnerVerificationStatus::Rejected) {
+            return null;
+        }
+
+        $message = match ($profile->verification_status) {
+            OwnerVerificationStatus::Pending => 'Your application is already being reviewed.',
+            OwnerVerificationStatus::Verified => 'Your owner account is already verified.',
+            default => 'Your owner account is suspended. Contact BoardMate support.',
+        };
+
+        return response()->json(['message' => $message, 'code' => 'owner_application_exists'], 409);
     }
 
     /**

@@ -26,6 +26,13 @@ beforeEach(function () {
 
 afterEach(fn () => Date::setTestNow());
 
+/** Move the clock to 9:00 AM Manila on $day and run the daily jobs, as the scheduler would. */
+function dailyRunOn(string $day): void
+{
+    Date::setTestNow(CarbonImmutable::parse("{$day} 09:00", 'Asia/Manila'));
+    test()->artisan('boardmate:daily')->assertSuccessful();
+}
+
 function applyFor(User $boarder, int $propertyId, array $data = []): TestResponse
 {
     return test()->actingAs($boarder, 'sanctum')->postJson("/api/v1/listings/{$propertyId}/applications", $data + [
@@ -148,11 +155,11 @@ it('expires reservations after their last day and reminds the day before', funct
     $id = applyFor($this->kim, $this->property->id)->json('data.id');
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/applications/{$id}/approve", ['unit_id' => $bed->id]);
 
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-26'])->assertSuccessful();
+    dailyRunOn('2026-10-26');
     Notification::assertSentTo($this->kim, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpiringSoon);
     expect(BookingApplication::find($id)->status->value)->toBe('approved'); // last day is Oct 27
 
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-28'])->assertSuccessful();
+    dailyRunOn('2026-10-28');
     expect(BookingApplication::find($id)->status->value)->toBe('expired')
         ->and($bed->fresh()->status->value)->toBe('available');
     Notification::assertSentTo($this->owner, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpired);
@@ -213,10 +220,10 @@ it('keeps the ID photo private and deletes it 30 days after the application clos
     expect($url)->toContain('signature=');
 
     $this->postJson("/api/v1/applications/{$id}/decline");
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-20'])->assertSuccessful();
+    dailyRunOn('2026-10-20');
     Storage::disk('local')->assertExists($path);
 
-    $this->artisan('boardmate:daily', ['--date' => '2026-11-04'])->assertSuccessful();
+    dailyRunOn('2026-11-04');
     Storage::disk('local')->assertMissing($path);
     expect(BookingApplication::find($id)->id_document_purged_at)->not->toBeNull();
 });

@@ -17,6 +17,11 @@ endpoints:
         Any signed-in account can apply. The account gets the owner role right
         away (so the owner can start setting up), but listings stay hidden until
         a platform admin verifies the account. A rejected owner can apply again.
+
+        Multipart. Proof files go in `documents[i][kind]` + `documents[i][file]`
+        (jpg, png, webp or pdf, 5 MB each, up to 5 in all): a `government_id`
+        and a `property_proof` are required; `business_permit` and `other` are
+        optional. When applying again, `remove_document_ids[]` drops earlier files.
       authenticated: true
       deprecated: false
     headers:
@@ -269,7 +274,7 @@ endpoints:
         name: access_level
         description: ''
         required: true
-        example: collector
+        example: manager
         type: string
         enumValues:
           - collector
@@ -278,7 +283,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      access_level: collector
+      access_level: manager
     fileParameters: []
     responses: []
     responseFields: []
@@ -378,7 +383,7 @@ endpoints:
         name: access_level
         description: ''
         required: false
-        example: manager
+        example: collector
         type: string
         enumValues:
           - collector
@@ -400,7 +405,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       email: gbailey@example.net
-      access_level: manager
+      access_level: collector
       property_ids:
         - 16
     fileParameters: []

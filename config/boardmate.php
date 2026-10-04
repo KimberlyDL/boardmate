@@ -3,6 +3,7 @@
 use App\Services\Scheduler\Jobs\ExpireReservationsJob;
 use App\Services\Scheduler\Jobs\PruneIdleTokensJob;
 use App\Services\Scheduler\Jobs\PurgeClosedApplicationIdsJob;
+use App\Services\Scheduler\Jobs\PurgeOwnerDocumentsJob;
 
 return [
 
@@ -46,6 +47,7 @@ return [
         PruneIdleTokensJob::class,
         ExpireReservationsJob::class,
         PurgeClosedApplicationIdsJob::class,
+        PurgeOwnerDocumentsJob::class,
     ],
 
     /*

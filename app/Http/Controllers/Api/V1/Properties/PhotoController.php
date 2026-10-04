@@ -33,8 +33,9 @@ class PhotoController extends Controller
     /**
      * Upload photos
      *
-     * One or more `photos[]` (jpg, png or webp, up to 5 MB each). The first
-     * photo of a property becomes its cover.
+     * One or more `photos[]` (jpg, png or webp, up to 5 MB and 8200 px a side).
+     * Each is saved as WebP within 1600 px and 480 px (longer side), without its
+     * EXIF data. The first photo of a property becomes its cover.
      */
     public function store(Request $request, Property $property): JsonResponse
     {
@@ -55,8 +56,10 @@ class PhotoController extends Controller
 
         $order = (int) $property->photos()->max('sort_order');
         foreach ($request->file('photos') as $i => $file) {
+            $variants = $this->files->storeImage($file, FilePurpose::ListingPhoto);
             $property->photos()->create([
-                'path' => $this->files->store($file, FilePurpose::ListingPhoto),
+                'path' => $variants['large'],
+                'thumb_path' => $variants['thumb'],
                 'sort_order' => $order + $i + 1,
                 'is_cover' => $existing === 0 && $i === 0,
             ]);
@@ -118,6 +121,7 @@ class PhotoController extends Controller
 
         $wasCover = $photo->is_cover;
         $this->files->delete($photo->path, FilePurpose::ListingPhoto);
+        $this->files->delete($photo->thumb_path, FilePurpose::ListingPhoto);
         $photo->delete();
 
         if ($wasCover) {

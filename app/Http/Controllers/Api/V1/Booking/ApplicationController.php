@@ -49,6 +49,8 @@ class ApplicationController extends Controller
             ->orderBy('id', $status === ApplicationStatus::Pending ? 'asc' : 'desc')
             ->paginate(25);
 
+        ApplicationResource::prepare($page->items(), 'reviewer');
+
         return ApiResponse::ok(
             collect($page->items())->map(fn ($a) => new ApplicationResource($a, 'reviewer')),
             meta: [
@@ -69,10 +71,13 @@ class ApplicationController extends Controller
     {
         $this->authorizeProperty($request, $application->property, A::ApproveBookings);
 
-        $units = $application->property->bookableUnits()->get()->map(fn ($u) => [
+        $prices = app(PriceBook::class);
+        $bookable = $application->property->bookableUnits()->get();
+        $prices->preload($bookable);
+        $units = $bookable->map(fn ($u) => [
             'id' => $u->id,
             'label' => $u->label,
-            'rent_centavos' => app(PriceBook::class)->amountOn($u),
+            'rent_centavos' => $prices->amountOn($u),
         ]);
 
         return ApiResponse::ok(new ApplicationResource($application, 'reviewer'), meta: ['bookable_units' => $units]);

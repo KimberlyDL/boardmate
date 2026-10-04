@@ -21,7 +21,7 @@ class EmployerController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $links = $request->user()->employerLinks()->active()->with('owner.ownerProfile')->latest()->get();
+        $links = $request->user()->employerLinks()->active()->with(['owner.ownerProfile', 'caretakerAssignments.property:id,name,owner_id'])->latest()->get();
 
         return ApiResponse::ok($links->map(fn ($link) => new CaretakerLinkResource($link, 'owner')));
     }

@@ -68,6 +68,8 @@ class MyApplicationController extends Controller
             ->limit(50)
             ->get();
 
+        ApplicationResource::prepare($applications);
+
         return ApiResponse::ok(
             $applications->map(fn ($a) => new ApplicationResource($a)),
             meta: ['reservation_id' => $applications->first(fn ($a) => $a->status === ApplicationStatus::Approved)?->id],

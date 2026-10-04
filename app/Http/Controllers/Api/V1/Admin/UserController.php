@@ -9,6 +9,7 @@ use App\Http\Resources\AdminUserResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Booking\BookingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -40,7 +41,7 @@ class UserController extends Controller
             ->when($request->has('suspended'), fn ($q) => $request->boolean('suspended')
                 ? $q->whereNotNull('suspended_at')
                 : $q->whereNull('suspended_at'))
-            ->with('ownerProfile', 'roles')
+            ->with('ownerProfile.documents', 'roles')
             ->latest()
             ->paginate(25);
 
@@ -66,7 +67,16 @@ class UserController extends Controller
         $user->tokens()->delete();
         app(AuditService::class)->record(AuditEvent::AccountSuspended, $user, note: "{$user->name} ({$user->email})");
 
-        return ApiResponse::ok(new AdminUserResource($user->load('ownerProfile', 'roles')), "{$user->name} is suspended.");
+        // Owners can no longer approve a suspended boarder; their reservation frees the unit.
+        $bookings = app(BookingService::class);
+        $cancelled = $bookings->closeForSuspendedBoarder($user, $request->user());
+        // An owner who cannot log in cannot review applicants either.
+        if ($user->ownerProfile) {
+            $cancelled += $bookings->closeForSuspendedOwner($user, $request->user());
+        }
+        $message = "{$user->name} is suspended.".($cancelled ? " {$cancelled} open booking(s) were closed." : '');
+
+        return ApiResponse::ok(new AdminUserResource($user->load('ownerProfile', 'roles')), $message);
     }
 
     /**

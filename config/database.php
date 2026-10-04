@@ -97,6 +97,8 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // Timestamps are stored as Manila wall time; the DB's now() must agree.
+            'timezone' => 'Asia/Manila',
         ],
 
         'sqlsrv' => [

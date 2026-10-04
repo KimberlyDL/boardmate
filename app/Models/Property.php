@@ -139,9 +139,31 @@ class Property extends Model
             ->whereHas('units', fn (Builder $u) => $u->where('status', UnitStatus::Available->value)->where('not_ready', false));
     }
 
+    /**
+     * Units that block deleting the property, switching rental mode, or
+     * removing them: anyone booked into or living there. Uses the same rule
+     * as RentableUnit::isInUse().
+     *
+     * @return Collection<int, RentableUnit>
+     */
+    public function occupancyBlocks(): Collection
+    {
+        return $this->units()->inUse()->orderBy('label')->get();
+    }
+
+    /**
+     * Lock this property's row for the rest of the transaction. Booking
+     * approval takes the same lock, so an in-use check made after this cannot
+     * be overtaken by an approval committing in between.
+     */
+    public function lockForOccupancyChange(): void
+    {
+        self::withTrashed()->whereKey($this->id)->lockForUpdate()->first();
+    }
+
     public function hasUnitsInUse(): bool
     {
-        return $this->units()->whereIn('status', UnitStatus::inUseValues())->exists();
+        return $this->units()->inUse()->exists();
     }
 
     public function fullAddress(): string

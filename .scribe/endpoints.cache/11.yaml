@@ -235,7 +235,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: pending
+        example: expired
         type: string
         enumValues:
           - pending
@@ -258,7 +258,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: pending
+      status: expired
       property_id: 16
     fileParameters: []
     responses:
