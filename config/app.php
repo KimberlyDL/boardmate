@@ -65,7 +65,11 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // All BoardMate dates are Asia/Manila (Technical standards, Features Guide §6).
+    'timezone' => env('APP_TIMEZONE', 'Asia/Manila'),
+
+    // Ionic app base URL, used for links in emails (password reset, invites).
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:8100'),
 
     /*
     |--------------------------------------------------------------------------

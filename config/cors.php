@@ -15,11 +15,16 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // Ionic dev servers and the Capacitor Android/iOS shells. Override with a
+    // comma-separated CORS_ALLOWED_ORIGINS in .env.
+    'allowed_origins' => array_values(array_filter(array_map('trim', explode(',', (string) env(
+        'CORS_ALLOWED_ORIGINS',
+        'http://localhost:8100,http://localhost:5173,capacitor://localhost,http://localhost',
+    ))))),
 
     'allowed_origins_patterns' => [],
 

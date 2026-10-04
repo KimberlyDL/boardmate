@@ -33,7 +33,9 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
-            'serve' => true,
+            // Private files are served only through the Files module's signed
+            // route (GET /api/v1/files/...), never by Laravel's built-in route.
+            'serve' => false,
             'throw' => false,
             'report' => false,
         ],
