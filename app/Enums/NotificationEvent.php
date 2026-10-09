@@ -31,6 +31,12 @@ enum NotificationEvent: string
     case BookingCancelled = 'booking_cancelled';
     case ReservationExpiringSoon = 'reservation_expiring_soon';
     case ReservationExpired = 'reservation_expired';
+    case TenancyStarted = 'tenancy_started';
+    case LeaderAppointed = 'leader_appointed';
+    case LeaderEnded = 'leader_ended';
+    case OccupantsChanged = 'occupants_changed';
+    case ApplicationWithdrawnOnMoveIn = 'application_withdrawn_on_move_in';
+    case DiscountChanged = 'discount_changed';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -56,6 +62,12 @@ enum NotificationEvent: string
             self::BookingCancelled => Templates\Booking\BookingCancelledTemplate::class,
             self::ReservationExpiringSoon => Templates\Booking\ReservationExpiringSoonTemplate::class,
             self::ReservationExpired => Templates\Booking\ReservationExpiredTemplate::class,
+            self::TenancyStarted => Templates\Tenancy\TenancyStartedTemplate::class,
+            self::LeaderAppointed => Templates\Tenancy\LeaderAppointedTemplate::class,
+            self::LeaderEnded => Templates\Tenancy\LeaderEndedTemplate::class,
+            self::OccupantsChanged => Templates\Tenancy\OccupantsChangedTemplate::class,
+            self::ApplicationWithdrawnOnMoveIn => Templates\Tenancy\ApplicationWithdrawnOnMoveInTemplate::class,
+            self::DiscountChanged => Templates\Tenancy\DiscountChangedTemplate::class,
         };
     }
 
@@ -94,6 +106,12 @@ enum NotificationEvent: string
             self::BookingCancelled => 'Booking cancelled',
             self::ReservationExpiringSoon => 'Reservation expiring',
             self::ReservationExpired => 'Reservation expired',
+            self::TenancyStarted => 'Moved in',
+            self::LeaderAppointed => 'Named room leader',
+            self::LeaderEnded => 'No longer room leader',
+            self::OccupantsChanged => 'Room occupants changed',
+            self::ApplicationWithdrawnOnMoveIn => 'Application withdrawn after move-in',
+            self::DiscountChanged => 'Agreed rate changed',
         };
     }
 

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 /**
  * Booking application statuses (Features guide F2). Approved = an active
- * reservation; moving in comes with tenancies.
+ * reservation; MovedIn = the reservation became a tenancy.
  */
 enum ApplicationStatus: string
 {
@@ -13,6 +13,7 @@ enum ApplicationStatus: string
     case Declined = 'declined';
     case Cancelled = 'cancelled';
     case Expired = 'expired';
+    case MovedIn = 'moved_in';
 
     public function label(): string
     {
@@ -22,6 +23,7 @@ enum ApplicationStatus: string
             self::Declined => 'Declined',
             self::Cancelled => 'Cancelled',
             self::Expired => 'Expired',
+            self::MovedIn => 'Moved in',
         };
     }
 

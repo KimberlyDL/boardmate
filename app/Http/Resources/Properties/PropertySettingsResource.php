@@ -18,7 +18,7 @@ class PropertySettingsResource extends JsonResource
     public function toArray(Request $request): array
     {
         $values = [];
-        foreach (array_keys(PropertySettings::DEFAULTS) as $field) {
+        foreach (PropertySettings::activeFields() as $field) {
             $value = $this->{$field};
             $values[$field] = match (true) {
                 $value instanceof BackedEnum => $value->value,
@@ -29,7 +29,7 @@ class PropertySettingsResource extends JsonResource
 
         return [
             'values' => $values,
-            'defaults' => PropertySettings::DEFAULTS,
+            'defaults' => array_intersect_key(PropertySettings::DEFAULTS, array_flip(PropertySettings::activeFields())),
             'sections' => PropertySettings::SECTIONS,
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

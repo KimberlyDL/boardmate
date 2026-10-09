@@ -41,7 +41,7 @@ class PropertyController extends Controller
     {
         $properties = Property::query()
             ->visibleTo($request->user())
-            ->with(['units', 'photos', 'building', 'owner.ownerProfile'])
+            ->with(['rooms', 'units', 'photos', 'building', 'owner.ownerProfile'])
             ->orderBy('name')
             ->get();
 
@@ -53,8 +53,10 @@ class PropertyController extends Controller
     /**
      * Add a property
      *
-     * Owner only. Creates the property with its first unit(s) and the guide's
-     * default settings. Prices are in centavos.
+     * Owner only. Creates the property with its first room (rented whole or by
+     * bedspace, with an optional floor), its unit(s) and the guide's default
+     * settings. A house or studio is a property with one room. Add more rooms
+     * with the room endpoints. Prices are in centavos.
      */
     public function store(Request $request): JsonResponse
     {
@@ -64,6 +66,7 @@ class PropertyController extends Controller
         $data = $request->validate($this->detailRules($request, true) + [
             'type' => ['required', Rule::enum(PropertyType::class)],
             'rental_mode' => ['required', Rule::enum(RentalMode::class)],
+            'floor' => ['sometimes', 'nullable', 'integer', 'between:-5,100'],
             ...$this->unitSpecRules(),
         ]);
 
@@ -73,6 +76,7 @@ class PropertyController extends Controller
             RentalMode::from($data['rental_mode']),
             $data['units'] ?? [],
             $data['type'],
+            $data['floor'] ?? null,
         );
 
         $this->audit->record(AuditEvent::PropertyCreated, $property, owner: $user, note: $property->name);
@@ -186,33 +190,9 @@ class PropertyController extends Controller
         return ApiResponse::ok($this->detail($property), 'Unpublished. The listing is hidden.');
     }
 
-    /**
-     * Switch rental mode
-     *
-     * Whole property ⇄ bedspaces. Refused while any unit is in use. The old
-     * units are archived with their price history.
-     */
-    public function switchMode(Request $request, Property $property): JsonResponse
-    {
-        $this->authorizeProperty($request, $property, A::ManageUnits);
-
-        $data = $request->validate([
-            'rental_mode' => ['required', Rule::enum(RentalMode::class)],
-            ...$this->unitSpecRules(),
-        ]);
-
-        $before = $property->rental_mode;
-        $this->setup->switchMode($property, RentalMode::from($data['rental_mode']), $data['units'] ?? [], $request->user());
-
-        $this->audit->record(AuditEvent::RentalModeSwitched, $property,
-            ['rental_mode' => [$before, $property->rental_mode]], owner: $property->owner, note: $property->name);
-
-        return ApiResponse::ok($this->detail($property->refresh()), 'Rental mode changed.');
-    }
-
     private function detail(Property $property): PropertyResource
     {
-        return new PropertyResource($property->load(['units', 'utilityAccounts', 'photos', 'building', 'owner.ownerProfile']), detail: true);
+        return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts', 'photos', 'building', 'owner.ownerProfile']), detail: true);
     }
 
     private function detailRules(Request $request, bool $creating): array

@@ -6,11 +6,14 @@ use App\Enums\ApplicationStatus as Status;
 use App\Enums\AuditEvent;
 use App\Enums\FilePurpose;
 use App\Enums\NotificationEvent;
+use App\Enums\UnitKind;
 use App\Enums\UnitStatus;
 use App\Models\BookingApplication;
 use App\Models\Property;
 use App\Models\PropertyCaretaker;
 use App\Models\RentableUnit;
+use App\Models\Room;
+use App\Models\RoomLeader;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Files\Contracts\FileService;
@@ -19,6 +22,7 @@ use App\Services\Properties\UnitStatusService;
 use App\Support\ManilaDate;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -31,6 +35,8 @@ use Illuminate\Validation\ValidationException;
  * - Approving the last free unit declines the property's other pending
  *   applications ("fully booked").
  * - A reservation lasts until planned move-in + reservation_expiry_days.
+ * - Approval also notes who will stay (a room rented whole) and whether the
+ *   applicant becomes the room's leader; move-in turns that into records.
  */
 class BookingService
 {
@@ -164,9 +170,13 @@ class BookingService
         return $application;
     }
 
-    public function approve(BookingApplication $application, int $unitId, User $actor): BookingApplication
+    /**
+     * @param  bool  $leader  the applicant will lead the room (always so in a room rented whole)
+     * @param  list<array{name: string, contact_phone?: string|null, emergency_contact_name?: string|null, emergency_contact_relationship?: string|null, emergency_contact_phone?: string|null}>  $plannedOccupants  the other people who will stay in a room rented whole
+     */
+    public function approve(BookingApplication $application, int $unitId, User $actor, bool $leader = false, array $plannedOccupants = []): BookingApplication
     {
-        [$application, $withdrawn, $fullyBooked] = DB::transaction(function () use ($application, $unitId, $actor) {
+        [$application, $withdrawn, $fullyBooked] = DB::transaction(function () use ($application, $unitId, $actor, $leader, $plannedOccupants) {
             // Always lock in the same order: boarder → property → application →
             // unit. Approvals for the same boarder or the same property queue up
             // instead of deadlocking, and a bed can never be reserved twice.
@@ -194,6 +204,8 @@ class BookingService
                 throw ValidationException::withMessages(['application' => 'This boarder already has a reservation elsewhere.']);
             }
 
+            [$leaderOnMoveIn, $planned] = $this->planAttendance($unit, $application, $leader, $plannedOccupants);
+
             $settings = $application->property->settings;
             $today = ManilaDate::today();
             $start = $application->planned_move_in_on->greaterThan($today) ? $application->planned_move_in_on : $today;
@@ -204,6 +216,8 @@ class BookingService
                 'decided_by' => $actor->id,
                 'decided_at' => now(),
                 'reserved_until' => $start->addDays($settings?->reservation_expiry_days ?? 7)->toDateString(),
+                'planned_occupants' => $planned === [] ? null : $planned,
+                'leader_on_move_in' => $leaderOnMoveIn,
             ])->save();
 
             $this->unitStatus->move($unit, UnitStatus::Reserved);
@@ -237,13 +251,16 @@ class BookingService
         $unit = $application->unit;
 
         $this->audit->record(AuditEvent::BookingApproved, $application, owner: $property->owner,
-            note: "{$application->boarder->name} → {$property->name} · {$unit->label} until ".$application->reserved_until->format('M j, Y'));
+            note: "{$application->boarder->name} → {$property->name} · {$unit->label} until ".$application->reserved_until->format('M j, Y')
+                .($application->leader_on_move_in ? ' · leader' : '')
+                .($application->planned_occupants ? ' · +'.count($application->planned_occupants).' to stay' : ''));
 
         $this->notifications->send($application->boarder, NotificationEvent::BookingApproved, [
             'property_name' => $property->name,
             'unit_label' => $unit->label,
             'address' => $property->fullAddress(),
             'reserved_until' => $application->reserved_until->format('M j, Y'),
+            'leader' => $application->leader_on_move_in,
         ]);
         foreach ($withdrawn as $other) {
             $this->notifications->send($application->boarder, NotificationEvent::BookingAutoCancelled, [
@@ -374,6 +391,89 @@ class BookingService
         }
 
         return $old->count();
+    }
+
+    /**
+     * The boarder has moved in somewhere: their other pending applications
+     * are withdrawn. Call inside the transaction that records the move-in.
+     *
+     * @return Collection<int, BookingApplication> the applications withdrawn
+     */
+    public function withdrawPendingFor(User $boarder, ?int $exceptApplicationId, string $reason): Collection
+    {
+        $pending = BookingApplication::with('property')
+            ->where('boarder_id', $boarder->id)
+            ->where('status', Status::Pending)
+            ->when($exceptApplicationId, fn ($q, $id) => $q->whereKeyNot($id))
+            ->lockForUpdate()
+            ->get();
+
+        foreach ($pending as $other) {
+            $this->close($other, Status::Cancelled, null, $reason);
+        }
+
+        return $pending;
+    }
+
+    /**
+     * Who will stay and who will lead, checked while the unit is locked.
+     *
+     * - Room rented whole: the applicant holds the lease and so leads the
+     *   room; the others go on the occupant list, within the unit's capacity.
+     * - Bedspace room: the applicant may be named leader if the room has none
+     *   and nobody else reserved there is already planned as leader.
+     *
+     * @param  list<array<string, mixed>>  $occupants
+     * @return array{0: bool, 1: list<array<string, mixed>>}
+     */
+    private function planAttendance(RentableUnit $unit, BookingApplication $application, bool $leader, array $occupants): array
+    {
+        if ($unit->kind === UnitKind::Whole) {
+            if (count($occupants) + 1 > (int) $unit->capacity) {
+                throw ValidationException::withMessages([
+                    'occupants' => "{$unit->label} fits {$unit->capacity} ".($unit->capacity === 1 ? 'person' : 'people').', counting the applicant.',
+                ]);
+            }
+
+            return [true, $this->normalizeOccupants($occupants)];
+        }
+
+        if ($occupants !== []) {
+            throw ValidationException::withMessages(['occupants' => 'People who will stay are listed only for rooms rented whole. In a bedspace room each person is booked separately.']);
+        }
+        if (! $leader) {
+            return [false, []];
+        }
+
+        Room::whereKey($unit->room_id)->lockForUpdate()->first();
+        if (RoomLeader::current()->where('room_id', $unit->room_id)->exists()) {
+            throw ValidationException::withMessages(['leader' => 'This room already has a leader.']);
+        }
+        $alreadyPlanned = BookingApplication::where('status', Status::Approved)
+            ->where('leader_on_move_in', true)
+            ->whereKeyNot($application->id)
+            ->whereHas('unit', fn ($u) => $u->where('room_id', $unit->room_id))
+            ->exists();
+        if ($alreadyPlanned) {
+            throw ValidationException::withMessages(['leader' => 'Someone else reserved in this room is already planned as its leader.']);
+        }
+
+        return [true, []];
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $occupants
+     * @return list<array<string, mixed>>
+     */
+    private function normalizeOccupants(array $occupants): array
+    {
+        return array_values(array_map(fn (array $o) => [
+            'name' => $o['name'],
+            'contact_phone' => $o['contact_phone'] ?? null,
+            'emergency_contact_name' => $o['emergency_contact_name'] ?? null,
+            'emergency_contact_relationship' => $o['emergency_contact_relationship'] ?? null,
+            'emergency_contact_phone' => $o['emergency_contact_phone'] ?? null,
+        ], $occupants));
     }
 
     private function assertCanApply(User $boarder, Property $property): void

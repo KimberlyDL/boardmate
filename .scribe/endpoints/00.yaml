@@ -30,7 +30,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"app":"BoardMate","api_version":"v1","database":"ok","server_time":"2026-10-04T12:12:53+08:00","timezone":"Asia\/Manila"}}'
+        content: '{"data":{"app":"BoardMate","api_version":"v1","database":"ok","server_time":"2026-10-05T19:25:50+08:00","timezone":"Asia\/Manila"}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

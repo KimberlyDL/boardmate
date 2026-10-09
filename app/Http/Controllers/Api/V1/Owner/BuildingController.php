@@ -22,7 +22,7 @@ class BuildingController extends Controller
     public function index(Request $request): JsonResponse
     {
         return ApiResponse::ok(Building::where('owner_id', $request->user()->id)->withCount('properties')->orderBy('name')->get()
-            ->map(fn (Building $b) => ['id' => $b->id, 'name' => $b->name, 'properties_count' => $b->properties_count]));
+            ->map(fn (Building $b) => ['id' => $b->id, 'name' => $b->name, 'number' => $b->number, 'properties_count' => $b->properties_count]));
     }
 
     /**
@@ -35,9 +35,10 @@ class BuildingController extends Controller
 
         $building = new Building($data);
         $building->owner_id = $request->user()->id;
+        $building->number = (int) Building::where('owner_id', $request->user()->id)->max('number') + 1;
         $building->save();
 
-        return ApiResponse::created(['id' => $building->id, 'name' => $building->name, 'properties_count' => 0]);
+        return ApiResponse::created(['id' => $building->id, 'name' => $building->name, 'number' => $building->number, 'properties_count' => 0]);
     }
 
     /**
@@ -50,7 +51,7 @@ class BuildingController extends Controller
             Rule::unique('buildings')->where('owner_id', $request->user()->id)->ignore($building->id)]]);
         $building->update($data);
 
-        return ApiResponse::ok(['id' => $building->id, 'name' => $building->name]);
+        return ApiResponse::ok(['id' => $building->id, 'name' => $building->name, 'number' => $building->number]);
     }
 
     /**

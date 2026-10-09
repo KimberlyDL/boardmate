@@ -35,13 +35,24 @@ Decisions made while building that **differ from or add to** the two spec guides
 | Decision | Detail |
 | --- | --- |
 | Publishing needs | A verified owner, a map pin, at least one photo, rent on every unit, and at least one unit ready to rent. |
-| "In use" | A unit that is reserved, occupied, leaving or overstaying. One rule (`RentableUnit::isInUse`, `Property::occupancyBlocks`) blocks deleting the property, switching rental mode, and removing the unit. Each check runs under the same property lock that booking approval takes, so they cannot race. |
+| "In use" | A unit that is reserved, occupied, leaving or overstaying. One rule (`RentableUnit::isInUse`, `Property::occupancyBlocks`, `Room::hasUnitsInUse`) blocks deleting the property or a room, switching a room's rental mode, and removing the unit. Each check runs under the same property lock that booking approval takes, so they cannot race. |
 | Unit status changes | Only through `UnitStatusService`, with a fixed list of allowed moves. A move that is not allowed, or based on an out-of-date status, is an error. |
 | Deleting a property | Refused while any unit is in use. Otherwise it is unpublished and soft-deleted (history stays), and its pending applications are declined ("This place is no longer listed"). |
-| Switching rental mode | Refused while any unit is in use. The old units are archived with their price history. |
+| Rooms (2026-10-05) | Every property has at least one room, and each room is rented whole or by bedspace (`rooms.rental_mode`), so one property can mix both. A house or studio rented as a whole is a property with one room. Rental mode moved from the property to the room; the property only shows a summary (`whole`, `bedspaces` or `mixed`). |
+| Room floor and code | The floor is an optional number on the room, not a table. The code is automatic: building number (`buildings.number`, assigned per owner), floor and room number, e.g. `B1-F4-03`; missing parts are left out. Room numbers are never reused. |
+| Switching a room's rental mode | Refused while any unit in the room is in use. A person joining a whole-rented room never switches it; the owner changes the price and the leader's occupant list instead. The old units are archived with their price history. |
+| Removing a room | Refused while a unit is in use, and a property always keeps at least one room. The room and its units are archived. |
 | Prices | Effective-dated, never overwritten, no back-dating. Saving the price already in force changes nothing. A scheduled future price is replaced, not stacked. A price set today can be corrected the same day. |
 | Locked prices | A price a bill used is locked (`price_rules.locked_at`; billing calls `PriceBook::lock`). It is never deleted or replaced; a later price can still end it. |
 | Listing photos | Up to 15. Saved as WebP with the longer side at most 1600 px (`large`) and 480 px (`thumb`). EXIF and GPS are removed and the original is not kept. Images over 8200 px on a side are refused. Profile photos are a 256 px WebP square. `boardmate:rebuild-images` converts older uploads. |
+
+## Owner settings (2026-10-06)
+
+| Decision | Detail |
+| --- | --- |
+| Settings of removed features are retired | Due-date policy and common day, partial-period handling, overstay daily charge, short-notice fee, final-utility holdback, split manager, utility due rule, late fees, formal demand, notice-to-vacate, early warning and payment promises. The columns stay (no migration) and keep their defaults, but the settings API neither shows nor accepts them (`PropertySettings::RETIRED`) and the app no longer displays them. |
+| Deposit and first rent (2026-10-06) | Under the default rule the deposit is one month's rent **after** any discount (rent 4,500, discount 500: deposit 4,000). The advance rent paid at move-in is also after the discount and excludes utilities. |
+| Rent in advance, utilities in arrears (2026-10-06) | Each bill from the anchor day is the rent for the period starting plus the utilities of the period just finished. The move-in payment is separate from bills. This replaces the guide's example SC-02, which puts rent and fixed utilities together for the coming period. |
 
 ## Booking (up to the reservation)
 

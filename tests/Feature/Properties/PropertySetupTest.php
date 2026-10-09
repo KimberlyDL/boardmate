@@ -32,7 +32,7 @@ it('creates a bedspace property with numbered beds, rents and default settings',
         ->and(Activity::where('event', 'property.created')->count())->toBe(1);
 });
 
-it('creates a whole property with exactly one unit and its max occupants', function () {
+it('creates a whole room property (a house or studio) with exactly one unit and its max occupants', function () {
     $this->actingAs($this->owner, 'sanctum')->postJson('/api/v1/properties', [
         'name' => 'Mini House', 'type' => 'mini_house', 'rental_mode' => 'whole',
         'units' => ['capacity' => 4, 'rent_centavos' => 1200000],
@@ -55,7 +55,7 @@ it('adds bedspaces in bulk, continuing the numbering', function () {
     $property = makeProperty($this->owner);
 
     $this->actingAs($this->owner, 'sanctum')
-        ->postJson("/api/v1/properties/{$property->id}/units", ['count' => 2, 'rent_centavos' => 150000])
+        ->postJson("/api/v1/rooms/{$property->rooms()->first()->id}/bedspaces", ['count' => 2, 'rent_centavos' => 150000])
         ->assertCreated()
         ->assertJsonPath('data.0.label', 'Bed 4')
         ->assertJsonPath('data.1.label', 'Bed 5');
@@ -63,26 +63,28 @@ it('adds bedspaces in bulk, continuing the numbering', function () {
     expect($property->units()->count())->toBe(5);
 });
 
-it('switches rental mode only while no unit is in use, archiving the old units', function () {
+it('switches the rental mode of a room only while no unit is in use, archiving the old units', function () {
     $property = makeProperty($this->owner);
+    $room = $property->rooms()->first();
     $oldIds = $property->units()->pluck('id');
 
     $this->actingAs($this->owner, 'sanctum')
-        ->postJson("/api/v1/properties/{$property->id}/rental-mode", [
+        ->postJson("/api/v1/rooms/{$room->id}/rental-mode", [
             'rental_mode' => 'whole', 'units' => ['capacity' => 3, 'rent_centavos' => 600000],
         ])->assertOk()
         ->assertJsonPath('data.rental_mode', 'whole')
         ->assertJsonPath('data.counts.units', 1);
 
+    expect($property->fresh()->rentalModeSummary())->toBe('whole');
     expect(RentableUnit::withTrashed()->whereIn('id', $oldIds)->whereNotNull('deleted_at')->count())->toBe(3);
 
     // Someone moves in: switching back is refused.
     $property->units()->first()->forceFill(['status' => UnitStatus::Occupied])->save();
-    $this->postJson("/api/v1/properties/{$property->id}/rental-mode", ['rental_mode' => 'bedspaces', 'units' => ['count' => 2]])
+    $this->postJson("/api/v1/rooms/{$room->id}/rental-mode", ['rental_mode' => 'bedspaces', 'units' => ['count' => 2]])
         ->assertUnprocessable()->assertJsonValidationErrors(['mode']);
 });
 
-it('protects bedspaces in use, the last bedspace, and whole-property units from removal', function () {
+it('protects bedspaces in use, the last bedspace, and whole-room units from removal', function () {
     $property = makeProperty($this->owner, ['units' => ['count' => 2, 'rent_centavos' => 100000]]);
     [$a, $b] = $property->units()->get()->all();
     $a->forceFill(['status' => UnitStatus::Reserved])->save();

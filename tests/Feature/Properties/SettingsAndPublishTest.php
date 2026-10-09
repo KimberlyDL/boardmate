@@ -16,32 +16,18 @@ it('starts every property with the guides\' default settings', function () {
         ->getJson("/api/v1/properties/{$this->property->id}/settings")->assertOk()->json('data.values');
 
     expect($values)->toMatchArray([
-        'due_date_policy' => 'anniversary',          // S5
         'activation_required' => true,               // SC-33
         'deposit_rule' => 'one_month_rent',          // F5
         'price_change_notice_days' => 30,            // F5
-        'overstay_daily_centavos' => null,           // SC-29: rent ÷ 30
         'minimum_notice_days' => null,               // S8
         'suggested_notice_days' => 7,                // S8
-        'short_notice_consequence' => 'none',
-        'short_notice_fee_centavos' => 0,            // S8: ₱0
-        'split_manager' => 'owner',                  // S3
         'split_method' => 'occupant_days',           // F5
-        'utility_due_rule' => 'days_after_issue',
         'utility_due_days' => 7,                     // SC-20 N = 7
         'grace_days' => 3,                           // S8 timings
         'remind_before_days' => 3,
         'remind_on_due' => true,
         'overdue_reminder_days' => [1, 3],
         'mark_late_day' => 4,
-        'late_fee_type' => 'off',
-        'arrears_enabled' => false,
-        'arrears_days' => 15,
-        'notice_to_vacate_min_days' => 30,
-        'notice_to_vacate_end_days' => 15,
-        'early_warning_late_count' => 2,
-        'early_warning_window_periods' => 6,
-        'payment_promise_max_days' => 14,
         'correction_credit_handling' => 'roll_forward', // SC-14
         'reservation_expiry_days' => 7,              // F2
         'curfew_time' => null,                       // F9
@@ -50,26 +36,32 @@ it('starts every property with the guides\' default settings', function () {
         'overnight_limit_per_month' => 3,
         'extra_occupant_fee_enabled' => false,
     ]);
+
+    // Features left out of the first release are neither shown nor settable.
+    expect(array_keys($values))->not->toContain('due_date_policy', 'late_fee_type', 'final_utility_handling', 'split_manager');
 });
 
 it('saves settings, checks combinations, logs before → after, and resets a section', function () {
     $this->actingAs($this->owner, 'sanctum');
     $url = "/api/v1/properties/{$this->property->id}/settings";
 
-    $this->putJson($url, ['due_date_policy' => 'common'])->assertUnprocessable()->assertJsonValidationErrors(['common_due_day']);
-    $this->putJson($url, ['late_fee_type' => 'percentage'])->assertUnprocessable()->assertJsonValidationErrors(['late_fee_basis_points']);
+    $this->putJson($url, ['deposit_rule' => 'fixed_amount'])->assertUnprocessable()->assertJsonValidationErrors(['deposit_fixed_centavos']);
     $this->putJson($url, ['grace_days' => 5])->assertUnprocessable()->assertJsonValidationErrors(['mark_late_day']);
 
-    $this->putJson($url, ['due_date_policy' => 'common', 'common_due_day' => 5, 'curfew_time' => '22:00', 'grace_days' => 2])
+    // Settings of removed features are ignored, not saved.
+    $this->putJson($url, ['late_fee_type' => 'fixed', 'due_date_policy' => 'common', 'curfew_time' => '22:00', 'grace_days' => 2])
         ->assertOk()
-        ->assertJsonPath('data.values.common_due_day', 5)
-        ->assertJsonPath('data.values.curfew_time', '22:00');
+        ->assertJsonPath('data.values.curfew_time', '22:00')
+        ->assertJsonMissingPath('data.values.late_fee_type');
+    expect($this->property->settings->fresh())
+        ->late_fee_type->value->toBe('off')
+        ->due_date_policy->value->toBe('anniversary');
 
-    $this->getJson('/api/v1/owner/audit-log?event=property.settings_changed')->assertJsonPath('data.0.changes.0.field', 'due_date_policy');
+    expect(collect($this->getJson('/api/v1/owner/audit-log?event=property.settings_changed')->json('data.0.changes'))->pluck('field')->all())
+        ->toEqualCanonicalizing(['curfew_time', 'grace_days']);
 
-    $this->postJson("{$url}/reset", ['sections' => ['rent', 'curfew']])
+    $this->postJson("{$url}/reset", ['sections' => ['curfew']])
         ->assertOk()
-        ->assertJsonPath('data.values.due_date_policy', 'anniversary')
         ->assertJsonPath('data.values.curfew_time', null)
         ->assertJsonPath('data.values.grace_days', 2); // payments section untouched
 });
@@ -103,7 +95,7 @@ it('needs rent on every unit and one unit ready', function () {
     $this->property->update(['latitude' => 14.6, 'longitude' => 121.0]);
     $this->actingAs($this->owner, 'sanctum')
         ->postJson("/api/v1/properties/{$this->property->id}/photos", ['photos' => [UploadedFile::fake()->image('a.jpg')]]);
-    $this->postJson("/api/v1/properties/{$this->property->id}/units", ['count' => 1]); // no rent
+    $this->postJson('/api/v1/rooms/'.$this->property->rooms()->first()->id.'/bedspaces', ['count' => 1]); // no rent
     $this->property->units()->update(['not_ready' => true]);
 
     $missing = collect($this->postJson("/api/v1/properties/{$this->property->id}/publish")->json('checklist'))

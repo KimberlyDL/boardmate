@@ -85,23 +85,40 @@ class PropertySettings extends Model
         'visitor_hours_end' => null,
     ];
 
+    /**
+     * Settings of features left out of the first release (System Design guide:
+     * anniversary due dates only, no proration, late fees, holdback, formal
+     * demand or notice-to-vacate automation, promises, early warning, lease
+     * holders). The columns stay and keep their defaults, but the API neither
+     * shows nor accepts them.
+     */
+    public const RETIRED = [
+        'due_date_policy', 'common_due_day', 'partial_period_handling', 'overstay_daily_centavos',
+        'short_notice_consequence', 'short_notice_fee_centavos', 'final_utility_handling',
+        'final_utility_holdback_centavos', 'split_manager', 'utility_due_rule', 'late_fee_type',
+        'late_fee_fixed_centavos', 'late_fee_basis_points', 'arrears_enabled', 'arrears_days',
+        'notice_to_vacate_min_days', 'notice_to_vacate_end_days', 'early_warning_enabled',
+        'early_warning_late_count', 'early_warning_window_periods', 'payment_promise_max_days',
+    ];
+
     /** Groups shown in the app and reset together. */
     public const SECTIONS = [
-        'rent' => ['due_date_policy', 'common_due_day', 'partial_period_handling', 'activation_required', 'deposit_rule',
-            'deposit_fixed_centavos', 'price_change_notice_days', 'overstay_daily_centavos'],
-        'move_out' => ['minimum_notice_days', 'suggested_notice_days', 'short_notice_consequence', 'short_notice_fee_centavos',
-            'final_utility_handling', 'final_utility_holdback_centavos'],
-        'utilities' => ['split_manager', 'split_method', 'utility_due_rule', 'utility_due_days'],
+        'rent' => ['activation_required', 'deposit_rule', 'deposit_fixed_centavos', 'price_change_notice_days'],
+        'move_out' => ['minimum_notice_days', 'suggested_notice_days'],
+        'utilities' => ['split_method', 'utility_due_days'],
         'payments' => ['grace_days', 'remind_before_due', 'remind_before_days', 'remind_on_due', 'remind_overdue',
-            'overdue_reminder_days', 'mark_late_enabled', 'mark_late_day', 'late_fee_type', 'late_fee_fixed_centavos',
-            'late_fee_basis_points', 'arrears_enabled', 'arrears_days', 'notice_to_vacate_min_days', 'notice_to_vacate_end_days',
-            'early_warning_enabled', 'early_warning_late_count', 'early_warning_window_periods', 'payment_promise_max_days',
-            'correction_credit_handling'],
+            'overdue_reminder_days', 'mark_late_enabled', 'mark_late_day', 'correction_credit_handling'],
         'booking' => ['reservation_expiry_days'],
         'curfew' => ['curfew_time', 'curfew_reminder_minutes'],
         'visitors' => ['overnight_requires_approval', 'overnight_limit_per_month', 'extra_occupant_fee_enabled',
             'extra_occupant_fee_centavos', 'visitor_hours_start', 'visitor_hours_end'],
     ];
+
+    /** @return list<string> the settings owners can see and change */
+    public static function activeFields(): array
+    {
+        return array_values(array_diff(array_keys(self::DEFAULTS), self::RETIRED));
+    }
 
     protected $guarded = ['id', 'property_id'];
 

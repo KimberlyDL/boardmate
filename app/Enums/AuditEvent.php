@@ -39,6 +39,9 @@ enum AuditEvent: string
     case PropertyDeleted = 'property.deleted';
     case PropertyPublished = 'property.published';
     case PropertyUnpublished = 'property.unpublished';
+    case RoomAdded = 'room.added';
+    case RoomUpdated = 'room.updated';
+    case RoomRemoved = 'room.removed';
     case RentalModeSwitched = 'property.rental_mode_switched';
     case UnitsAdded = 'unit.added';
     case UnitUpdated = 'unit.updated';
@@ -59,6 +62,18 @@ enum AuditEvent: string
     case BookingDeclined = 'booking.declined';
     case BookingCancelled = 'booking.cancelled';
     case ReservationExpired = 'booking.expired';
+
+    // Tenancies (C1, C2)
+    case LeaderAppointed = 'room.leader_appointed';
+    case LeaderReplaced = 'room.leader_replaced';
+    case OccupantAdded = 'room.occupant_added';
+    case OccupantUpdated = 'room.occupant_updated';
+    case OccupantRemoved = 'room.occupant_removed';
+    case TenancyStarted = 'tenancy.started';
+    case ActivationOverridden = 'tenancy.activation_overridden';
+    case EmergencyContactChanged = 'tenancy.emergency_contact_changed';
+    case DiscountSet = 'tenancy.discount_set';
+    case DiscountEnded = 'tenancy.discount_ended';
 
     // Account security
     case EmailChanged = 'account.email_changed';
@@ -99,7 +114,10 @@ enum AuditEvent: string
             self::PropertyDeleted => 'Deleted a property',
             self::PropertyPublished => 'Published a listing',
             self::PropertyUnpublished => 'Unpublished a listing',
-            self::RentalModeSwitched => 'Switched rental mode',
+            self::RoomAdded => 'Added a room',
+            self::RoomUpdated => 'Changed a room',
+            self::RoomRemoved => 'Removed a room',
+            self::RentalModeSwitched => 'Switched a room\'s rental mode',
             self::UnitsAdded => 'Added units',
             self::UnitUpdated => 'Changed a unit',
             self::UnitRemoved => 'Removed a unit',
@@ -117,6 +135,16 @@ enum AuditEvent: string
             self::BookingDeclined => 'Declined a booking',
             self::BookingCancelled => 'Cancelled a booking',
             self::ReservationExpired => 'A reservation expired',
+            self::LeaderAppointed => 'Appointed a room leader',
+            self::LeaderReplaced => 'Replaced a room leader',
+            self::OccupantAdded => 'Added an occupant',
+            self::OccupantUpdated => 'Changed an occupant',
+            self::OccupantRemoved => 'Removed an occupant',
+            self::TenancyStarted => 'Moved someone in',
+            self::ActivationOverridden => 'Moved in without the deposit and first rent',
+            self::EmergencyContactChanged => 'Changed a tenant\'s emergency contact',
+            self::DiscountSet => 'Set a tenant\'s discount',
+            self::DiscountEnded => 'Ended a tenant\'s discount',
             self::EmailChanged => 'Changed email',
             self::PasswordChanged => 'Changed password',
             self::PasswordSet => 'Set a password',

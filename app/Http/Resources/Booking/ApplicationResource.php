@@ -4,6 +4,7 @@ namespace App\Http\Resources\Booking;
 
 use App\Enums\ApplicationStatus;
 use App\Enums\FilePurpose;
+use App\Enums\UnitKind;
 use App\Models\BookingApplication;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Pricing\PriceBook;
@@ -59,7 +60,7 @@ class ApplicationResource extends JsonResource
                 'area' => collect([$property->barangay, $property->city])->filter()->implode(', '),
                 'address' => $reserved || $this->view === 'reviewer' ? $property->fullAddress() : null,
                 'cover_photo_url' => $cover ? $files->url($cover->thumbOrLargePath(), FilePurpose::ListingPhoto) : null,
-                'rental_mode' => $property->rental_mode->value,
+                'rental_mode' => $this->unit ? ($this->unit->kind === UnitKind::Whole ? 'whole' : 'bedspaces') : null,
                 'owner_name' => $property->owner->ownerDisplayName(),
             ],
             'unit' => $this->unit ? [
@@ -75,6 +76,7 @@ class ApplicationResource extends JsonResource
             'closed_at' => $this->closed_at?->toIso8601String(),
             'created_at' => $this->created_at?->toIso8601String(),
             'can_cancel' => $this->status->isOpen(),
+            'leader_on_move_in' => $this->leader_on_move_in,
         ];
 
         if ($this->view === 'reviewer') {
@@ -89,6 +91,8 @@ class ApplicationResource extends JsonResource
             $data['id_document_url'] = $files->url($this->id_document_path, FilePurpose::IdDocument);
             $data['id_document_purged'] = $this->id_document_purged_at !== null;
             $data['decided_by'] = $this->decider?->name;
+            // Emergency contacts are for staff only, so the boarder does not get this list.
+            $data['planned_occupants'] = $this->planned_occupants ?? [];
             $data['can_cancel'] = $this->status === ApplicationStatus::Approved;
         }
 

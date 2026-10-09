@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/** An optional label grouping several properties for display (D1). */
+/** An optional label grouping several properties for display; its number (B1, B2) is used in room codes (B1). */
 class Building extends Model
 {
     protected $fillable = ['name'];

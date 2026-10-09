@@ -28,6 +28,20 @@ $sample = [
     'reserved_until' => 'Oct 27, 2026',
     'reserved_property' => 'Reyes Dorm',
     'cancelled_by' => 'Kim Santos',
+    'anchor_day' => 25,
+    'moved_in_on' => 'Oct 25, 2026',
+    'next_due_on' => 'Nov 25, 2026',
+    'is_leader' => true,
+    'room_code' => 'B1-F2-03',
+    'appointed_by' => 'Santos Boarding House',
+    'new_leader' => 'Ben Reyes',
+    'leader_name' => 'Kim Santos',
+    'summary' => 'added Ericka Cruz',
+    'property_id' => 12,
+    'moved_property' => 'Reyes Dorm',
+    'change' => 'set',
+    'from' => 'Nov 26, 2026',
+    'description' => '₱500.00 off your rent',
 ];
 
 it('renders every event as email and in-app, for an account and for a bare address', function (NotificationEvent $event) use ($sample) {

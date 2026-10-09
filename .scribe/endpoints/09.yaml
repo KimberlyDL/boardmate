@@ -1,18 +1,18 @@
-name: Utilities
+name: Units
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/properties/{property_id}/utility-accounts'
+    uri: 'api/v1/properties/{property_id}/units'
     metadata:
       custom: []
-      groupName: Utilities
+      groupName: Units
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'List utility accounts'
+      title: 'List units'
       description: ''
       authenticated: true
       deprecated: false
@@ -60,19 +60,16 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/properties/{property_id}/utility-accounts'
+      - PATCH
+    uri: 'api/v1/units/{id}'
     metadata:
       custom: []
-      groupName: Utilities
+      groupName: Units
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Add a utility account'
-      description: |-
-        Fixed methods (per bedspace, per property, opt-in) need
-        `amount_centavos`. "Billed by: group" means the boarders handle it among
-        themselves and it never appears on the owner's bill.
+      title: 'Rename or resize a unit'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -80,10 +77,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      property_id:
+      id:
         custom: []
-        name: property_id
-        description: 'The ID of the property.'
+        name: id
+        description: 'The ID of the unit.'
         required: true
         example: 16
         type: integer
@@ -92,7 +89,93 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      label:
+        custom: []
+        name: label
+        description: 'Must not be greater than 80 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      sort_order:
+        custom: []
+        name: sort_order
+        description: 'Must be at least 0. Must not be greater than 9999.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      capacity:
+        custom: []
+        name: capacity
+        description: 'Max occupants of a whole room; a bedspace is always 1. Must be at least 1. Must not be greater than 50.'
+        required: false
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      label: b
+      sort_order: 22
+      capacity: 7
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/units/{id}'
+    metadata:
+      custom: []
+      groupName: Units
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove a bedspace'
+      description: |-
+        Not while someone is booked into or living in it, and a bedspace room
+        always keeps at least one bedspace. The bedspace is archived with its
+        history.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the unit.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -111,17 +194,17 @@ endpoints:
     custom: []
     httpMethods:
       - PATCH
-    uri: 'api/v1/utility-accounts/{account_id}'
+    uri: 'api/v1/units/{unit_id}/not-ready'
     metadata:
       custom: []
-      groupName: Utilities
+      groupName: Units
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Change a utility account'
+      title: 'Mark a unit (not) ready'
       description: |-
-        Switching to a fixed method needs `amount_centavos` (starts today).
-        To change only the amount later, use the amount endpoint.
+        Needs cleaning or repairs: hidden from bookings until cleared (S1). Does
+        not change anyone's tenancy.
       authenticated: true
       deprecated: false
     headers:
@@ -129,10 +212,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      account_id:
+      unit_id:
         custom: []
-        name: account_id
-        description: 'The ID of the account.'
+        name: unit_id
+        description: 'The ID of the unit.'
         required: true
         example: 16
         type: integer
@@ -141,58 +224,35 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      account_id: 16
+      unit_id: 16
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/utility-accounts/{account_id}'
-    metadata:
-      custom: []
-      groupName: Utilities
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove a utility account'
-      description: 'Archived with its price history.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      account_id:
+    bodyParameters:
+      not_ready:
         custom: []
-        name: account_id
-        description: 'The ID of the account.'
+        name: not_ready
+        description: ''
         required: true
-        example: 16
-        type: integer
+        example: true
+        type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-    cleanUrlParameters:
-      account_id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      reason:
+        custom: []
+        name: reason
+        description: 'This field is required when <code>not_ready</code> is <code>true</code>. Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      not_ready: true
+      reason: b
     fileParameters: []
     responses: []
     responseFields: []
@@ -207,15 +267,18 @@ endpoints:
     custom: []
     httpMethods:
       - PUT
-    uri: 'api/v1/utility-accounts/{account_id}/amount'
+    uri: 'api/v1/units/{unit_id}/rent'
     metadata:
       custom: []
-      groupName: Utilities
+      groupName: Units
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Change a fixed utility amount'
-      description: 'Effective-dated like rent: the current amount closes the day before.'
+      title: 'Set rent'
+      description: |-
+        Effective-dated (S4): the current rent closes the day before
+        `effective_from` and the new one starts; past prices are never changed.
+        Omit `effective_from` to start today.
       authenticated: true
       deprecated: false
     headers:
@@ -223,10 +286,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      account_id:
+      unit_id:
         custom: []
-        name: account_id
-        description: 'The ID of the account.'
+        name: unit_id
+        description: 'The ID of the unit.'
         required: true
         example: 16
         type: integer
@@ -235,7 +298,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      account_id: 16
+      unit_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -255,7 +318,7 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-04'
+        example: '2026-10-05'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -263,7 +326,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       amount_centavos: 1
-      effective_from: '2026-10-04'
+      effective_from: '2026-10-05'
     fileParameters: []
     responses: []
     responseFields: []
@@ -278,14 +341,14 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/utility-accounts/{account_id}/price-history'
+    uri: 'api/v1/units/{unit_id}/price-history'
     metadata:
       custom: []
-      groupName: Utilities
+      groupName: Units
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Amount history'
+      title: 'Rent history'
       description: ''
       authenticated: true
       deprecated: false
@@ -294,10 +357,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      account_id:
+      unit_id:
         custom: []
-        name: account_id
-        description: 'The ID of the account.'
+        name: unit_id
+        description: 'The ID of the unit.'
         required: true
         example: 16
         type: integer
@@ -306,7 +369,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      account_id: 16
+      unit_id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

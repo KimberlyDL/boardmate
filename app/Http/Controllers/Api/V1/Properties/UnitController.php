@@ -15,7 +15,6 @@ use App\Models\RentableUnit;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Pricing\PriceBook;
-use App\Services\Properties\PropertySetup;
 use App\Support\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,35 +42,6 @@ class UnitController extends Controller
     }
 
     /**
-     * Add bedspaces
-     *
-     * Bedspace mode only. `label_pattern` uses {n} for the number, e.g.
-     * "Room A – Bed {n}". Numbering continues after existing bedspaces unless
-     * `start_number` is given.
-     */
-    public function store(Request $request, Property $property, PropertySetup $setup): JsonResponse
-    {
-        $this->authorizeProperty($request, $property, A::ManageUnits);
-
-        $data = $request->validate([
-            'count' => ['required', 'integer', 'min:1', 'max:'.PropertySetup::MAX_BEDSPACES],
-            'label_pattern' => ['sometimes', 'string', 'max:60'],
-            'start_number' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:9999'],
-            'rent_centavos' => ['sometimes', 'nullable', 'integer', 'min:0', 'max:100000000'],
-        ]);
-
-        $units = $setup->addBedspaces(
-            $property, $data['count'], $data['label_pattern'] ?? 'Bed {n}', $data['start_number'] ?? null,
-            $data['rent_centavos'] ?? null, $request->user(),
-        );
-
-        $this->audit->record(AuditEvent::UnitsAdded, $property, owner: $property->owner,
-            note: $units->count().' bedspace(s): '.$units->pluck('label')->implode(', '));
-
-        return ApiResponse::created(UnitResource::collection(UnitResource::prepare($units)), $units->count().' bedspace(s) added.');
-    }
-
-    /**
      * Rename or resize a unit
      */
     public function update(Request $request, RentableUnit $unit): JsonResponse
@@ -82,7 +52,7 @@ class UnitController extends Controller
         $data = $request->validate([
             'label' => ['sometimes', 'string', 'max:80'],
             'sort_order' => ['sometimes', 'integer', 'min:0', 'max:9999'],
-            // Max occupants of a whole property; a bedspace is always 1.
+            // Max occupants of a whole room; a bedspace is always 1.
             'capacity' => ['sometimes', 'integer', 'min:1', 'max:50'],
         ]);
         if ($unit->kind->value === 'bedspace') {
@@ -103,24 +73,26 @@ class UnitController extends Controller
     /**
      * Remove a bedspace
      *
-     * Not while someone is booked into or living in it, and a property always
-     * keeps at least one unit. The bedspace is archived with its history.
+     * Not while someone is booked into or living in it, and a bedspace room
+     * always keeps at least one bedspace. The bedspace is archived with its
+     * history.
      */
     public function destroy(Request $request, RentableUnit $unit): JsonResponse
     {
         $property = $unit->property;
         $this->authorizeProperty($request, $property, A::ManageUnits);
 
-        if ($property->rental_mode === RentalMode::Whole) {
-            throw ValidationException::withMessages(['unit' => 'A whole-property listing has exactly one unit. Switch to bedspaces instead.']);
+        $room = $unit->room;
+        if ($room->rental_mode === RentalMode::Whole) {
+            throw ValidationException::withMessages(['unit' => 'A room rented as a whole has exactly one unit. Switch the room to bedspaces instead.']);
         }
-        DB::transaction(function () use ($property, $unit) {
+        DB::transaction(function () use ($property, $room, $unit) {
             $property->lockForOccupancyChange();
             if ($unit->refresh()->isInUse()) {
                 throw ValidationException::withMessages(['unit' => 'Someone is booked into or living in this bedspace.']);
             }
-            if ($property->units()->count() <= 1) {
-                throw ValidationException::withMessages(['unit' => 'A property needs at least one bedspace.']);
+            if ($room->units()->count() <= 1) {
+                throw ValidationException::withMessages(['unit' => 'A bedspace room needs at least one bedspace.']);
             }
 
             $unit->delete();

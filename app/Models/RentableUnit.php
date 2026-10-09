@@ -12,12 +12,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/** The whole property or one bedspace (D1). Rent is an effective-dated price rule. */
+/** A whole room or one bedspace (B1). Rent is an effective-dated price rule. */
 class RentableUnit extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['kind', 'label', 'sort_order', 'capacity'];
+    protected $fillable = ['room_id', 'kind', 'label', 'sort_order', 'capacity'];
 
     /** New units are free and ready (matches the column defaults). */
     protected $attributes = ['status' => 'available', 'not_ready' => false];
@@ -36,6 +36,11 @@ class RentableUnit extends Model
         return $this->belongsTo(Property::class);
     }
 
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class);
+    }
+
     public function priceRules(): MorphMany
     {
         return $this->morphMany(PriceRule::class, 'priceable')->orderByDesc('effective_from')->orderByDesc('id');
@@ -46,6 +51,12 @@ class RentableUnit extends Model
     public function activeReservation(): HasOne
     {
         return $this->hasOne(BookingApplication::class, 'unit_id')->where('status', ApplicationStatus::Approved);
+    }
+
+    /** The tenancy running in this unit, if someone has moved in. */
+    public function currentTenancy(): HasOne
+    {
+        return $this->hasOne(Tenancy::class, 'unit_id')->whereNotIn('status', ['ended', 'settled']);
     }
 
     public function isAvailable(): bool

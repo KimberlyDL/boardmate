@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-/** A rentable unit is the whole property or one bedspace (D1). */
+/** A rentable unit is a whole room or one bedspace (B1). */
 enum UnitKind: string
 {
     case Whole = 'whole';
@@ -11,7 +11,7 @@ enum UnitKind: string
     public function label(): string
     {
         return match ($this) {
-            self::Whole => 'Whole property',
+            self::Whole => 'Whole room',
             self::Bedspace => 'Bedspace',
         };
     }

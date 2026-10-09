@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Booking\ApplicationResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\BookingApplication;
+use App\Models\RoomLeader;
 use App\Services\Booking\BookingService;
 use App\Services\Pricing\PriceBook;
 use Illuminate\Http\JsonResponse;
@@ -74,9 +75,16 @@ class ApplicationController extends Controller
         $prices = app(PriceBook::class);
         $bookable = $application->property->bookableUnits()->get();
         $prices->preload($bookable);
+        $property = $application->property->loadMissing('building');
+        $rooms = $property->rooms()->get()->each(fn ($r) => $r->setRelation('property', $property))->keyBy('id');
+        $withLeader = RoomLeader::current()->whereIn('room_id', $bookable->pluck('room_id'))->pluck('room_id')->flip();
         $units = $bookable->map(fn ($u) => [
             'id' => $u->id,
+            'room_code' => $rooms->get($u->room_id)?->code(),
             'label' => $u->label,
+            'kind' => $u->kind->value,
+            'capacity' => $u->capacity,
+            'room_has_leader' => $withLeader->has($u->room_id),
             'rent_centavos' => $prices->amountOn($u),
         ]);
 
@@ -85,13 +93,30 @@ class ApplicationController extends Controller
 
     /**
      * Approve (reserve a unit)
+     *
+     * `unit_id` is the bedspace or whole room. For a room rented whole the
+     * applicant leads it and `occupants` lists the other people who will stay
+     * (name required; contacts can be completed at move-in), within the
+     * unit's capacity. For a bedspace, `leader: true` names the applicant the
+     * room's leader when it has none yet.
      */
     public function approve(Request $request, BookingApplication $application): JsonResponse
     {
         $this->authorizeProperty($request, $application->property, A::ApproveBookings);
-        $data = $request->validate(['unit_id' => ['required', 'integer']]);
+        $data = $request->validate([
+            'unit_id' => ['required', 'integer'],
+            'leader' => ['sometimes', 'boolean'],
+            'occupants' => ['sometimes', 'array', 'max:49'],
+            'occupants.*.name' => ['required', 'string', 'max:120'],
+            'occupants.*.contact_phone' => ['sometimes', 'nullable', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+            'occupants.*.emergency_contact_name' => ['sometimes', 'nullable', 'string', 'max:120'],
+            'occupants.*.emergency_contact_relationship' => ['sometimes', 'nullable', 'string', 'max:50'],
+            'occupants.*.emergency_contact_phone' => ['nullable', 'required_with:occupants.*.emergency_contact_name', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+        ]);
 
-        $application = $this->bookings->approve($application, $data['unit_id'], $request->user());
+        $application = $this->bookings->approve(
+            $application, $data['unit_id'], $request->user(), (bool) ($data['leader'] ?? false), $data['occupants'] ?? [],
+        );
 
         return ApiResponse::ok(new ApplicationResource($application->load(['unit', 'boarder']), 'reviewer'),
             "{$application->unit->label} is reserved for {$application->boarder->name} until ".$application->reserved_until->format('M j').'.');

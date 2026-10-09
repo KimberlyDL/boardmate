@@ -40,7 +40,7 @@ class ListingSearch
             })
             ->when(isset($filters['min_price']), fn (Builder $q) => $q->where($price, '>=', $filters['min_price']))
             ->when(isset($filters['max_price']), fn (Builder $q) => $q->where($price, '<=', $filters['max_price']))
-            ->when($filters['rental_mode'] ?? null, fn (Builder $q, string $mode) => $q->where('rental_mode', $mode))
+            ->when($filters['rental_mode'] ?? null, fn (Builder $q, string $mode) => $q->whereHas('rooms', fn (Builder $r) => $r->where('rental_mode', $mode)))
             ->when($filters['includes'] ?? [], function (Builder $q, array $types) {
                 foreach ($types as $type) {
                     $q->whereHas('utilityAccounts', fn (Builder $u) => $u->where('type', $type)->where('method', 'included'));
@@ -55,7 +55,7 @@ class ListingSearch
                 fn (Builder $q) => $q->orderByRaw('price_from_centavos asc nulls last'),
                 fn (Builder $q) => $q->orderByDesc('published_at'))
             ->orderBy('properties.id')
-            ->with(['photos', 'units', 'utilityAccounts', 'owner.ownerProfile'])
+            ->with(['photos', 'rooms', 'building', 'units', 'utilityAccounts', 'owner.ownerProfile'])
             ->paginate($perPage);
     }
 
@@ -66,7 +66,7 @@ class ListingSearch
             ->listable()
             ->select('properties.*')
             ->selectSub(self::priceFromSubquery(), 'price_from_centavos')
-            ->with(['photos', 'units', 'utilityAccounts', 'settings', 'owner.ownerProfile'])
+            ->with(['photos', 'rooms', 'building', 'units', 'utilityAccounts', 'settings', 'owner.ownerProfile'])
             ->find($id);
     }
 

@@ -5,14 +5,7 @@ namespace App\Http\Controllers\Api\V1\Properties;
 use App\Enums\AuditEvent;
 use App\Enums\CorrectionCreditHandling;
 use App\Enums\DepositRule;
-use App\Enums\DueDatePolicy;
-use App\Enums\FinalUtilityHandling;
-use App\Enums\LateFeeType;
-use App\Enums\PartialPeriodHandling;
 use App\Enums\PropertyAbility as A;
-use App\Enums\ShortNoticeConsequence;
-use App\Enums\SplitManager;
-use App\Enums\UtilityDueRule;
 use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Properties\PropertySettingsResource;
@@ -119,23 +112,8 @@ class SettingsController extends Controller
     private function validateCombination(array $s): void
     {
         $errors = [];
-        if (in_array($s['due_date_policy'], ['common', 'hybrid'], true) && empty($s['common_due_day'])) {
-            $errors['common_due_day'] = 'Choose the day of the month everyone pays.';
-        }
         if ($s['deposit_rule'] === 'fixed_amount' && $s['deposit_fixed_centavos'] === null) {
             $errors['deposit_fixed_centavos'] = 'Enter the deposit amount.';
-        }
-        if ($s['late_fee_type'] === 'fixed' && empty($s['late_fee_fixed_centavos'])) {
-            $errors['late_fee_fixed_centavos'] = 'Enter the late fee amount.';
-        }
-        if ($s['late_fee_type'] === 'percentage' && empty($s['late_fee_basis_points'])) {
-            $errors['late_fee_basis_points'] = 'Enter the late fee percentage.';
-        }
-        if ($s['short_notice_consequence'] === 'fixed_fee' && empty($s['short_notice_fee_centavos'])) {
-            $errors['short_notice_fee_centavos'] = 'Enter the short-notice fee.';
-        }
-        if ($s['final_utility_handling'] === 'holdback_true_up' && empty($s['final_utility_holdback_centavos'])) {
-            $errors['final_utility_holdback_centavos'] = 'Enter how much to hold back.';
         }
         if ($s['extra_occupant_fee_enabled'] && empty($s['extra_occupant_fee_centavos'])) {
             $errors['extra_occupant_fee_centavos'] = 'Enter the extra-occupant fee.';
@@ -157,25 +135,15 @@ class SettingsController extends Controller
         $days = fn (int $max) => ['integer', 'min:0', 'max:'.$max];
 
         return [
-            'due_date_policy' => ['sometimes', Rule::enum(DueDatePolicy::class)],
-            'common_due_day' => ['sometimes', 'nullable', 'integer', 'min:1', 'max:31'],
-            'partial_period_handling' => ['sometimes', Rule::enum(PartialPeriodHandling::class)],
             'activation_required' => ['sometimes', 'boolean'],
             'deposit_rule' => ['sometimes', Rule::enum(DepositRule::class)],
             'deposit_fixed_centavos' => ['sometimes', ...$money],
             'price_change_notice_days' => ['sometimes', ...$days(365)],
-            'overstay_daily_centavos' => ['sometimes', ...$money],
 
             'minimum_notice_days' => ['sometimes', 'nullable', ...$days(180)],
             'suggested_notice_days' => ['sometimes', ...$days(180)],
-            'short_notice_consequence' => ['sometimes', Rule::enum(ShortNoticeConsequence::class)],
-            'short_notice_fee_centavos' => ['sometimes', 'integer', 'min:0', 'max:100000000'],
-            'final_utility_handling' => ['sometimes', Rule::enum(FinalUtilityHandling::class)],
-            'final_utility_holdback_centavos' => ['sometimes', ...$money],
 
-            'split_manager' => ['sometimes', Rule::enum(SplitManager::class)],
             'split_method' => ['sometimes', Rule::in(['equal', 'occupant_days', 'weights', 'custom'])],
-            'utility_due_rule' => ['sometimes', Rule::enum(UtilityDueRule::class)],
             'utility_due_days' => ['sometimes', 'integer', 'min:1', 'max:60'],
 
             'grace_days' => ['sometimes', ...$days(60)],
@@ -187,17 +155,6 @@ class SettingsController extends Controller
             'overdue_reminder_days.*' => ['integer', 'min:1', 'max:90', 'distinct'],
             'mark_late_enabled' => ['sometimes', 'boolean'],
             'mark_late_day' => ['sometimes', 'integer', 'min:1', 'max:90'],
-            'late_fee_type' => ['sometimes', Rule::enum(LateFeeType::class)],
-            'late_fee_fixed_centavos' => ['sometimes', ...$money],
-            'late_fee_basis_points' => ['sometimes', 'nullable', 'integer', 'min:1', 'max:10000'],
-            'arrears_enabled' => ['sometimes', 'boolean'],
-            'arrears_days' => ['sometimes', 'integer', 'min:1', 'max:180'],
-            'notice_to_vacate_min_days' => ['sometimes', 'integer', 'min:1', 'max:365'],
-            'notice_to_vacate_end_days' => ['sometimes', 'integer', 'min:1', 'max:180'],
-            'early_warning_enabled' => ['sometimes', 'boolean'],
-            'early_warning_late_count' => ['sometimes', 'integer', 'min:1', 'max:24'],
-            'early_warning_window_periods' => ['sometimes', 'integer', 'min:1', 'max:24'],
-            'payment_promise_max_days' => ['sometimes', 'integer', 'min:1', 'max:60'],
             'correction_credit_handling' => ['sometimes', Rule::enum(CorrectionCreditHandling::class)],
 
             'reservation_expiry_days' => ['sometimes', 'integer', 'min:1', 'max:60'],

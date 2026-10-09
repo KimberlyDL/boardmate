@@ -35,6 +35,7 @@ class UnitResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'room_id' => $this->room_id,
             'kind' => $this->kind->value,
             'label' => $this->label,
             'sort_order' => $this->sort_order,

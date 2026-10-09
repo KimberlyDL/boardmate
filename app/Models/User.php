@@ -43,6 +43,12 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /** Stays this account has had as a bedspacer, or as the leader of a room rented whole. */
+    public function tenancies(): HasMany
+    {
+        return $this->hasMany(Tenancy::class, 'tenant_id');
+    }
+
     public function boarderProfile(): HasOne
     {
         return $this->hasOne(BoarderProfile::class);

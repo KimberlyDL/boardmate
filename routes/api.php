@@ -24,10 +24,15 @@ use App\Http\Controllers\Api\V1\Owner\OwnerApplicationController;
 use App\Http\Controllers\Api\V1\Properties\CaretakerAssignmentController;
 use App\Http\Controllers\Api\V1\Properties\PhotoController;
 use App\Http\Controllers\Api\V1\Properties\PropertyController;
+use App\Http\Controllers\Api\V1\Properties\RoomController;
 use App\Http\Controllers\Api\V1\Properties\SettingsController;
 use App\Http\Controllers\Api\V1\Properties\UnitController;
 use App\Http\Controllers\Api\V1\Properties\UtilityAccountController;
 use App\Http\Controllers\Api\V1\Public\ListingController;
+use App\Http\Controllers\Api\V1\Tenancies\RoomLeaderController;
+use App\Http\Controllers\Api\V1\Tenancies\RoomOccupantController;
+use App\Http\Controllers\Api\V1\Tenancies\TenancyController;
+use App\Http\Controllers\Api\V1\Tenancies\TenancyDiscountController;
 use App\Http\Middleware\EnsureAccountIsActive;
 use Illuminate\Support\Facades\Route;
 
@@ -126,10 +131,15 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::delete('/', [PropertyController::class, 'destroy'])->name('destroy');
             Route::post('publish', [PropertyController::class, 'publish'])->name('publish');
             Route::post('unpublish', [PropertyController::class, 'unpublish'])->name('unpublish');
-            Route::post('rental-mode', [PropertyController::class, 'switchMode'])->name('rental-mode');
+
+            Route::get('tenancies', [TenancyController::class, 'index'])->name('tenancies.index');
+            Route::get('tenancies/preview', [TenancyController::class, 'preview'])->name('tenancies.preview');
+            Route::post('tenancies', [TenancyController::class, 'store'])->name('tenancies.store');
+
+            Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
+            Route::post('rooms', [RoomController::class, 'store'])->name('rooms.store');
 
             Route::get('units', [UnitController::class, 'index'])->name('units.index');
-            Route::post('units', [UnitController::class, 'store'])->name('units.store');
 
             Route::get('utility-accounts', [UtilityAccountController::class, 'index'])->name('utility-accounts.index');
             Route::post('utility-accounts', [UtilityAccountController::class, 'store'])->name('utility-accounts.store');
@@ -144,6 +154,31 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::delete('photos/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
 
             Route::put('caretakers', [CaretakerAssignmentController::class, 'update'])->name('caretakers.update');
+        });
+
+        Route::prefix('rooms/{room}')->name('rooms.')->group(function () {
+            Route::get('leader', [RoomLeaderController::class, 'show'])->name('leader.show');
+            Route::put('leader', [RoomLeaderController::class, 'update'])->name('leader.update');
+            Route::get('occupants', [RoomOccupantController::class, 'index'])->name('occupants.index');
+            Route::post('occupants', [RoomOccupantController::class, 'store'])->name('occupants.store');
+            Route::patch('/', [RoomController::class, 'update'])->name('update');
+            Route::delete('/', [RoomController::class, 'destroy'])->name('destroy');
+            Route::post('rental-mode', [RoomController::class, 'switchMode'])->name('rental-mode');
+            Route::post('bedspaces', [RoomController::class, 'addBedspaces'])->name('bedspaces');
+        });
+
+        Route::get('me/tenancies', [TenancyController::class, 'mine'])->name('me.tenancies.index');
+        Route::prefix('tenancies/{tenancy}')->name('tenancies.')->group(function () {
+            Route::get('/', [TenancyController::class, 'show'])->name('show');
+            Route::put('emergency-contact', [TenancyController::class, 'updateEmergencyContact'])->name('emergency-contact.update');
+            Route::get('discounts', [TenancyDiscountController::class, 'index'])->name('discounts.index');
+            Route::put('discount', [TenancyDiscountController::class, 'update'])->name('discount.update');
+            Route::delete('discount', [TenancyDiscountController::class, 'destroy'])->name('discount.destroy');
+        });
+
+        Route::prefix('occupants/{occupant}')->name('occupants.')->group(function () {
+            Route::patch('/', [RoomOccupantController::class, 'update'])->name('update');
+            Route::delete('/', [RoomOccupantController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('units/{unit}')->name('units.')->group(function () {
@@ -171,6 +206,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('applications', [ApplicationController::class, 'index'])->name('applications.index');
         Route::get('applications/{application}', [ApplicationController::class, 'show'])->name('applications.show');
         Route::post('applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
+        Route::post('applications/{application}/move-in', [TenancyController::class, 'moveIn'])->name('applications.move-in');
         Route::post('applications/{application}/decline', [ApplicationController::class, 'decline'])->name('applications.decline');
         Route::post('applications/{application}/cancel', [ApplicationController::class, 'cancel'])->name('applications.cancel');
 

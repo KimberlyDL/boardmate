@@ -22,6 +22,9 @@ class BookingApplication extends Model
             'reserved_until' => 'immutable_date',
             'decided_at' => 'datetime',
             'closed_at' => 'datetime',
+            'moved_in_at' => 'datetime',
+            'planned_occupants' => 'array',
+            'leader_on_move_in' => 'boolean',
             'id_document_purged_at' => 'datetime',
         ];
     }

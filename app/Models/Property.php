@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
 /**
- * An apartment, dorm, boarding house or mini house (Billing guide: Terms).
- * Structure: Building (optional) → Property → Bedspace (optional).
+ * A dorm, apartment, boarding house, house or studio (System Design B1).
+ * Structure: Building (optional) → Property → Room → Bedspace (optional).
  */
 class Property extends Model
 {
@@ -36,7 +36,6 @@ class Property extends Model
     {
         return [
             'type' => PropertyType::class,
-            'rental_mode' => RentalMode::class,
             'is_published' => 'boolean',
             'published_at' => 'datetime',
             'latitude' => 'float',
@@ -54,9 +53,19 @@ class Property extends Model
         return $this->belongsTo(Building::class);
     }
 
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(Room::class)->ordered();
+    }
+
     public function units(): HasMany
     {
         return $this->hasMany(RentableUnit::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function tenancies(): HasMany
+    {
+        return $this->hasMany(Tenancy::class);
     }
 
     public function utilityAccounts(): HasMany
@@ -140,8 +149,8 @@ class Property extends Model
     }
 
     /**
-     * Units that block deleting the property, switching rental mode, or
-     * removing them: anyone booked into or living there. Uses the same rule
+     * Units that block deleting the property, switching a room's rental mode,
+     * or removing them: anyone booked into or living there. Uses the same rule
      * as RentableUnit::isInUse().
      *
      * @return Collection<int, RentableUnit>
@@ -159,6 +168,25 @@ class Property extends Model
     public function lockForOccupancyChange(): void
     {
         self::withTrashed()->whereKey($this->id)->lockForUpdate()->first();
+    }
+
+    /**
+     * How the property is rented overall: 'whole' (every room whole),
+     * 'bedspaces' (every room by bedspace) or 'mixed'.
+     */
+    public function rentalModeSummary(): string
+    {
+        $rooms = $this->relationLoaded('rooms') ? $this->rooms : $this->rooms()->get();
+        $modes = $rooms->map(fn (Room $r) => $r->rental_mode->value)->unique()->values();
+
+        return $modes->count() > 1 ? 'mixed' : ($modes->first() ?? RentalMode::Bedspaces->value);
+    }
+
+    public function rentalModeSummaryLabel(): string
+    {
+        $summary = $this->rentalModeSummary();
+
+        return $summary === 'mixed' ? 'Mixed' : RentalMode::from($summary)->label();
     }
 
     public function hasUnitsInUse(): bool

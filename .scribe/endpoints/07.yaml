@@ -60,8 +60,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Add a property'
       description: |-
-        Owner only. Creates the property with its first unit(s) and the guide's
-        default settings. Prices are in centavos.
+        Owner only. Creates the property with its first room (rented whole or by
+        bedspace, with an optional floor), its unit(s) and the guide's default
+        settings. A house or studio is a property with one room. Add more rooms
+        with the room endpoints. Prices are in centavos.
       authenticated: true
       deprecated: false
     headers:
@@ -322,69 +324,6 @@ endpoints:
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/properties/{property_id}/rental-mode'
-    metadata:
-      custom: []
-      groupName: Properties
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Switch rental mode'
-      description: |-
-        Whole property ⇄ bedspaces. Refused while any unit is in use. The old
-        units are archived with their price history.
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      property_id:
-        custom: []
-        name: property_id
-        description: 'The ID of the property.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      property_id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      rental_mode:
-        custom: []
-        name: rental_mode
-        description: ''
-        required: true
-        example: bedspaces
-        type: string
-        enumValues:
-          - whole
-          - bedspaces
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      rental_mode: bedspaces
     fileParameters: []
     responses: []
     responseFields: []
@@ -700,7 +639,7 @@ endpoints:
         name: 'assignments[].access_level'
         description: ''
         required: true
-        example: manager
+        example: collector
         type: string
         enumValues:
           - collector
@@ -712,7 +651,7 @@ endpoints:
       assignments:
         -
           caretaker_id: 16
-          access_level: manager
+          access_level: collector
     fileParameters: []
     responses: []
     responseFields: []

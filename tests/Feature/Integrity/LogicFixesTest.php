@@ -163,7 +163,7 @@ it('uses one in-use check for removing a unit, switching mode and deleting', fun
 
     $this->actingAs($this->owner, 'sanctum')->deleteJson("/api/v1/units/{$bed->id}")->assertUnprocessable();
     $this->actingAs($this->owner, 'sanctum')
-        ->postJson("/api/v1/properties/{$this->property->id}/rental-mode", ['rental_mode' => 'whole', 'units' => ['capacity' => 2, 'rent_centavos' => 500000]])
+        ->postJson('/api/v1/rooms/'.$this->property->rooms()->first()->id.'/rental-mode', ['rental_mode' => 'whole', 'units' => ['capacity' => 2, 'rent_centavos' => 500000]])
         ->assertUnprocessable();
 });
 
