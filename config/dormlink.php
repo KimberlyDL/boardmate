@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\Scheduler\Jobs\ExpireReservationsJob;
+use App\Services\Scheduler\Jobs\IssueRentBillsJob;
 use App\Services\Scheduler\Jobs\PruneIdleTokensJob;
 use App\Services\Scheduler\Jobs\PurgeClosedApplicationIdsJob;
 use App\Services\Scheduler\Jobs\PurgeOwnerDocumentsJob;
@@ -18,7 +19,7 @@ return [
     | The only seeded account. Set both in .env before `php artisan db:seed`.
     */
     'admin' => [
-        'name' => env('ADMIN_NAME', 'BoardMate Admin'),
+        'name' => env('ADMIN_NAME', 'DormLink Admin'),
         'email' => env('ADMIN_EMAIL'),
         'password' => env('ADMIN_PASSWORD'),
     ],
@@ -40,7 +41,7 @@ return [
     'email_link_hours' => 24,
 
     /*
-    | Daily jobs run by `boardmate:daily` at 9:00 AM Asia/Manila, in this order.
+    | Daily jobs run by `dormlink:daily` at 9:00 AM Asia/Manila, in this order.
     | Each class implements App\Services\Scheduler\Contracts\DailyJob.
     */
     'daily_jobs' => [
@@ -48,6 +49,7 @@ return [
         ExpireReservationsJob::class,
         PurgeClosedApplicationIdsJob::class,
         PurgeOwnerDocumentsJob::class,
+        IssueRentBillsJob::class,
     ],
 
     /*

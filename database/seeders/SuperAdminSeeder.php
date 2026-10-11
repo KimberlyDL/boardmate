@@ -15,7 +15,7 @@ class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $config = config('boardmate.admin');
+        $config = config('dormlink.admin');
 
         if (blank($config['email']) || blank($config['password'])) {
             throw new RuntimeException('Set ADMIN_EMAIL and ADMIN_PASSWORD in .env before seeding the platform admin.');

@@ -105,7 +105,7 @@ it('converts photos uploaded before variants existed, and is safe to run twice',
     $user = User::factory()->boarder()->create(['photo_path' => 'profile-photos/2026/10/me.jpg']);
     Storage::disk('local')->put('profile-photos/2026/10/me.jpg', file_get_contents(jpegWithExif(500, 500)->getRealPath()));
 
-    $this->artisan('boardmate:rebuild-images')->assertSuccessful();
+    $this->artisan('dormlink:rebuild-images')->assertSuccessful();
 
     $photo->refresh();
     expect($photo->path)->toEndWith('-large.webp')
@@ -114,7 +114,7 @@ it('converts photos uploaded before variants existed, and is safe to run twice',
     $disk->assertMissing('listing-photos/2026/10/old.jpg');
     Storage::disk('local')->assertMissing('profile-photos/2026/10/me.jpg');
 
-    $this->artisan('boardmate:rebuild-images')->expectsOutputToContain('Converted 0, failed 0.')->assertSuccessful();
+    $this->artisan('dormlink:rebuild-images')->expectsOutputToContain('Converted 0, failed 0.')->assertSuccessful();
     expect($photo->fresh()->path)->toBe($photo->path);
 });
 

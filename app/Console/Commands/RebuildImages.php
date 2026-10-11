@@ -11,7 +11,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Throwable;
 
-#[Signature('boardmate:rebuild-images')]
+#[Signature('dormlink:rebuild-images')]
 #[Description('Convert listing and profile photos uploaded before WebP variants existed (safe to run twice)')]
 class RebuildImages extends Command
 {

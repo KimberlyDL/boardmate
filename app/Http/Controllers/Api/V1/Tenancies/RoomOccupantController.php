@@ -42,7 +42,7 @@ class RoomOccupantController extends Controller
      *
      * Owner, Manager or the room's leader. Only for a room rented whole that
      * someone has moved into, and never above the room's capacity. `email`
-     * optionally links an existing BoardMate account.
+     * optionally links an existing DormLink account.
      */
     public function store(Request $request, Room $room): JsonResponse
     {

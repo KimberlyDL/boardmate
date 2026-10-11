@@ -6,7 +6,7 @@ use App\Enums\OwnerVerificationStatus;
 use App\Models\CaretakerInvitation;
 use App\Models\OwnerCaretaker;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 
@@ -23,8 +23,8 @@ function inviteCaretaker(User $owner, string $email, string $level = 'collector'
         ->assertCreated();
 
     $token = null;
-    Notification::assertSentTo(new AnonymousNotifiable, BoardMateNotification::class,
-        function (BoardMateNotification $n, $channels, AnonymousNotifiable $to) use ($email, &$token) {
+    Notification::assertSentTo(new AnonymousNotifiable, DormLinkNotification::class,
+        function (DormLinkNotification $n, $channels, AnonymousNotifiable $to) use ($email, &$token) {
             if ($n->event !== NotificationEvent::CaretakerInvitation || $to->routes['mail'] !== $email) {
                 return false;
             }
@@ -65,8 +65,8 @@ it('lets the invited person accept and become a caretaker', function () {
         ->assertJsonPath('data.0.person.name', 'Owner Ana')
         ->assertJsonPath('data.0.access_level', 'collector');
 
-    Notification::assertSentTo($this->owner, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::CaretakerInvitationAccepted);
+    Notification::assertSentTo($this->owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::CaretakerInvitationAccepted);
 
     $this->postJson("/api/v1/caretaker-invitations/{$token}/accept")
         ->assertStatus(410)->assertJsonPath('code', 'invitation_accepted');
@@ -136,8 +136,8 @@ it('changes access level and removes a caretaker, dropping the role when no owne
     $carla->refresh();
     expect($carla->hasRole('caretaker'))->toBeFalse()
         ->and($carla->active_role)->toBe('boarder');
-    Notification::assertSentTo($carla, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::CaretakerRemoved);
+    Notification::assertSentTo($carla, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::CaretakerRemoved);
 });
 
 it('keeps the caretaker role while another owner still employs them', function () {

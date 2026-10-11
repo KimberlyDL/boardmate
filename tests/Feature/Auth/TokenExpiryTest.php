@@ -35,7 +35,7 @@ it('prunes only expired tokens', function () {
     $this->user->createToken('stale');
     PersonalAccessToken::where('name', 'stale')->update(['last_used_at' => now()->subDays(45)]);
 
-    $this->artisan('boardmate:daily')->assertSuccessful();
+    $this->artisan('dormlink:daily')->assertSuccessful();
 
     expect(PersonalAccessToken::pluck('name')->all())->toBe(['fresh']);
 });

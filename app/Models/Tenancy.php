@@ -77,6 +77,12 @@ class Tenancy extends Model
         return $this->hasMany(TenancyDiscount::class)->orderByDesc('effective_from')->orderByDesc('id');
     }
 
+    /** Bills issued for this tenancy (its anniversary bills). */
+    public function bills(): HasMany
+    {
+        return $this->hasMany(Bill::class);
+    }
+
     public function occupants(): HasMany
     {
         return $this->hasMany(RoomOccupant::class);

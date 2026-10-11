@@ -8,10 +8,10 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('boardmate:daily
+#[Signature('dormlink:daily
     {--date= : Run for this Manila date (YYYY-MM-DD) instead of today, e.g. to catch up}
     {--simulate : Allow a future --date; jobs run but are not recorded as done, so the real run that day still happens}')]
-#[Description('Run all BoardMate daily jobs once for the day (safe to run twice)')]
+#[Description('Run all DormLink daily jobs once for the day (safe to run twice)')]
 class RunDailyJobs extends Command
 {
     public function handle(DailyJobRunner $runner): int

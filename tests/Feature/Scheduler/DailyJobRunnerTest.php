@@ -82,18 +82,18 @@ it('runs the registered jobs for a chosen day with --date (catch-up)', function 
     $user->createToken('stale');
     PersonalAccessToken::query()->update(['last_used_at' => now()->subDays(45)]);
 
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-03'])->assertSuccessful();
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-03'])->assertSuccessful();
+    $this->artisan('dormlink:daily', ['--date' => '2026-10-03'])->assertSuccessful();
+    $this->artisan('dormlink:daily', ['--date' => '2026-10-03'])->assertSuccessful();
 
     expect(PersonalAccessToken::count())->toBe(0)
         ->and(DB::table('scheduler_runs')->where('run_on', '2026-10-03')->value('status'))->toBe('succeeded')
-        ->and(DB::table('scheduler_runs')->count())->toBe(count(config('boardmate.daily_jobs')))
+        ->and(DB::table('scheduler_runs')->count())->toBe(count(config('dormlink.daily_jobs')))
         ->and(DB::table('scheduler_runs')->where('status', '!=', 'succeeded')->count())->toBe(0);
 });
 
 it('is scheduled at 9:00 AM Manila time', function () {
     $event = collect(app(Schedule::class)->events())
-        ->first(fn ($e) => str_contains($e->command, 'boardmate:daily'));
+        ->first(fn ($e) => str_contains($e->command, 'dormlink:daily'));
 
     expect($event)->not->toBeNull()
         ->and($event->expression)->toBe('0 9 * * *')

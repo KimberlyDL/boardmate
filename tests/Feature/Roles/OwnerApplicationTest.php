@@ -5,7 +5,7 @@ use App\Enums\NotificationEvent;
 use App\Enums\OwnerVerificationStatus;
 use App\Models\OwnerDocument;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
@@ -43,8 +43,8 @@ it('makes a boarder a pending owner and tells the admins', function () {
         ->assertJsonPath('data.owner_profile.verification_status', 'pending')
         ->assertJsonPath('data.phone', '0917 555 1234');
 
-    Notification::assertSentTo($admin, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::OwnerApplicationSubmitted);
+    Notification::assertSentTo($admin, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::OwnerApplicationSubmitted);
 });
 
 it('requires notes, and a phone when the account has none', function () {
@@ -160,11 +160,11 @@ it('deletes the files 90 days after the decision but keeps the record', function
     $paths = OwnerDocument::pluck('path');
 
     Date::setTestNow(CarbonImmutable::parse('2026-09-28 09:00', 'Asia/Manila'));   // 89 days later
-    $this->artisan('boardmate:daily')->assertSuccessful();
+    $this->artisan('dormlink:daily')->assertSuccessful();
     expect(OwnerDocument::whereNull('purged_at')->count())->toBe(4);
 
     Date::setTestNow(CarbonImmutable::parse('2026-09-30 09:00', 'Asia/Manila'));
-    $this->artisan('boardmate:daily')->assertSuccessful();
+    $this->artisan('dormlink:daily')->assertSuccessful();
     Date::setTestNow();
 
     $decided = $boarder->ownerProfile->documents()->get();

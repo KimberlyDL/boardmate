@@ -10,7 +10,7 @@ class OwnerSuspendedTemplate extends BaseTemplate
     public function mail(?User $user, array $data): MailMessage
     {
         return $this->message($user)
-            ->subject('Your BoardMate owner account is suspended')
+            ->subject('Your DormLink owner account is suspended')
             ->line('Your owner account has been suspended, so your listings are hidden from the public.')
             ->line("Reason: {$data['reason']}")
             ->line('Reply to this email if you think this is a mistake.');

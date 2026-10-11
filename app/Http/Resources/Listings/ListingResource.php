@@ -3,7 +3,9 @@
 namespace App\Http\Resources\Listings;
 
 use App\Enums\FilePurpose;
+use App\Enums\RentalMode;
 use App\Enums\UnitKind;
+use App\Enums\UnitStatus;
 use App\Enums\UtilityMethod;
 use App\Models\Property;
 use App\Models\RentableUnit;
@@ -17,8 +19,9 @@ use Illuminate\Support\Collection;
 
 /**
  * A property as the PUBLIC sees it (Dorm Finder, F1). Never includes owner
- * contacts, caretakers, tenants, internal settings or the street address
- * (unless `showStreet`, i.e. the viewer holds a reservation there).
+ * contacts, caretakers, tenants or who lives in which room, internal
+ * settings or the street address (unless `showStreet`, i.e. the viewer holds
+ * a reservation there).
  *
  * @mixin Property
  */
@@ -37,8 +40,9 @@ class ListingResource extends JsonResource
      */
     private function availabilityLabel(Collection $bookable): string
     {
-        $whole = $this->units->where('kind', UnitKind::Whole);
-        $beds = $this->units->where('kind', UnitKind::Bedspace);
+        $places = $this->units->where('is_whole_option', false);
+        $whole = $places->where('kind', UnitKind::Whole);
+        $beds = $places->where('kind', UnitKind::Bedspace);
         $parts = [];
         if ($whole->isNotEmpty()) {
             $parts[] = $whole->count() === 1
@@ -50,6 +54,54 @@ class ListingResource extends JsonResource
         }
 
         return implode(' · ', $parts);
+    }
+
+    /**
+     * A room as the public sees it on "Rooms & availability": its status,
+     * price and free places, never who lives there.
+     *
+     * @return array<string, mixed>
+     */
+    private function publicRoom(Room $room, PriceBook $prices): array
+    {
+        $roomUnits = $this->units->where('room_id', $room->id);
+        $option = $roomUnits->firstWhere('is_whole_option', true);
+        $units = $roomUnits->where('is_whole_option', false)->values();
+        $free = $units->filter(fn (RentableUnit $u) => $u->isAvailable());
+        $status = match (true) {
+            $free->isNotEmpty() || $option?->isAvailable() => 'available',
+            $units->contains(fn (RentableUnit $u) => $u->status === UnitStatus::Available && $u->not_ready) => 'not_ready',
+            default => 'full',
+        };
+        $rents = ($free->isNotEmpty() ? $free : $units)->map(fn (RentableUnit $u) => $prices->amountOn($u))->filter(fn ($r) => $r !== null);
+        $whole = $room->rental_mode === RentalMode::Whole;
+        $capacity = $whole ? (int) $units->first()?->capacity : $units->count();
+
+        return [
+            'id' => $room->id,
+            'label' => $room->label(),
+            'code' => $room->code(),
+            'door_no' => $room->door_no,
+            'floor' => $room->floor,
+            'rental_mode' => $room->rental_mode->value,
+            'rental_mode_label' => $room->rental_mode->label(),
+            'who_can_stay' => $room->who_can_stay->value,
+            'who_can_stay_label' => $room->who_can_stay->label(),
+            'status' => $status,
+            'available' => $free->count(),
+            'total' => $units->count(),
+            'capacity' => $capacity,
+            'rent_from_centavos' => $rents->isEmpty() ? null : (int) $rents->min(),
+            'availability_label' => $whole
+                ? 'Whole room for up to '.$capacity
+                : $free->count().' of '.$units->count().' bedspaces available',
+            // A bedspace room that can also be rented as one room, while every bedspace is free.
+            'whole_option' => $option ? [
+                'available' => $option->isAvailable(),
+                'rent_centavos' => $prices->amountOn($option),
+                'capacity' => $option->capacity,
+            ] : null,
+        ];
     }
 
     public function toArray(Request $request): array
@@ -75,9 +127,12 @@ class ListingResource extends JsonResource
             'longitude' => $this->longitude,
             'who_can_apply' => $this->who_can_apply,
             'price_from_centavos' => $this->price_from_centavos !== null ? (int) $this->price_from_centavos : null,
+            'is_full' => $bookable->isEmpty(),
+            // Straight-line metres from the search's `near` point, when given.
+            'distance_m' => isset($this->distance_m) ? (int) round((float) $this->distance_m) : null,
             'availability' => [
-                'available' => $bookable->count(),
-                'total' => $this->units->count(),
+                'available' => $bookable->where('is_whole_option', false)->count(),
+                'total' => $this->units->where('is_whole_option', false)->count(),
                 'label' => $this->availabilityLabel($bookable),
             ],
             'included_utilities' => $included,
@@ -91,7 +146,7 @@ class ListingResource extends JsonResource
         }
 
         $settings = $this->settings;
-        $prices->preload($bookable);
+        $prices->preload($this->units);
         $prices->preload($this->utilityAccounts);
         $rooms = $this->rooms->each(fn (Room $r) => $r->setRelation('property', $this->resource))->keyBy('id');
 
@@ -107,11 +162,16 @@ class ListingResource extends JsonResource
                 'room' => $rooms->has($u->room_id) ? [
                     'id' => $u->room_id,
                     'code' => $rooms[$u->room_id]->code(),
+                    'door_no' => $rooms[$u->room_id]->door_no,
+                    'label' => $rooms[$u->room_id]->label(),
                     'floor' => $rooms[$u->room_id]->floor,
+                    'who_can_stay' => $rooms[$u->room_id]->who_can_stay->value,
+                    'who_can_stay_label' => $rooms[$u->room_id]->who_can_stay->label(),
                 ] : null,
                 'capacity' => $u->capacity,
                 'rent_centavos' => $prices->amountOn($u),
             ]),
+            'rooms' => $rooms->values()->map(fn (Room $room) => $this->publicRoom($room, $prices)),
             'utilities' => $this->utilityAccounts->map(fn (UtilityAccount $a) => [
                 'type' => $a->type->value,
                 'name' => $a->name,

@@ -8,13 +8,13 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-#[Signature('boardmate:export-enums {--path= : Output file (default: ../boardmate-app/src/types/enums.ts)}')]
+#[Signature('dormlink:export-enums {--path= : Output file (default: ../dormlink-app/src/types/enums.ts)}')]
 #[Description('Export app/Enums as TypeScript for the Ionic app')]
 class ExportEnums extends Command
 {
     public function handle(): int
     {
-        $path = $this->option('path') ?: base_path('../boardmate-app/src/types/enums.ts');
+        $path = $this->option('path') ?: base_path('../dormlink-app/src/types/enums.ts');
 
         $enums = EnumExporter::discover(app_path('Enums'));
 

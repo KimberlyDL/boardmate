@@ -13,7 +13,7 @@ use Illuminate\Notifications\Notification;
  * The single Laravel notification class. What it says and which channels it
  * uses come from the event's template.
  */
-class BoardMateNotification extends Notification
+class DormLinkNotification extends Notification
 {
     use Queueable;
 

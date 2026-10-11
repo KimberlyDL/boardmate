@@ -148,7 +148,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /** Email verification link, sent through the Notifications module. */
     public function sendEmailVerificationNotification(): void
     {
-        $url = URL::temporarySignedRoute('api.v1.auth.verification.verify', now()->addHours(config('boardmate.email_link_hours')), [
+        $url = URL::temporarySignedRoute('api.v1.auth.verification.verify', now()->addHours(config('dormlink.email_link_hours')), [
             'id' => $this->getKey(),
             'hash' => sha1($this->getEmailForVerification()),
         ]);
@@ -159,7 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /** Confirmation link to the pending (new) email address. */
     public function sendEmailChangeVerification(): void
     {
-        $url = URL::temporarySignedRoute('api.v1.auth.email-change.verify', now()->addHours(config('boardmate.email_link_hours')), [
+        $url = URL::temporarySignedRoute('api.v1.auth.email-change.verify', now()->addHours(config('dormlink.email_link_hours')), [
             'id' => $this->getKey(),
             'hash' => sha1((string) $this->pending_email),
         ]);

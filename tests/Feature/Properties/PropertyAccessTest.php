@@ -3,6 +3,7 @@
 use App\Enums\CaretakerAccessLevel;
 use App\Models\CaretakerInvitation;
 use App\Models\OwnerCaretaker;
+use App\Models\Tenancy;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 
@@ -129,4 +130,16 @@ it('assigns the properties picked on the invitation when it is accepted', functi
     $this->actingAs($dana, 'sanctum')->postJson("/api/v1/caretaker-invitations/{$token}/accept")->assertOk();
 
     $this->getJson('/api/v1/properties')->assertJsonCount(1, 'data')->assertJsonPath('data.0.name', 'Second house');
+});
+
+it('shows the property\'s tenants on its rooms to the owner and every assigned caretaker', function () {
+    $tenant = User::factory()->boarder()->create(['name' => 'Kim Santos']);
+    $this->unit->forceFill(['status' => 'occupied'])->save();
+    Tenancy::factory()->forUnit($this->unit)->create(['tenant_id' => $tenant->id]);
+
+    foreach ([$this->owner, $this->manager, $this->collector] as $person) {
+        $names = collect($this->actingAs($person, 'sanctum')->getJson("/api/v1/properties/{$this->property->id}")->assertOk()->json('data.rooms.0.units'))
+            ->pluck('tenant_name');
+        expect($names)->toContain('Kim Santos');
+    }
 });

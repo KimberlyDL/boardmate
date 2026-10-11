@@ -2,7 +2,7 @@
 
 use App\Enums\NotificationEvent;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
@@ -27,15 +27,15 @@ it('keeps the old email, mails a link to the new one and a notice to the old one
         ->assertJsonPath('data.email', 'kim@example.com')
         ->assertJsonPath('data.pending_email', 'kim.new@gmail.com');
 
-    Notification::assertSentTo(new AnonymousNotifiable, BoardMateNotification::class,
-        function (BoardMateNotification $n, array $channels, AnonymousNotifiable $notifiable) {
+    Notification::assertSentTo(new AnonymousNotifiable, DormLinkNotification::class,
+        function (DormLinkNotification $n, array $channels, AnonymousNotifiable $notifiable) {
             return $n->event === NotificationEvent::EmailChangeConfirm
                 && $notifiable->routes['mail'] === 'kim.new@gmail.com'
                 && str_contains($n->data['url'], '/api/v1/auth/email-change/verify/');
         });
 
-    Notification::assertSentTo($this->user, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::EmailChangeNotice
+    Notification::assertSentTo($this->user, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::EmailChangeNotice
             && $n->data['masked_email'] === 'k***@gmail.com');
 });
 

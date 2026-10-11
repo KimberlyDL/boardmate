@@ -12,7 +12,7 @@ class BookingApplication extends Model
 {
     protected $fillable = ['planned_move_in_on', 'message', 'contact_phone'];
 
-    protected $attributes = ['status' => 'pending'];
+    protected $attributes = ['status' => 'pending', 'wants_whole' => false];
 
     protected function casts(): array
     {
@@ -23,6 +23,7 @@ class BookingApplication extends Model
             'decided_at' => 'datetime',
             'closed_at' => 'datetime',
             'moved_in_at' => 'datetime',
+            'wants_whole' => 'boolean',
             'planned_occupants' => 'array',
             'leader_on_move_in' => 'boolean',
             'id_document_purged_at' => 'datetime',
@@ -32,6 +33,12 @@ class BookingApplication extends Model
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class)->withTrashed();
+    }
+
+    /** The room the boarder asked for; the reserved unit may be in another room. */
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class)->withTrashed();
     }
 
     public function unit(): BelongsTo

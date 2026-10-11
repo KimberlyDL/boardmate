@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * `path` is now the large WebP (1600 px) and `thumb_path` the 480 px one
-     * for cards and map popups. Null until `boardmate:rebuild-images` runs
+     * for cards and map popups. Null until `dormlink:rebuild-images` runs
      * for photos uploaded before this.
      */
     public function up(): void

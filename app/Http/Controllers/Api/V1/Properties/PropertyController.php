@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Properties\PropertyResource;
 use App\Http\Responses\ApiResponse;
-use App\Models\Building;
 use App\Models\Property;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
@@ -41,7 +40,7 @@ class PropertyController extends Controller
     {
         $properties = Property::query()
             ->visibleTo($request->user())
-            ->with(['rooms', 'units', 'photos', 'building', 'owner.ownerProfile'])
+            ->with(['rooms', 'units', 'photos', 'owner.ownerProfile'])
             ->orderBy('name')
             ->get();
 
@@ -192,7 +191,7 @@ class PropertyController extends Controller
 
     private function detail(Property $property): PropertyResource
     {
-        return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts', 'photos', 'building', 'owner.ownerProfile']), detail: true);
+        return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts', 'photos', 'owner.ownerProfile']), detail: true);
     }
 
     private function detailRules(Request $request, bool $creating): array
@@ -203,8 +202,6 @@ class PropertyController extends Controller
             'name' => [$required, 'string', 'max:120'],
             'description' => ['sometimes', 'nullable', 'string', 'max:3000'],
             'who_can_apply' => ['sometimes', 'nullable', 'string', 'max:120'],
-            'building_id' => ['sometimes', 'nullable', 'integer',
-                Rule::exists(Building::class, 'id')->where('owner_id', $request->user()->id)],
             'street' => ['sometimes', 'nullable', 'string', 'max:255'],
             'barangay' => ['sometimes', 'nullable', 'string', 'max:120'],
             'city' => ['sometimes', 'nullable', 'string', 'max:120'],

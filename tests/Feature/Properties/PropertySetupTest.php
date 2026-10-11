@@ -34,7 +34,7 @@ it('creates a bedspace property with numbered beds, rents and default settings',
 
 it('creates a whole room property (a house or studio) with exactly one unit and its max occupants', function () {
     $this->actingAs($this->owner, 'sanctum')->postJson('/api/v1/properties', [
-        'name' => 'Mini House', 'type' => 'mini_house', 'rental_mode' => 'whole',
+        'name' => 'Santos House', 'type' => 'house', 'rental_mode' => 'whole',
         'units' => ['capacity' => 4, 'rent_centavos' => 1200000],
     ])->assertCreated()
         ->assertJsonPath('data.counts.units', 1)

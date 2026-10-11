@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\PropertyType;
 use App\Enums\RentalMode;
-use App\Enums\UnitStatus;
 use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +15,7 @@ use Illuminate\Support\Collection;
 
 /**
  * A dorm, apartment, boarding house, house or studio (System Design B1).
- * Structure: Building (optional) → Property → Room → Bedspace (optional).
+ * Structure: Property (the building) → Room → Bedspace (optional).
  */
 class Property extends Model
 {
@@ -28,7 +27,7 @@ class Property extends Model
     protected $attributes = ['is_published' => false];
 
     protected $fillable = [
-        'building_id', 'name', 'type', 'description', 'who_can_apply',
+        'name', 'type', 'description', 'who_can_apply',
         'street', 'barangay', 'city', 'province', 'latitude', 'longitude',
     ];
 
@@ -46,11 +45,6 @@ class Property extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
-    }
-
-    public function building(): BelongsTo
-    {
-        return $this->belongsTo(Building::class);
     }
 
     public function rooms(): HasMany
@@ -107,15 +101,30 @@ class Property extends Model
         });
     }
 
+    public function bills(): HasMany
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function utilityBills(): HasMany
+    {
+        return $this->hasMany(UtilityBill::class);
+    }
+
     public function applications(): HasMany
     {
         return $this->hasMany(BookingApplication::class);
     }
 
-    /** Units a boarder could book right now: Available and not marked Not ready. */
+    /** Units a boarder could book right now: Available, ready and not blocked. */
     public function bookableUnits(): HasMany
     {
-        return $this->units()->where('status', UnitStatus::Available->value)->where('not_ready', false);
+        return $this->units()->free();
     }
 
     /**
@@ -135,17 +144,27 @@ class Property extends Model
     }
 
     /**
-     * Shown on Dorm Finder (F1): published, by a verified owner whose account
-     * is active, with at least one bookable unit.
+     * Shown on Dorm Finder (F1): published by a verified owner whose account
+     * is active. Full places are shown too, marked full.
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopeOnFinder(Builder $query): void
+    {
+        $query->where('is_published', true)
+            ->whereHas('owner', fn (Builder $o) => $o->whereNull('suspended_at')
+                ->whereHas('ownerProfile', fn (Builder $p) => $p->where('verification_status', 'verified')));
+    }
+
+    /**
+     * On Dorm Finder and taking bookings: at least one unit is free and ready.
      *
      * @param  Builder<self>  $query
      */
     public function scopeListable(Builder $query): void
     {
-        $query->where('is_published', true)
-            ->whereHas('owner', fn (Builder $o) => $o->whereNull('suspended_at')
-                ->whereHas('ownerProfile', fn (Builder $p) => $p->where('verification_status', 'verified')))
-            ->whereHas('units', fn (Builder $u) => $u->where('status', UnitStatus::Available->value)->where('not_ready', false));
+        $query->onFinder()
+            ->whereHas('units', fn (Builder $u) => $u->free());
     }
 
     /**

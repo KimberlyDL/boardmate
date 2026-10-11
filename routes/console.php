@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Schedule;
 | - Development: keep `php artisan schedule:work` running in a terminal.
 | - Server: one cron line, see docs/CONVENTIONS.md.
 |
-| Every feature's daily work runs inside boardmate:daily (config/boardmate.php
+| Every feature's daily work runs inside dormlink:daily (config/dormlink.php
 | 'daily_jobs'), at the guide's reminder time of 9:00 AM Asia/Manila.
 */
 
-Schedule::command('boardmate:daily')
+Schedule::command('dormlink:daily')
     ->dailyAt('09:00')
     ->timezone('Asia/Manila')
     ->withoutOverlapping();

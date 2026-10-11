@@ -10,7 +10,7 @@ class OwnerApplicationRejectedTemplate extends BaseTemplate
     public function mail(?User $user, array $data): MailMessage
     {
         return $this->message($user)
-            ->subject('Your BoardMate owner application')
+            ->subject('Your DormLink owner application')
             ->line('We could not approve your owner application yet.')
             ->line("Reason: {$data['reason']}")
             ->line('You can update your details and apply again from your account.');

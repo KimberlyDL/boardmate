@@ -37,6 +37,8 @@ enum NotificationEvent: string
     case OccupantsChanged = 'occupants_changed';
     case ApplicationWithdrawnOnMoveIn = 'application_withdrawn_on_move_in';
     case DiscountChanged = 'discount_changed';
+    case BillIssued = 'bill_issued';
+    case BillAdjusted = 'bill_adjusted';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -68,6 +70,8 @@ enum NotificationEvent: string
             self::OccupantsChanged => Templates\Tenancy\OccupantsChangedTemplate::class,
             self::ApplicationWithdrawnOnMoveIn => Templates\Tenancy\ApplicationWithdrawnOnMoveInTemplate::class,
             self::DiscountChanged => Templates\Tenancy\DiscountChangedTemplate::class,
+            self::BillIssued => Templates\Billing\BillIssuedTemplate::class,
+            self::BillAdjusted => Templates\Billing\BillAdjustedTemplate::class,
         };
     }
 
@@ -112,6 +116,8 @@ enum NotificationEvent: string
             self::OccupantsChanged => 'Room occupants changed',
             self::ApplicationWithdrawnOnMoveIn => 'Application withdrawn after move-in',
             self::DiscountChanged => 'Agreed rate changed',
+            self::BillIssued => 'New bill',
+            self::BillAdjusted => 'Bill corrected',
         };
     }
 

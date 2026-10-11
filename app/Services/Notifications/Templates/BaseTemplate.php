@@ -20,7 +20,7 @@ abstract class BaseTemplate implements NotificationTemplate
     {
         return (new MailMessage)
             ->greeting($user ? 'Hi '.str($user->name)->before(' ').',' : 'Hi,')
-            ->salutation("Thanks,\nThe BoardMate team");
+            ->salutation("Thanks,\nThe DormLink team");
     }
 
     public function inApp(?User $user, array $data): array

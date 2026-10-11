@@ -16,8 +16,8 @@ class EmailChangeNoticeTemplate extends BaseTemplate
     public function mail(?User $user, array $data): MailMessage
     {
         return $this->message($user)
-            ->subject('Your BoardMate email is being changed')
-            ->line("Someone asked to change the email on your BoardMate account to {$data['masked_email']}.")
+            ->subject('Your DormLink email is being changed')
+            ->line("Someone asked to change the email on your DormLink account to {$data['masked_email']}.")
             ->line('Nothing changes until the new address is confirmed.')
             ->line('If this was not you, log in and change your password right away, then cancel the change in your profile.');
     }

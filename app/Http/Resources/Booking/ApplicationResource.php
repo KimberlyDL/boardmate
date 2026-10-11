@@ -35,7 +35,7 @@ class ApplicationResource extends JsonResource
     {
         $list = new EloquentCollection(collect($applications)->all());
         $list->loadMissing(array_merge(
-            ['property.owner.ownerProfile', 'property.photos', 'unit'],
+            ['property.owner.ownerProfile', 'property.photos', 'unit.room', 'room'],
             $view === 'reviewer' ? ['boarder', 'decider'] : [],
         ));
         app(PriceBook::class)->preload($list->pluck('unit')->filter());
@@ -63,9 +63,15 @@ class ApplicationResource extends JsonResource
                 'rental_mode' => $this->unit ? ($this->unit->kind === UnitKind::Whole ? 'whole' : 'bedspaces') : null,
                 'owner_name' => $property->owner->ownerDisplayName(),
             ],
+            // The room the boarder asked for.
+            'room' => $this->room ? ['id' => $this->room->id, 'label' => $this->room->label()] : null,
+            // They asked for the whole room (a bedspace room offered whole).
+            'wants_whole' => $this->wants_whole,
             'unit' => $this->unit ? [
                 'id' => $this->unit->id,
                 'label' => $this->unit->label,
+                'room_id' => $this->unit->room_id,
+                'room_label' => $this->unit->room?->label(),
                 'rent_centavos' => app(PriceBook::class)->amountOn($this->unit),
             ] : null,
             'planned_move_in_on' => $this->planned_move_in_on->toDateString(),

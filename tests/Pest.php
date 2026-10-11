@@ -11,7 +11,7 @@ use Tests\Concerns\SeedsRoles;
 use Tests\TestCase;
 
 /*
-| Feature tests boot Laravel against the separate `boardmate_test` Postgres
+| Feature tests boot Laravel against the separate `dormlink_test` Postgres
 | database (phpunit.xml) and reset it per test. Mail is the `array` mailer, so
 | no real email is ever sent from tests.
 |

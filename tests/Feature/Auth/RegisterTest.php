@@ -2,7 +2,7 @@
 
 use App\Enums\NotificationEvent;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Notification;
 
@@ -31,7 +31,7 @@ it('creates an unverified boarder account with consent and returns no token', fu
         ->and($user->active_role)->toBe('boarder')
         ->and($user->hasVerifiedEmail())->toBeFalse()
         ->and($user->consented_at)->not->toBeNull()
-        ->and($user->privacy_policy_version)->toBe(config('boardmate.privacy_policy_version'))
+        ->and($user->privacy_policy_version)->toBe(config('dormlink.privacy_policy_version'))
         ->and($user->boarderProfile)->not->toBeNull()
         ->and($user->tokens()->count())->toBe(0);
 });
@@ -41,10 +41,10 @@ it('sends the verification email and an in-app welcome', function () {
 
     $user = User::firstWhere('email', 'kim@example.com');
 
-    Notification::assertSentTo($user, BoardMateNotification::class,
-        fn (BoardMateNotification $n, array $channels) => $n->event === NotificationEvent::VerifyEmail && $channels === ['mail']);
-    Notification::assertSentTo($user, BoardMateNotification::class,
-        fn (BoardMateNotification $n, array $channels) => $n->event === NotificationEvent::Welcome && $channels === ['database']);
+    Notification::assertSentTo($user, DormLinkNotification::class,
+        fn (DormLinkNotification $n, array $channels) => $n->event === NotificationEvent::VerifyEmail && $channels === ['mail']);
+    Notification::assertSentTo($user, DormLinkNotification::class,
+        fn (DormLinkNotification $n, array $channels) => $n->event === NotificationEvent::Welcome && $channels === ['database']);
 });
 
 it('still creates the account when the mail server is down', function () {

@@ -16,10 +16,10 @@ class CaretakerInvitationTemplate extends BaseTemplate
     public function mail(?User $user, array $data): MailMessage
     {
         return $this->message($user)
-            ->subject("{$data['owner_name']} invited you to be a caretaker on BoardMate")
-            ->line("{$data['owner_name']} wants you to help run their boarding house on BoardMate as a {$data['access_level_label']}.")
+            ->subject("{$data['owner_name']} invited you to be a caretaker on DormLink")
+            ->line("{$data['owner_name']} wants you to help run their boarding house on DormLink as a {$data['access_level_label']}.")
             ->line($data['access_level_description'])
             ->action('View invitation', $data['url'])
-            ->line("The invitation works for {$data['valid_days']} days. Log in or create a BoardMate account with this email address to accept it.");
+            ->line("The invitation works for {$data['valid_days']} days. Log in or create a DormLink account with this email address to accept it.");
     }
 }

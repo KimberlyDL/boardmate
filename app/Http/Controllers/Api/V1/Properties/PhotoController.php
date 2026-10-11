@@ -140,6 +140,6 @@ class PhotoController extends Controller
 
     private function detail(Property $property): PropertyResource
     {
-        return new PropertyResource($property->load(['units', 'utilityAccounts', 'photos', 'building', 'owner.ownerProfile']), detail: true);
+        return new PropertyResource($property->load(['units', 'utilityAccounts', 'photos', 'owner.ownerProfile']), detail: true);
     }
 }

@@ -21,7 +21,7 @@ class AuditLogController extends Controller
      * Owner activity log
      *
      * Everything that happened in the owner's business: their own actions,
-     * their caretakers' actions, and BoardMate's decisions about their
+     * their caretakers' actions, and DormLink's decisions about their
      * account. Owner only (not caretakers). Newest first, 25 per page.
      */
     public function owner(Request $request): JsonResponse

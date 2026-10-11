@@ -1,21 +1,21 @@
-name: Rooms
+name: Tenancies
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/properties/{property_id}/rooms'
+    uri: 'api/v1/properties/{property_id}/tenancies'
     metadata:
       custom: []
-      groupName: Rooms
+      groupName: Tenancies
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'List rooms'
+      title: "List a property's tenancies"
       description: |-
-        By floor (rooms without a floor first), then room number. Each room
-        carries its code, rental mode and units.
+        Current tenancies by default; `room_id` narrows to one room. Includes
+        the move-in payments and emergency contacts (staff only).
       authenticated: true
       deprecated: false
     headers:
@@ -28,14 +28,584 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      room_id:
+        custom: []
+        name: room_id
+        description: ''
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      room_id: 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/tenancies/preview'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Preview a move-in'
+      description: |-
+        What the rent, deposit and first rent would be for a unit on a day,
+        with an optional discount (`discount_kind`: fixed or percent, and
+        `discount_value` in centavos or basis points). The first rent is the
+        rent after the discount, with no utilities.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      unit_id:
+        custom: []
+        name: unit_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      moved_in_on:
+        custom: []
+        name: moved_in_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      discount_kind:
+        custom: []
+        name: discount_kind
+        description: 'This field is required when <code>discount_value</code> is present.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      discount_value:
+        custom: []
+        name: discount_value
+        description: 'This field is required when <code>discount_kind</code> is present. Must be at least 1. Must not be greater than 100000000.'
+        required: false
+        example: 22
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      unit_id: 16
+      moved_in_on: '2026-10-11'
+      discount_value: 22
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/properties/{property_id}/tenancies'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Move in a walk-in'
+      description: |-
+        For someone who never applied: pick an available `unit_id` and the
+        `email` of their DormLink account. Everything else is as for a
+        reservation.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      unit_id:
+        custom: []
+        name: unit_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: zbailey@example.net
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      moved_in_on:
+        custom: []
+        name: moved_in_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact:
+        custom: []
+        name: emergency_contact
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact.name:
+        custom: []
+        name: emergency_contact.name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact.relationship:
+        custom: []
+        name: emergency_contact.relationship
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      emergency_contact.phone:
+        custom: []
+        name: emergency_contact.phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: true
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      discount:
+        custom: []
+        name: discount
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      discount.kind:
+        custom: []
+        name: discount.kind
+        description: 'This field is required when <code>discount</code> is present.'
+        required: false
+        example: fixed
+        type: string
+        enumValues:
+          - fixed
+          - percent
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      discount.value:
+        custom: []
+        name: discount.value
+        description: 'This field is required when <code>discount</code> is present. Must be at least 1. Must not be greater than 100000000.'
+        required: false
+        example: 25
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit:
+        custom: []
+        name: deposit
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      deposit.amount_centavos:
+        custom: []
+        name: deposit.amount_centavos
+        description: 'This field is required when <code>deposit</code> is present. Must be at least 0. Must not be greater than 100000000.'
+        required: false
+        example: 8
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit.method:
+        custom: []
+        name: deposit.method
+        description: 'This field is required when <code>deposit</code> is present.'
+        required: false
+        example: e_wallet
+        type: string
+        enumValues:
+          - cash
+          - bank_transfer
+          - e_wallet
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit.received_on:
+        custom: []
+        name: deposit.received_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      deposit.reference:
+        custom: []
+        name: deposit.reference
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: l
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent:
+        custom: []
+        name: first_rent
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent.amount_centavos:
+        custom: []
+        name: first_rent.amount_centavos
+        description: 'This field is required when <code>first_rent</code> is present. Must be at least 0. Must not be greater than 100000000.'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      first_rent.method:
+        custom: []
+        name: first_rent.method
+        description: 'This field is required when <code>first_rent</code> is present.'
+        required: false
+        example: cash
+        type: string
+        enumValues:
+          - cash
+          - bank_transfer
+          - e_wallet
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      first_rent.received_on:
+        custom: []
+        name: first_rent.received_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent.reference:
+        custom: []
+        name: first_rent.reference
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      override_reason:
+        custom: []
+        name: override_reason
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      leader_consent:
+        custom: []
+        name: leader_consent
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      make_leader:
+        custom: []
+        name: make_leader
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      occupants:
+        custom: []
+        name: occupants
+        description: 'Must not have more than 49 items.'
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].name':
+        custom: []
+        name: 'occupants[].name'
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: r
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'occupants[].contact_phone':
+        custom: []
+        name: 'occupants[].contact_phone'
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: false
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_name':
+        custom: []
+        name: 'occupants[].emergency_contact_name'
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: p
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_relationship':
+        custom: []
+        name: 'occupants[].emergency_contact_relationship'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_phone':
+        custom: []
+        name: 'occupants[].emergency_contact_phone'
+        description: 'This field is required when <code>occupants.*.emergency_contact_name</code> is present. Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: false
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      unit_id: 16
+      email: zbailey@example.net
+      moved_in_on: '2026-10-11'
+      emergency_contact:
+        name: b
+        relationship: 'n'
+        phone: '-666-09'
+      discount:
+        kind: fixed
+        value: 25
+      deposit:
+        amount_centavos: 8
+        method: e_wallet
+        received_on: '2026-10-11'
+        reference: l
+      first_rent:
+        amount_centavos: 20
+        method: cash
+        received_on: '2026-10-11'
+        reference: q
+      override_reason: w
+      leader_consent: false
+      make_leader: true
+      occupants:
+        -
+          name: r
+          contact_phone: '-666-09'
+          emergency_contact_name: p
+          emergency_contact_relationship: w
+          emergency_contact_phone: '-666-09'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/me/tenancies
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'My tenancies'
+      description: "The signed-in boarder's current stay (a list, normally of one)."
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -62,92 +632,18 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/properties/{property_id}/rooms'
+      - GET
+    uri: 'api/v1/tenancies/{id}'
     metadata:
       custom: []
-      groupName: Rooms
+      groupName: Tenancies
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Add a room'
+      title: 'View a tenancy'
       description: |-
-        The room is rented whole (`rental_mode: whole`, one unit with a max
-        `capacity`) or by bedspace (`rental_mode: bedspaces`, `count` beds). The
-        floor is optional; the room number and code are automatic.
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      property_id:
-        custom: []
-        name: property_id
-        description: 'The ID of the property.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      property_id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      rental_mode:
-        custom: []
-        name: rental_mode
-        description: ''
-        required: true
-        example: bedspaces
-        type: string
-        enumValues:
-          - whole
-          - bedspaces
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      floor:
-        custom: []
-        name: floor
-        description: 'Must be between -5 and 100.'
-        required: false
-        example: -4
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      rental_mode: bedspaces
-      floor: -4
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PATCH
-    uri: 'api/v1/rooms/{id}'
-    metadata:
-      custom: []
-      groupName: Rooms
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: "Change a room's floor"
-      description: ''
+        Staff of the property see everything. The tenant sees their own
+        tenancy without the move-in payments' bookkeeping.
       authenticated: true
       deprecated: false
     headers:
@@ -158,84 +654,31 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the room.'
+        description: 'The ID of the tenancy.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      floor:
-        custom: []
-        name: floor
-        description: 'Must be between -5 and 100.'
-        required: false
-        example: -4
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      floor: -4
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/rooms/{id}'
-    metadata:
-      custom: []
-      groupName: Rooms
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove a room'
-      description: |-
-        Not while someone is booked into or living in one of its units, and a
-        property always keeps at least one room. The room and its units are
-        archived with their history.
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the room.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: 16
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
     responseFields: []
     auth:
       - headers
@@ -247,19 +690,16 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/rooms/{room_id}/rental-mode'
+      - PUT
+    uri: 'api/v1/tenancies/{tenancy_id}/emergency-contact'
     metadata:
       custom: []
-      groupName: Rooms
+      groupName: Tenancies
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: "Switch a room's rental mode"
-      description: |-
-        Whole ⇄ bedspaces. Refused while any unit of the room is in use. A
-        person joining or leaving a room never switches it. The old units are
-        archived with their price history.
+      title: 'Change the emergency contact'
+      description: "The tenant or the property's owner or Manager."
       authenticated: true
       deprecated: false
     headers:
@@ -267,37 +707,59 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      room_id:
+      tenancy_id:
         custom: []
-        name: room_id
-        description: 'The ID of the room.'
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      tenancy_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      rental_mode:
+      name:
         custom: []
-        name: rental_mode
-        description: ''
+        name: name
+        description: 'Must not be greater than 120 characters.'
         required: true
-        example: whole
+        example: b
         type: string
-        enumValues:
-          - whole
-          - bedspaces
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      relationship:
+        custom: []
+        name: relationship
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      phone:
+        custom: []
+        name: phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: true
+        example: '-666-09'
+        type: string
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      rental_mode: whole
+      name: b
+      relationship: 'n'
+      phone: '-666-09'
     fileParameters: []
     responses: []
     responseFields: []
@@ -312,18 +774,22 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: 'api/v1/rooms/{room_id}/bedspaces'
+    uri: 'api/v1/applications/{application_id}/move-in'
     metadata:
       custom: []
-      groupName: Rooms
+      groupName: Tenancies
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Add bedspaces'
+      title: 'Move in from a reservation'
       description: |-
-        Bedspace rooms only. `label_pattern` uses {n} for the number, e.g.
-        "Bed {n}". Numbering continues after existing bedspaces unless
-        `start_number` is given.
+        The reservation becomes a tenancy and its unit Occupied. With the
+        property's activation requirement on, the deposit and the first rent
+        must be recorded in full, or an owner or Manager gives an
+        `override_reason`. In a room rented whole the tenant becomes the leader
+        (`leader_consent: true` is needed) and the people to stay need
+        emergency contacts; in a bedspace room `make_leader` names the tenant
+        the leader when the room has none.
       authenticated: true
       deprecated: false
     headers:
@@ -331,71 +797,356 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      room_id:
+      application_id:
         custom: []
-        name: room_id
-        description: 'The ID of the room.'
+        name: application_id
+        description: 'The ID of the application.'
         required: true
-        example: 16
+        example: 5
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      room_id: 16
+      application_id: 5
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      count:
+      moved_in_on:
         custom: []
-        name: count
-        description: 'Must be at least 1.'
+        name: moved_in_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      label_pattern:
-        custom: []
-        name: label_pattern
-        description: 'Must not be greater than 60 characters.'
-        required: false
-        example: 'n'
+        example: '2026-10-11'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      start_number:
+      emergency_contact:
         custom: []
-        name: start_number
-        description: 'Must be at least 0. Must not be greater than 9999.'
+        name: emergency_contact
+        description: ''
+        required: true
+        example: []
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact.name:
+        custom: []
+        name: emergency_contact.name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact.relationship:
+        custom: []
+        name: emergency_contact.relationship
+        description: 'Must not be greater than 50 characters.'
         required: false
-        example: 7
-        type: integer
+        example: 'n'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
-      rent_centavos:
+      emergency_contact.phone:
         custom: []
-        name: rent_centavos
-        description: 'Must be at least 0. Must not be greater than 100000000.'
+        name: emergency_contact.phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: true
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      discount:
+        custom: []
+        name: discount
+        description: ''
         required: false
-        example: 16
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      discount.kind:
+        custom: []
+        name: discount.kind
+        description: 'This field is required when <code>discount</code> is present.'
+        required: false
+        example: fixed
+        type: string
+        enumValues:
+          - fixed
+          - percent
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      discount.value:
+        custom: []
+        name: discount.value
+        description: 'This field is required when <code>discount</code> is present. Must be at least 1. Must not be greater than 100000000.'
+        required: false
+        example: 25
         type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit:
+        custom: []
+        name: deposit
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      deposit.amount_centavos:
+        custom: []
+        name: deposit.amount_centavos
+        description: 'This field is required when <code>deposit</code> is present. Must be at least 0. Must not be greater than 100000000.'
+        required: false
+        example: 8
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit.method:
+        custom: []
+        name: deposit.method
+        description: 'This field is required when <code>deposit</code> is present.'
+        required: false
+        example: bank_transfer
+        type: string
+        enumValues:
+          - cash
+          - bank_transfer
+          - e_wallet
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      deposit.received_on:
+        custom: []
+        name: deposit.received_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      deposit.reference:
+        custom: []
+        name: deposit.reference
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: l
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent:
+        custom: []
+        name: first_rent
+        description: ''
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent.amount_centavos:
+        custom: []
+        name: first_rent.amount_centavos
+        description: 'This field is required when <code>first_rent</code> is present. Must be at least 0. Must not be greater than 100000000.'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      first_rent.method:
+        custom: []
+        name: first_rent.method
+        description: 'This field is required when <code>first_rent</code> is present.'
+        required: false
+        example: bank_transfer
+        type: string
+        enumValues:
+          - cash
+          - bank_transfer
+          - e_wallet
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      first_rent.received_on:
+        custom: []
+        name: first_rent.received_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      first_rent.reference:
+        custom: []
+        name: first_rent.reference
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: q
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      override_reason:
+        custom: []
+        name: override_reason
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      leader_consent:
+        custom: []
+        name: leader_consent
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      make_leader:
+        custom: []
+        name: make_leader
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      occupants:
+        custom: []
+        name: occupants
+        description: 'Must not have more than 49 items.'
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].name':
+        custom: []
+        name: 'occupants[].name'
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: r
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'occupants[].contact_phone':
+        custom: []
+        name: 'occupants[].contact_phone'
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: false
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_name':
+        custom: []
+        name: 'occupants[].emergency_contact_name'
+        description: 'Must not be greater than 120 characters.'
+        required: false
+        example: p
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_relationship':
+        custom: []
+        name: 'occupants[].emergency_contact_relationship'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'occupants[].emergency_contact_phone':
+        custom: []
+        name: 'occupants[].emergency_contact_phone'
+        description: 'This field is required when <code>occupants.*.emergency_contact_name</code> is present. Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: false
+        example: '-666-09'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      count: 16
-      label_pattern: 'n'
-      start_number: 7
-      rent_centavos: 16
+      moved_in_on: '2026-10-11'
+      emergency_contact:
+        name: b
+        relationship: 'n'
+        phone: '-666-09'
+      discount:
+        kind: fixed
+        value: 25
+      deposit:
+        amount_centavos: 8
+        method: bank_transfer
+        received_on: '2026-10-11'
+        reference: l
+      first_rent:
+        amount_centavos: 20
+        method: bank_transfer
+        received_on: '2026-10-11'
+        reference: q
+      override_reason: w
+      leader_consent: false
+      make_leader: false
+      occupants:
+        -
+          name: r
+          contact_phone: '-666-09'
+          emergency_contact_name: p
+          emergency_contact_relationship: w
+          emergency_contact_phone: '-666-09'
     fileParameters: []
     responses: []
     responseFields: []

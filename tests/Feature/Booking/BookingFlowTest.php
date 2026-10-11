@@ -3,8 +3,9 @@
 use App\Enums\CaretakerAccessLevel;
 use App\Enums\NotificationEvent;
 use App\Models\BookingApplication;
+use App\Models\Room;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
@@ -30,7 +31,7 @@ afterEach(fn () => Date::setTestNow());
 function dailyRunOn(string $day): void
 {
     Date::setTestNow(CarbonImmutable::parse("{$day} 09:00", 'Asia/Manila'));
-    test()->artisan('boardmate:daily')->assertSuccessful();
+    test()->artisan('dormlink:daily')->assertSuccessful();
 }
 
 function applyFor(User $boarder, int $propertyId, array $data = []): TestResponse
@@ -48,8 +49,8 @@ it('lets a boarder apply and tells the owner', function () {
         ->assertJsonPath('data.unit', null)
         ->assertJsonPath('data.property.address', null);
 
-    Notification::assertSentTo($this->owner, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingReceived);
+    Notification::assertSentTo($this->owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingReceived);
 });
 
 it('reserves the chosen bedspace until planned move-in + 7 days', function () {
@@ -64,8 +65,8 @@ it('reserves the chosen bedspace until planned move-in + 7 days', function () {
         ->assertJsonPath('data.reserved_until', '2026-10-27');
 
     expect($bed->fresh()->status->value)->toBe('reserved');
-    Notification::assertSentTo($this->kim, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingApproved && $n->data['reserved_until'] === 'Oct 27, 2026');
+    Notification::assertSentTo($this->kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingApproved && $n->data['reserved_until'] === 'Oct 27, 2026');
 
     // Kim now sees the full address.
     $this->actingAs($this->kim, 'sanctum')->getJson('/api/v1/me/applications')
@@ -93,8 +94,8 @@ it('withdraws the boarder\'s other applications when one is approved', function 
         ->postJson("/api/v1/applications/{$here}/approve", ['unit_id' => $this->property->units()->first()->id])->assertOk();
 
     expect(BookingApplication::find($there)->status->value)->toBe('cancelled');
-    Notification::assertSentTo($this->kim, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingAutoCancelled && $n->data['property_name'] === 'Reyes Dorm');
+    Notification::assertSentTo($this->kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingAutoCancelled && $n->data['property_name'] === 'Reyes Dorm');
 
     // …and they cannot apply anywhere else while holding the reservation.
     applyFor($this->kim, $other->id)->assertUnprocessable()->assertJsonPath('code', 'has_reservation');
@@ -110,7 +111,7 @@ it('declines the other applicants when the last free bed is taken', function () 
 
     expect(BookingApplication::find($benId)->status->value)->toBe('declined')
         ->and(BookingApplication::find($benId)->closed_reason)->toBe('The place is now fully booked.');
-    $this->getJson("/api/v1/listings/{$this->property->id}")->assertNotFound(); // nothing bookable left
+    $this->getJson("/api/v1/listings/{$this->property->id}")->assertOk()->assertJsonPath('data.listing.is_full', true); // shown as full
 });
 
 it('refuses to reserve a unit that is not available', function () {
@@ -130,8 +131,8 @@ it('declines with a reason the boarder sees', function () {
         ->postJson("/api/v1/applications/{$id}/decline", ['reason' => 'Female boarders only.'])
         ->assertOk()->assertJsonPath('data.status', 'declined');
 
-    Notification::assertSentTo($this->kim, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingDeclined && $n->data['reason'] === 'Female boarders only.');
+    Notification::assertSentTo($this->kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingDeclined && $n->data['reason'] === 'Female boarders only.');
 });
 
 it('frees the bed when the boarder or the owner cancels a reservation', function () {
@@ -141,7 +142,7 @@ it('frees the bed when the boarder or the owner cancels a reservation', function
 
     $this->actingAs($this->kim, 'sanctum')->postJson("/api/v1/me/applications/{$id}/cancel")->assertOk()->assertJsonPath('data.status', 'cancelled');
     expect($bed->fresh()->status->value)->toBe('available');
-    Notification::assertSentTo($this->owner, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::BookingCancelled);
+    Notification::assertSentTo($this->owner, DormLinkNotification::class, fn ($n) => $n->event === NotificationEvent::BookingCancelled);
 
     $id2 = applyFor($this->ben, $this->property->id)->json('data.id');
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/applications/{$id2}/approve", ['unit_id' => $bed->id]);
@@ -156,13 +157,13 @@ it('expires reservations after their last day and reminds the day before', funct
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/applications/{$id}/approve", ['unit_id' => $bed->id]);
 
     dailyRunOn('2026-10-26');
-    Notification::assertSentTo($this->kim, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpiringSoon);
+    Notification::assertSentTo($this->kim, DormLinkNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpiringSoon);
     expect(BookingApplication::find($id)->status->value)->toBe('approved'); // last day is Oct 27
 
     dailyRunOn('2026-10-28');
     expect(BookingApplication::find($id)->status->value)->toBe('expired')
         ->and($bed->fresh()->status->value)->toBe('available');
-    Notification::assertSentTo($this->owner, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpired);
+    Notification::assertSentTo($this->owner, DormLinkNotification::class, fn ($n) => $n->event === NotificationEvent::ReservationExpired);
 });
 
 it('enforces the booking rules', function () {
@@ -198,7 +199,7 @@ it('lets owners and Managers review, but not Collectors or other owners', functi
     $other = User::factory()->owner()->create();
     $id = applyFor($this->kim, $this->property->id)->json('data.id');
 
-    Notification::assertSentTo($manager, BoardMateNotification::class, fn ($n) => $n->event === NotificationEvent::BookingReceived);
+    Notification::assertSentTo($manager, DormLinkNotification::class, fn ($n) => $n->event === NotificationEvent::BookingReceived);
 
     $this->actingAs($this->owner, 'sanctum')->getJson('/api/v1/applications')->assertJsonCount(1, 'data')->assertJsonPath('meta.pending_count', 1);
     $this->actingAs($manager, 'sanctum')->getJson('/api/v1/applications')->assertJsonCount(1, 'data')
@@ -237,4 +238,46 @@ it('shows "Reserved for" on the owner\'s unit list', function () {
         ->assertJsonPath('data.units.0.status', 'reserved')
         ->assertJsonPath('data.units.0.reservation.boarder_name', 'Kim')
         ->assertJsonPath('data.units.0.reservation.reserved_until', '2026-10-27');
+});
+
+it('applies to a room, and tells the boarder when the owner places them in another one', function () {
+    $this->actingAs($this->owner, 'sanctum');
+    $first = $this->property->rooms()->first();
+    $first->update(['door_no' => '201']);
+    $second = $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
+        'rental_mode' => 'bedspaces', 'door_no' => '202', 'units' => ['count' => 2, 'rent_centavos' => 180000],
+    ])->json('data.id');
+    $full = $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
+        'rental_mode' => 'whole', 'door_no' => '203', 'units' => ['capacity' => 2, 'rent_centavos' => 400000],
+    ])->json('data.id');
+    Room::find($full)->units()->update(['status' => 'occupied']);
+    $elsewhere = makeProperty($this->owner)->rooms()->first();
+
+    applyFor($this->kim, $this->property->id)->assertUnprocessable()->assertJsonPath('errors.room_id.0', 'Choose the room you want.');
+    applyFor($this->kim, $this->property->id, ['room_id' => $elsewhere->id])->assertUnprocessable()->assertJsonValidationErrors(['room_id']);
+    applyFor($this->kim, $this->property->id, ['room_id' => $full])
+        ->assertUnprocessable()->assertJsonPath('errors.room_id.0', 'Room 203 has no free place right now. Choose another room.');
+
+    $id = applyFor($this->kim, $this->property->id, ['room_id' => $first->id])->assertCreated()->assertJsonPath('data.room.label', '201')->json('data.id');
+    Notification::assertSentTo($this->owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingReceived && $n->data['room_label'] === '201');
+
+    // The owner sees which room each free unit is in, and places Kim in room 202.
+    $units = $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/applications/{$id}")->assertOk()->json('meta.bookable_units');
+    expect(collect($units)->where('room_id', $first->id))->toHaveCount(2);
+    $bed = collect($units)->firstWhere('room_id', $second);
+
+    $this->postJson("/api/v1/applications/{$id}/approve", ['unit_id' => $bed['id']])
+        ->assertOk()
+        ->assertJsonPath('data.room.label', '201')
+        ->assertJsonPath('data.unit.room_label', '202');
+
+    Notification::assertSentTo($this->kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingApproved
+            && $n->data['room_label'] === '202' && $n->data['requested_room'] === '201');
+});
+
+it('uses the only room of a one-room place without asking', function () {
+    applyFor($this->kim, $this->property->id)->assertCreated()
+        ->assertJsonPath('data.room.label', $this->property->rooms()->first()->label());
 });

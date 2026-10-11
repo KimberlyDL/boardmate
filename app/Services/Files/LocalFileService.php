@@ -79,7 +79,7 @@ class LocalFileService implements FileService
 
         return URL::temporarySignedRoute(
             'api.v1.files.show',
-            now()->addMinutes(config('boardmate.private_file_url_minutes')),
+            now()->addMinutes(config('dormlink.private_file_url_minutes')),
             ['path' => $path],
         );
     }

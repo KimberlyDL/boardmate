@@ -33,28 +33,28 @@ class LaravelNotificationService implements NotificationService
                 continue;
             }
 
-            $this->deliver($user, new BoardMateNotification($event, $data));
+            $this->deliver($user, new DormLinkNotification($event, $data));
         }
     }
 
     public function sendToAddress(string $email, ?User $account, NotificationEvent $event, array $data = []): void
     {
         if ($this->queued()) {
-            Notification::route('mail', $email)->notify(new QueuedBoardMateNotification($event, $data, $account));
+            Notification::route('mail', $email)->notify(new QueuedDormLinkNotification($event, $data, $account));
 
             return;
         }
 
-        $notification = new BoardMateNotification($event, $data, $account);
+        $notification = new DormLinkNotification($event, $data, $account);
 
         $this->mailSafely($notification, $account, fn () => Notification::route('mail', $email)->notifyNow($notification, ['mail']));
     }
 
-    private function deliver(User $user, BoardMateNotification $notification): void
+    private function deliver(User $user, DormLinkNotification $notification): void
     {
         if ($this->queued()) {
             // The worker retries failed mail; the in-app copy is queued too.
-            $user->notify(new QueuedBoardMateNotification($notification->event, $notification->data, $notification->account));
+            $user->notify(new QueuedDormLinkNotification($notification->event, $notification->data, $notification->account));
 
             return;
         }
@@ -73,10 +73,10 @@ class LaravelNotificationService implements NotificationService
 
     private function queued(): bool
     {
-        return (bool) config('boardmate.notifications_queue');
+        return (bool) config('dormlink.notifications_queue');
     }
 
-    private function mailSafely(BoardMateNotification $notification, ?User $user, callable $send): void
+    private function mailSafely(DormLinkNotification $notification, ?User $user, callable $send): void
     {
         try {
             $send();

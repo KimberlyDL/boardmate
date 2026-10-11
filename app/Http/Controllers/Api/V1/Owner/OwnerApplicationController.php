@@ -116,7 +116,7 @@ class OwnerApplicationController extends Controller
         $message = match ($profile->verification_status) {
             OwnerVerificationStatus::Pending => 'Your application is already being reviewed.',
             OwnerVerificationStatus::Verified => 'Your owner account is already verified.',
-            default => 'Your owner account is suspended. Contact BoardMate support.',
+            default => 'Your owner account is suspended. Contact DormLink support.',
         };
 
         return response()->json(['message' => $message, 'code' => 'owner_application_exists'], 409);

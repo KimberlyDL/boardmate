@@ -12,7 +12,7 @@ class CaretakerRemovedTemplate extends BaseTemplate
     {
         return $this->message($user)
             ->subject('You are no longer a caretaker for '.$data['owner_name'])
-            ->line("{$data['owner_name']} removed you as a caretaker on BoardMate. You can no longer see or manage their properties.");
+            ->line("{$data['owner_name']} removed you as a caretaker on DormLink. You can no longer see or manage their properties.");
     }
 
     public function inApp(?User $user, array $data): array

@@ -34,7 +34,7 @@ class TenancyController extends Controller
 {
     use AuthorizesProperty;
 
-    private const WITH = ['tenant', 'room.property.building', 'unit', 'property', 'discounts'];
+    private const WITH = ['tenant', 'room', 'unit', 'property', 'discounts'];
 
     public function __construct(private readonly TenancyService $tenancies) {}
 
@@ -147,14 +147,14 @@ class TenancyController extends Controller
      * Move in a walk-in
      *
      * For someone who never applied: pick an available `unit_id` and the
-     * `email` of their BoardMate account. Everything else is as for a
+     * `email` of their DormLink account. Everything else is as for a
      * reservation.
      */
     public function store(WalkInRequest $request, Property $property): JsonResponse
     {
         $tenant = User::where('email', mb_strtolower($request->validated('email')))->first();
         if (! $tenant) {
-            throw ValidationException::withMessages(['email' => 'No BoardMate account uses this email. Ask the person to sign up first.']);
+            throw ValidationException::withMessages(['email' => 'No DormLink account uses this email. Ask the person to sign up first.']);
         }
 
         $tenancy = $this->tenancies->moveInWalkIn($property, $tenant, (int) $request->validated('unit_id'), $request->moveInData(), $request->user());

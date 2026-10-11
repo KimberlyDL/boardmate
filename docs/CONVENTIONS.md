@@ -1,4 +1,4 @@
-# BoardMate conventions
+# DormLink conventions
 
 Agreed before the first domain migration (Features Guide §6). Specs: *BoardMate System Features Guide* and *BoardMate Billing and Tenancy Design: Revised Subsystem Guide*.
 
@@ -31,7 +31,7 @@ Agreed before the first domain migration (Features Guide §6). Specs: *BoardMate
 ## Enums
 
 - PHP string-backed enums in `app/Enums`, with case names in StudlyCase, values in snake_case, and an optional `label()`.
-- After adding or changing an enum, run `php artisan boardmate:export-enums`. It regenerates `boardmate-app/src/types/enums.ts`; never edit that file by hand.
+- After adding or changing an enum, run `php artisan dormlink:export-enums`. It regenerates `dormlink-app/src/types/enums.ts`; never edit that file by hand.
 
 ## API
 
@@ -55,7 +55,7 @@ app/Services/<Module>/
 
 Bindings live in `app/Providers/ServiceModulesProvider.php`. Features type-hint the contract, never the implementation. A module is added only when a phase needs it.
 
-The app mirrors this in `boardmate-app/src/services/<module>.ts` on top of the shared `api` client.
+The app mirrors this in `dormlink-app/src/services/<module>.ts` on top of the shared `api` client.
 
 Current modules:
 
@@ -65,18 +65,18 @@ Current modules:
 | `Notifications` | Every message to a person: `send()` / `sendToAddress()`; wording in `Templates/` |
 | `Audit` | Every change to money, prices, approvals, overrides, caretaker actions: `record()`; `AuditDiff::between()` for before → after |
 | `Numbering` | Receipt / bill / notice numbers: `next()` inside the transaction that saves the document |
-| `Scheduler` | Daily work: implement `DailyJob`, add it to `config/boardmate.php` `daily_jobs` |
+| `Scheduler` | Daily work: implement `DailyJob`, add it to `config/dormlink.php` `daily_jobs` |
 | `Split` | Dividing any amount among people (S6): `SplitEngine` |
 | `BillingCalendar` | Due dates, rent periods, proration, utility due dates (S5): `BillingCalendar` |
 | `SocialAuth` | Google ID token verification |
 
 ## Scheduler
 
-- `php artisan boardmate:daily` runs every job in `config/boardmate.php` → `daily_jobs` once per Manila day; it is scheduled at 09:00 Asia/Manila.
+- `php artisan dormlink:daily` runs every job in `config/dormlink.php` → `daily_jobs` once per Manila day; it is scheduled at 09:00 Asia/Manila.
 - Safe to run twice: `scheduler_runs` records each job per day, and a finished job is skipped. Failed jobs are retried on the next run. `--date=YYYY-MM-DD` catches up a missed day.
 - A job computes what is due **as of** the given day, so a missed or repeated run never double-charges anyone.
 - Development: keep `php artisan schedule:work` running. Server: one cron entry:
-  `* * * * * cd /path/to/boardmate && php artisan schedule:run >> /dev/null 2>&1`
+  `* * * * * cd /path/to/dormlink && php artisan schedule:run >> /dev/null 2>&1`
 - Set `NOTIFICATIONS_QUEUE=true` on the server and run `php artisan queue:work` (e.g. under Supervisor) so emails are retried by the worker.
 
 ## Audit log
@@ -87,7 +87,7 @@ Current modules:
 
 ## Tests
 
-- Pest. Feature tests run against the `boardmate_test` Postgres database (reset per test). Mail uses the `array` mailer, so no real email is sent.
+- Pest. Feature tests run against the `dormlink_test` Postgres database (reset per test). Mail uses the `array` mailer, so no real email is sent.
 - `tests/Concurrency` runs real parallel processes (e.g. four cashiers numbering receipts at once); it truncates tables instead of rolling back.
 - Money and date logic must have tests that use the billing guide's worked examples as the expected results.
 - Run `php artisan test` and `vendor/bin/pint --test` before handing over a phase.

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
  * Same notification, sent by the queue worker. Used only when
  * NOTIFICATIONS_QUEUE=true (server), so development needs no worker.
  */
-class QueuedBoardMateNotification extends BoardMateNotification implements ShouldQueue
+class QueuedDormLinkNotification extends DormLinkNotification implements ShouldQueue
 {
     public int $tries = 3;
 

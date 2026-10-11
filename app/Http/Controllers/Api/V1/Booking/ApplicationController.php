@@ -75,14 +75,17 @@ class ApplicationController extends Controller
         $prices = app(PriceBook::class);
         $bookable = $application->property->bookableUnits()->get();
         $prices->preload($bookable);
-        $property = $application->property->loadMissing('building');
+        $property = $application->property;
         $rooms = $property->rooms()->get()->each(fn ($r) => $r->setRelation('property', $property))->keyBy('id');
         $withLeader = RoomLeader::current()->whereIn('room_id', $bookable->pluck('room_id'))->pluck('room_id')->flip();
         $units = $bookable->map(fn ($u) => [
             'id' => $u->id,
+            'room_id' => $u->room_id,
             'room_code' => $rooms->get($u->room_id)?->code(),
+            'room_label' => $rooms->get($u->room_id)?->label(),
             'label' => $u->label,
             'kind' => $u->kind->value,
+            'is_whole_option' => $u->is_whole_option,
             'capacity' => $u->capacity,
             'room_has_leader' => $withLeader->has($u->room_id),
             'rent_centavos' => $prices->amountOn($u),

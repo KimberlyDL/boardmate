@@ -1,192 +1,42 @@
-name: 'Dorm Finder'
+name: 'Room occupants'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/listings
+    uri: 'api/v1/rooms/{room_id}/occupants'
     metadata:
       custom: []
-      groupName: 'Dorm Finder'
+      groupName: 'Room occupants'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Search listings'
+      title: "List a room's occupants"
       description: |-
-        Published properties of verified owners with at least one free unit.
-        Prices in centavos. `bbox` = south,west,north,east (map view).
-      authenticated: false
+        The owner and the property's caretakers see everyone with their
+        emergency contacts. The leader sees the same list without emergency
+        contacts.
+      authenticated: true
       deprecated: false
     headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      q:
-        custom: []
-        name: q
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      min_price:
-        custom: []
-        name: min_price
-        description: 'Must be at least 0.'
-        required: false
-        example: 39
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      max_price:
-        custom: []
-        name: max_price
-        description: 'Must be at least 0.'
-        required: false
-        example: 84
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      rental_mode:
-        custom: []
-        name: rental_mode
-        description: ''
-        required: false
-        example: bedspaces
-        type: string
-        enumValues:
-          - whole
-          - bedspaces
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      includes:
-        custom: []
-        name: includes
-        description: ''
-        required: false
-        example: null
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      who:
-        custom: []
-        name: who
-        description: 'Must not be greater than 60 characters.'
-        required: false
-        example: z
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      bbox:
-        custom: []
-        name: bbox
-        description: 'Must match the regex /^-?\d+(\.\d+)?(,-?\d+(\.\d+)?){3}$/.'
-        required: false
-        example: '1,42.3268)))'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      sort:
-        custom: []
-        name: sort
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      page:
-        custom: []
-        name: page
-        description: 'Must be at least 1.'
-        required: false
-        example: 73
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      q: b
-      min_price: 39
-      max_price: 84
-      rental_mode: bedspaces
-      who: z
-      bbox: '1,42.3268)))'
-      page: 73
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 422
-        content: '{"message":"The bbox field format is invalid.","errors":{"bbox":["The bbox field format is invalid."]}}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
-          vary: Origin
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/v1/listings/{property}'
-    metadata:
-      custom: []
-      groupName: 'Dorm Finder'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'View a listing'
-      description: |-
-        Signed-in boarders also get their open application here (and the street
-        address once their reservation is approved).
-      authenticated: false
-      deprecated: false
-    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      property:
+      room_id:
         custom: []
-        name: property
-        description: ''
+        name: room_id
+        description: 'The ID of the room.'
         required: true
-        example: '564'
-        type: string
+        example: 1
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property: '564'
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -195,20 +45,249 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
-        content: |-
-          {
-              "message": "This listing is not available."
-          }
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
           vary: Origin
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/rooms/{room_id}/occupants'
+    metadata:
+      custom: []
+      groupName: 'Room occupants'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Add an occupant'
+      description: |-
+        Owner, Manager or the room's leader. Only for a room rented whole that
+        someone has moved into, and never above the room's capacity. `email`
+        optionally links an existing DormLink account.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      room_id:
+        custom: []
+        name: room_id
+        description: 'The ID of the room.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      room_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        custom: []
+        name: name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      contact_phone:
+        custom: []
+        name: contact_phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: false
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: theo.hauck@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      joined_on:
+        custom: []
+        name: joined_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-11'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact_name:
+        custom: []
+        name: emergency_contact_name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact_relationship:
+        custom: []
+        name: emergency_contact_relationship
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: r
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      emergency_contact_phone:
+        custom: []
+        name: emergency_contact_phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: true
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      name: b
+      contact_phone: '-666-09'
+      email: theo.hauck@example.com
+      joined_on: '2026-10-11'
+      emergency_contact_name: w
+      emergency_contact_relationship: r
+      emergency_contact_phone: '-666-09'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/occupants/{id}'
+    metadata:
+      custom: []
+      groupName: 'Room occupants'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Change an occupant'
+      description: |-
+        Owner or Manager can change everything. The leader can change the name,
+        phone and the leave date only. Setting `left_on` marks the person as
+        having left; clearing it (owner or Manager) brings them back.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the occupant.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/occupants/{id}'
+    metadata:
+      custom: []
+      groupName: 'Room occupants'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove an occupant'
+      description: 'Owner or Manager only. The person who rents the room cannot be removed.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the occupant.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
     controller: null
     method: null
     route: null

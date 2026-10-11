@@ -2,7 +2,7 @@
 
 use App\Enums\NotificationEvent;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 
@@ -68,8 +68,8 @@ it('resends the confirmation email without logging in', function () {
 
     $this->postJson('/api/v1/auth/email/resend', ['email' => 'KIM@example.com'])->assertOk();
 
-    Notification::assertSentTo($user, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::VerifyEmail);
+    Notification::assertSentTo($user, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::VerifyEmail);
 });
 
 it('answers the same for unknown or already verified emails, and sends nothing', function () {

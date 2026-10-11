@@ -5,8 +5,8 @@ namespace App\Services\Scheduler\Contracts;
 use Carbon\CarbonImmutable;
 
 /**
- * A feature's daily task, run by `boardmate:daily` at 09:00 Asia/Manila.
- * Register it in config/boardmate.php ('daily_jobs').
+ * A feature's daily task, run by `dormlink:daily` at 09:00 Asia/Manila.
+ * Register it in config/dormlink.php ('daily_jobs').
  *
  * Write run() so it computes what is due AS OF $day (e.g. "periods due on or
  * before $day that have no bill yet"), not "what happened since yesterday".

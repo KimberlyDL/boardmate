@@ -23,7 +23,7 @@ it('allows the Ionic dev origin through CORS', function () {
 it('writes the TypeScript enum file', function () {
     $path = storage_path('framework/testing/enums.ts');
 
-    $this->artisan('boardmate:export-enums', ['--path' => $path])->assertSuccessful();
+    $this->artisan('dormlink:export-enums', ['--path' => $path])->assertSuccessful();
 
     expect(file_get_contents($path))->toContain('AUTO-GENERATED');
 });

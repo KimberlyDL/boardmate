@@ -6,7 +6,6 @@ use App\Authorization\RoomAccess;
 use App\Enums\AuditEvent;
 use App\Enums\NotificationEvent;
 use App\Enums\PropertyAbility;
-use App\Enums\RentalMode;
 use App\Models\Property;
 use App\Models\Room;
 use App\Models\RoomOccupant;
@@ -145,7 +144,7 @@ class RoomOccupantService
         $this->notifications->send($property->bookingApprovers(), NotificationEvent::OccupantsChanged, [
             'property_id' => $property->id,
             'property_name' => $property->name,
-            'room_code' => $room->code(),
+            'room_code' => $room->label(),
             'leader_name' => $actor->name,
             'summary' => $summary,
         ]);
@@ -166,7 +165,7 @@ class RoomOccupantService
         Property::withTrashed()->whereKey($room->property_id)->lockForUpdate()->first();
         $room = Room::whereKey($room->id)->lockForUpdate()->firstOrFail();
 
-        if ($room->rental_mode !== RentalMode::Whole) {
+        if (! $room->isLetWhole()) {
             throw ValidationException::withMessages([
                 'room' => 'Occupants are listed only for rooms rented whole. In a bedspace room each person has their own tenancy.',
             ]);
@@ -221,7 +220,7 @@ class RoomOccupantService
 
         $user = User::where('email', mb_strtolower($email))->first();
         if (! $user) {
-            throw ValidationException::withMessages(['email' => 'No BoardMate account uses this email. Leave it out to add the person without an account.']);
+            throw ValidationException::withMessages(['email' => 'No DormLink account uses this email. Leave it out to add the person without an account.']);
         }
         if ($user->isSuspended()) {
             throw ValidationException::withMessages(['email' => 'This account is suspended.']);

@@ -133,8 +133,8 @@ class BookingService
             $this->notifications->send($application->property->bookingApprovers(), NotificationEvent::BookingCancelled, [
                 'property_name' => $application->property->name,
                 'unit_label' => $application->unit?->label ?? 'a place',
-                'reason' => 'The applicant\'s account was suspended by BoardMate.',
-                'cancelled_by' => 'BoardMate',
+                'reason' => 'The applicant\'s account was suspended by DormLink.',
+                'cancelled_by' => 'DormLink',
                 'action_url' => '/applications',
             ]);
             $this->audit->record(AuditEvent::BookingCancelled, $application, owner: $application->property->owner,
@@ -152,6 +152,8 @@ class BookingService
         $application = DB::transaction(function () use ($boarder, $property, $data, $idDocument) {
             $application = new BookingApplication($data);
             $application->property_id = $property->id;
+            $application->room_id = $data['room_id'] ?? null;
+            $application->wants_whole = (bool) ($data['wants_whole'] ?? false);
             $application->boarder_id = $boarder->id;
             if ($idDocument) {
                 $application->id_document_path = $this->files->store($idDocument, FilePurpose::IdDocument);
@@ -164,6 +166,8 @@ class BookingService
         $this->notifications->send($property->bookingApprovers(), NotificationEvent::BookingReceived, [
             'boarder_name' => $boarder->name,
             'property_name' => $property->name,
+            'room_label' => $application->room?->label(),
+            'whole' => $application->wants_whole,
             'move_in' => $application->planned_move_in_on->format('M j, Y'),
         ]);
 
@@ -249,15 +253,21 @@ class BookingService
 
         $property = $application->property;
         $unit = $application->unit;
+        $room = $unit->room;
+        // Placed in another room than the one asked for: say so.
+        $askedFor = $application->room_id && $application->room_id !== $unit->room_id ? $application->room?->label() : null;
 
         $this->audit->record(AuditEvent::BookingApproved, $application, owner: $property->owner,
             note: "{$application->boarder->name} → {$property->name} · {$unit->label} until ".$application->reserved_until->format('M j, Y')
                 .($application->leader_on_move_in ? ' · leader' : '')
-                .($application->planned_occupants ? ' · +'.count($application->planned_occupants).' to stay' : ''));
+                .($application->planned_occupants ? ' · +'.count($application->planned_occupants).' to stay' : '')
+                .($askedFor ? " · asked for room {$askedFor}" : ''));
 
         $this->notifications->send($application->boarder, NotificationEvent::BookingApproved, [
             'property_name' => $property->name,
             'unit_label' => $unit->label,
+            'room_label' => $room?->label(),
+            'requested_room' => $askedFor,
             'address' => $property->fullAddress(),
             'reserved_until' => $application->reserved_until->format('M j, Y'),
             'leader' => $application->leader_on_move_in,

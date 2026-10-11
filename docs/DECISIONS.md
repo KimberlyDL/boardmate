@@ -1,6 +1,12 @@
-# BoardMate decisions
+# DormLink decisions
 
 Decisions made while building that **differ from or add to** the two spec guides (*System Features Guide* and *Billing and Tenancy Design: Revised Subsystem Guide*). The guides have not been updated yet, so where they disagree, this file and the code win. Add an entry whenever a new decision is made.
+
+## Name (2026-10-09)
+
+| Decision | Detail |
+| --- | --- |
+| BoardMate is now DormLink | Full title: *DORMLINK: A Mobile-Based Boarding House Management and Dormitory Finder System*. Everything was renamed: folders (`dormlink`, `dormlink-app`), databases (`dormlink`, `dormlink_test`), `config/dormlink.php`, `dormlink:*` commands, `DormLinkNotification`, Capacitor `com.dormlink.app`, and the app's saved keys (`dormlink.*`, so everyone logs in again once). Records saved before the rename that say "BoardMate" stay as history. The two older spec guides keep their BoardMate titles. |
 
 ## Accounts and sign-in
 
@@ -8,7 +14,7 @@ Decisions made while building that **differ from or add to** the two spec guides
 | --- | --- |
 | Email must be verified before logging in | Unverified accounts cannot get a token. |
 | Changing the email address | The new address must be confirmed first; the old address is told about the change. |
-| Logins expire after 30 idle days | Each use extends the token. `boardmate.token_idle_days`; expired tokens are pruned by a daily job. |
+| Logins expire after 30 idle days | Each use extends the token. `dormlink.token_idle_days`; expired tokens are pruned by a daily job. |
 | Google sign-in | The Google ID token is verified on the server. A new account is created only after the person accepts the consent step. An existing account with the same email is linked automatically. |
 | Accounts are created on the web | Boarders, owners and caretakers sign up themselves. Only the super admin is seeded. |
 | Suspending an account | Its tokens are revoked. A suspended boarder's pending applications and reservation are cancelled, the unit is freed, and the owners are told. If the account is an owner, the pending applications on their properties are declined too. Approval refuses suspended applicants. |
@@ -39,12 +45,15 @@ Decisions made while building that **differ from or add to** the two spec guides
 | Unit status changes | Only through `UnitStatusService`, with a fixed list of allowed moves. A move that is not allowed, or based on an out-of-date status, is an error. |
 | Deleting a property | Refused while any unit is in use. Otherwise it is unpublished and soft-deleted (history stays), and its pending applications are declined ("This place is no longer listed"). |
 | Rooms (2026-10-05) | Every property has at least one room, and each room is rented whole or by bedspace (`rooms.rental_mode`), so one property can mix both. A house or studio rented as a whole is a property with one room. Rental mode moved from the property to the room; the property only shows a summary (`whole`, `bedspaces` or `mixed`). |
-| Room floor and code | The floor is an optional number on the room, not a table. The code is automatic: building number (`buildings.number`, assigned per owner), floor and room number, e.g. `B1-F4-03`; missing parts are left out. Room numbers are never reused. |
+| Buildings removed (2026-10-09) | A property is the building: the structure is Property → Room → Bedspace, with one map pin per property. An owner with two buildings lists two properties. The `buildings` table, `properties.building_id` and `/owner/buildings` are gone. |
+| Room floor and code | The floor is an optional number on the room, not a table. The code is automatic: floor and room number, e.g. `F4-03`, or `03` when the room has no floor. Room numbers count per property and are never reused. |
+| Door number and who can stay (2026-10-09) | Both optional on a room. The door number (`rooms.door_no`, up to 10 characters) is typed by the owner and is unique within the property, ignoring case and removed rooms. When set, it is what people see: "Room 201" in the app, notifications and messages (`Room::label()`), with the code shown small for staff. The activity log keeps the code. "Who can stay" is Anyone (default), Female only or Male only. |
 | Switching a room's rental mode | Refused while any unit in the room is in use. A person joining a whole-rented room never switches it; the owner changes the price and the leader's occupant list instead. The old units are archived with their price history. |
+| Whole-room option (2026-10-10) | A bedspace room can also be rented as one room: the owner or a Manager adds its whole-room option (`PUT /rooms/{room}/whole-option`: rent, and capacity, by default one per bedspace), an extra whole unit marked `is_whole_option`. The option and the bedspaces block each other (`rentable_units.blocked`, kept in step by `UnitStatusService::syncWholeOption` on every status change): the whole room is offered only while no bedspace is held, and while someone holds the whole room no bedspace is offered. Counts and labels count places only (bedspaces), never the option. The option is removed like a unit, not while it is held. A room held through its option behaves as a room rented whole (`Room::isLetWhole`): the renter is its leader and occupants are listed. Boarders ask for it with `whole: true` (`booking_applications.wants_whole`). |
 | Removing a room | Refused while a unit is in use, and a property always keeps at least one room. The room and its units are archived. |
 | Prices | Effective-dated, never overwritten, no back-dating. Saving the price already in force changes nothing. A scheduled future price is replaced, not stacked. A price set today can be corrected the same day. |
 | Locked prices | A price a bill used is locked (`price_rules.locked_at`; billing calls `PriceBook::lock`). It is never deleted or replaced; a later price can still end it. |
-| Listing photos | Up to 15. Saved as WebP with the longer side at most 1600 px (`large`) and 480 px (`thumb`). EXIF and GPS are removed and the original is not kept. Images over 8200 px on a side are refused. Profile photos are a 256 px WebP square. `boardmate:rebuild-images` converts older uploads. |
+| Listing photos | Up to 15. Saved as WebP with the longer side at most 1600 px (`large`) and 480 px (`thumb`). EXIF and GPS are removed and the original is not kept. Images over 8200 px on a side are refused. Profile photos are a 256 px WebP square. `dormlink:rebuild-images` converts older uploads. |
 
 ## Owner settings (2026-10-06)
 
@@ -58,24 +67,68 @@ Decisions made while building that **differ from or add to** the two spec guides
 
 | Decision | Detail |
 | --- | --- |
-| Boarders apply to a property, not a unit | The owner or a Manager picks the unit when approving. |
+| Boarders apply to a room (2026-10-10) | The application carries the room the boarder wants (`booking_applications.room_id`). It is required when the place has more than one room (a one-room place uses its room) and the room must have a free place when applying. The owner or a Manager still picks the unit when approving: the approve screen starts in that room and may choose another. If the reserved unit is in another room, the approval message says so ("placed you in room 202 instead of room 201") and the activity log notes the room asked for. The owner's "New booking application" message names the room. |
 | Reservation length | From the planned move-in date (or the approval day if that date has passed) plus the property's `reservation_expiry_days` (default 7). Unclaimed reservations expire daily; the boarder is reminded the day before. |
 | One reservation per boarder | Approving one cancels the boarder's other pending applications automatically. A boarder can have up to 5 pending applications. |
 | Last free unit taken | The property's other pending applicants are declined ("The place is now fully booked"). |
 | Street address | Hidden from a boarder until their reservation is approved. |
+| Full places stay on the Finder (2026-10-09) | Published places of verified owners are always found (`Property::scopeOnFinder`), marked `is_full` when no unit is free and ready, and listed after places with a free unit. Their page can be opened, but applying needs a free unit (`scopeListable`): "This place has no free room right now." `available=1` hides them. |
+| Distance (2026-10-09) | Straight-line metres, computed by the API from a `near` point (`distance_m`, `sort=nearest`); nobody types a distance. The point is a campus (the admin's list; one is the default, the first added becomes it, removing it passes it to the oldest), the user's location, or a point they tap. The choice is kept on the device. |
+| Map first (2026-10-09) | The Finder opens on the map (up to 200 pins, `per_page`), green pins with the "from" price for places with a free room, grey "Full" pins; a tap shows a card with distance, price and availability. The list is the second tab. The "Who can stay" filter matches rooms for that group or for anyone. |
+| Rooms & availability (2026-10-10) | The listing returns every room (`rooms`): label, floor, status (`available` when a unit is free and ready, `not_ready` when its free units are all not ready, else `full`), free and total places, capacity, "from" rent (of its free places, or of all when none is free) and who can stay; never who lives there. The app draws floors as slanted slabs, top floor first, rooms without a floor on the bottom slab; a tap opens the room with Apply. Owners and caretakers get the same view on the property's Rooms tab (Floors / List), with tenant names (`units[].tenant_name`) and reservation holders on the tiles; a tap opens the room's people. |
 | ID file on an application | Private; deleted 30 days after the application closes. |
-| Booking stops at the reservation | Move-in, deposits and billing belong to the tenancy phase. |
+| Planned occupants and leader (2026-10-06) | When approving a whole room, the owner or a Manager can list the people who will stay and mark the applicant as the room's leader. Both are only a plan until move-in. |
+
+## Tenancy up to move-in (Phase 7, 2026-10-06)
+
+| Decision | Detail |
+| --- | --- |
+| A tenancy starts `active` | There is no "reserved" tenancy: the approved application is the reservation. Notice, move-out, overstay and settlement come later. |
+| One current tenancy per boarder | A boarder with a tenancy cannot be moved in elsewhere until it ends. |
+| Walk-ins need an account | The owner or a Manager moves a walk-in into an available unit using the person's DormLink account. Someone holding a reservation must be moved in from it instead. |
+| Move-in date | Today, or up to 30 days back (`TenancyService::MAX_DAYS_BACK`), never in the future. |
+| Move-in payments | The deposit and the advance first rent are stored in `tenancy_payments`, apart from bills. With "activation required" on, both must be paid in full unless the owner or a Manager overrides with a reason. |
+| Moving in withdraws other applications | The boarder's other pending applications are withdrawn ("You moved into …"). |
+| Room leaders | One per room, appointed by the owner or a Manager with the person's consent recorded by them (no in-app acceptance). The leader must live in the room. In a whole room the leader is the person who rents it, set at move-in; a bedspace room's leader can be replaced. |
+| Occupants of a whole room | Kept with join and leave dates. Never more people than the unit's capacity, counting the tenant; the owner raises the capacity first. Only the leader's changes notify the owner and Managers. |
+| Discounts | Optional, manual and effective-dated like prices: from today or later, never back-dated, a scheduled one is replaced, and one a bill used is locked (`locked_at`). |
+| Rental mode is per room | See *Rooms (2026-10-05)*; this reverses the guides' property-level rental mode. |
+
+## Billing and payments (Phase 8, approved 2026-10-10, in progress)
+
+| Decision | Detail |
+| --- | --- |
+| Anniversary bills (step 2) | `BillingService` / daily job `billing.issue_rent_bills`. On each tenancy's due date: rent for the period starting at the price in force on its first day, minus the agreed-rate discount in force that day, plus fixed utilities for the period just finished (price on that period's first day). Period 1 is the move-in payment, so the first bill is period 2. Issuing locks the prices and discount used and takes the bill number in one transaction. One bill per tenancy period (unique in the database); missed days are caught up. |
+| Which fixed utilities | "Fixed per bedspace" on bedspace tenancies, "fixed per property" only on whole-room tenancies (a whole room or a whole-room option). Only accounts the owner bills; an account with a room (`utility_accounts.room_id`) only bills that room. "Billed by the boarders" accounts never appear on owner bills. |
+| Metered bills (step 3) | `MeteredBillService`. The owner or a Manager enters the provider's bill (coverage dates, total, optional private photo). A room meter bills that room's leader in full; a whole-property meter is split across rooms by occupant-days within the coverage (bedspace tenants from move-in; in a whole room every listed occupant from joining). Each share is its own bill to the room's leader, due the property's utility due days (default 7) after entry. The split is saved with the entry (`utility_bills.shares`). |
+| Room without a leader | A room with a share and no leader stops the entry ("Room A has no leader. Appoint one, or waive its share."). A waived share is absorbed by the owner and recorded. |
+| Correcting a metered total | A new entry replaces the old (`replaces_id`, reason required) with the same split; each room's bill gets an adjustment line for the difference and its leader is told (SC-14). Only the latest entry can be corrected. |
+| One-time charges and corrections (step 4) | Owner or Manager only (`EditIssuedBills`), reason required. A charge is its own bill, due on a chosen date (default: utility due days). A correction is an adjustment line (positive charges more, negative is a credit); a bill never goes below ₱0. Issued lines are never edited. |
+| Payments (step 5, planned) | Recorded by hand only. Staff-recorded payments: reference no. and proof optional, confirmed at once, numbered receipt. A boarder's report needs a reference no. or a screenshot and stays Pending until the owner or a caretaker confirms or rejects it with a reason; reused references are flagged. Oldest charge first; same due date: rent, then utilities, then other charges. Overpayment is credit. Mistakes are reversed, never deleted. |
+| Property types (2026-10-10) | Dormitory, Boarding house, Apartment, Studio, House, Condo unit. "Mini house" removed; existing ones become House. |
+
+## Map and rooms view (approved 2026-10-09, all six steps built by 2026-10-10)
+
+From the professor's review. Built in this order, one step at a time:
+
+1. **Buildings are removed** (done 2026-10-09). Structure is Property (the building or dorm: one map pin, rules, photos) → Room → Bedspace. An owner with two buildings lists two properties. Room codes lose the building part (`F2-03`); numbering stays per property.
+2. **Rooms get an optional door number and "Who can stay"** (done 2026-10-09). The door number is typed by the owner, unique within the property, and shown instead of the code when set. "Who can stay" is Female only, Male only or Any.
+3. **The map is the Finder's default view** (done 2026-10-09). One pin per property, green with free rooms and grey when full (full properties are shown too). Distance is a straight line from a campus (default; the admin manages the campus list), the user's location, or a point they tap. Nobody types a distance.
+4. **Rooms & availability view** (done 2026-10-10) on the map card and the listing: floors, then room tiles marked Available, Full or Not ready. A room shows its price and "2 of 4 bedspaces available". Drawn in a stacked 3D look (user, 2026-10-09): each floor is a slab at an angle, lowest at the bottom, with its room tiles on top; rooms without a floor share one slab. The owner sees the same view for their own properties with the tenants' names on each tile, and so do the caretakers assigned to that property (Managers and Collectors; user, 2026-10-10), matching the room view. Public screens never show who lives where.
+5. **Boarders apply to a room** (done 2026-10-10) (a bedspace or the whole room; until step 6 the room's rental mode decides which). The owner can assign a different room or bed when approving, and the boarder is told.
+6. **An empty bedspace room can also be rented whole** (done 2026-10-10) when the owner allows it and sets a whole-room price. The whole-room choice and the bedspaces block each other.
 
 ## Scheduler and data
 
 | Decision | Detail |
 | --- | --- |
-| Daily jobs | `boardmate:daily` at 09:00 Manila. Each job runs once per day; failed or stale jobs are retried. `--date` catches up past days only; a future date needs `--simulate`, which runs the jobs (with real effects) without marking them done. |
+| Daily jobs | `dormlink:daily` at 09:00 Manila. Each job runs once per day; failed or stale jobs are retried. `--date` catches up past days only; a future date needs `--simulate`, which runs the jobs (with real effects) without marking them done. |
 | Time zone | App and database connection are both `Asia/Manila`. In the app, calendar dates (`…_on`, `reserved_until`, `effective_from`) use `manilaDate()`, moments use `manila()`, and clock times (curfew, visitor hours) use `clockTime()`. |
 | Activity log | Never cleaned automatically; it is the paper trail. |
 
 ## Left out for now (by choice)
 
+- Online payments (GCash or Maya gateway): postponed 2026-10-10 until the panel review confirms they are needed. E-wallet and bank transfer payments are recorded by hand.
 - Server setup: cron, queue worker, production URLs, map tiles, online payment provider. When it is done, PHP needs at least `upload_max_filesize = 6M`, `post_max_size = 30M` (an owner application can carry 5 files of 5 MB), the GD extension with WebP, and room to raise `memory_limit` to 512M while a photo is resized. The app uploads listing photos one per request, so the usual 30-second time limit is enough.
 - Privacy notice (current text is a draft).
 - Account deletion or deactivation by the user.

@@ -66,7 +66,7 @@ class GoogleAuthController extends Controller
         if (! $user) {
             if (! $request->boolean('consent')) {
                 return response()->json([
-                    'message' => 'Please agree to the privacy notice to create your BoardMate account.',
+                    'message' => 'Please agree to the privacy notice to create your DormLink account.',
                     'code' => 'consent_required',
                 ], 409);
             }
@@ -111,7 +111,7 @@ class GoogleAuthController extends Controller
                 'email' => $google->email,
                 'active_role' => UserRole::Boarder->value,
                 'consented_at' => now(),
-                'privacy_policy_version' => config('boardmate.privacy_policy_version'),
+                'privacy_policy_version' => config('dormlink.privacy_policy_version'),
             ]);
             $user->forceFill(['google_id' => $google->googleId, 'email_verified_at' => now()])->save();
 

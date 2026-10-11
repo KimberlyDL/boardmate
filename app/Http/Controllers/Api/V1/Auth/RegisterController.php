@@ -37,7 +37,7 @@ class RegisterController extends Controller
                 'password' => $request->input('password'),
                 'active_role' => UserRole::Boarder->value,
                 'consented_at' => now(),
-                'privacy_policy_version' => config('boardmate.privacy_policy_version'),
+                'privacy_policy_version' => config('dormlink.privacy_policy_version'),
             ]);
 
             $user->assignRole(UserRole::Boarder->value);

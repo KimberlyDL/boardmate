@@ -3,7 +3,7 @@
 use App\Enums\NotificationEvent;
 use App\Enums\OwnerVerificationStatus as Status;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
@@ -36,8 +36,8 @@ it('verifies an owner and emails them', function () {
 
     expect($owner->fresh()->isVerifiedOwner())->toBeTrue()
         ->and($owner->ownerProfile->fresh()->reviewed_by)->toBe($this->admin->id);
-    Notification::assertSentTo($owner, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::OwnerApplicationApproved);
+    Notification::assertSentTo($owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::OwnerApplicationApproved);
 });
 
 it('rejects with a reason the owner sees', function () {
@@ -51,8 +51,8 @@ it('rejects with a reason the owner sees', function () {
         ->assertOk()
         ->assertJsonPath('data.owner_profile.review_reason', 'Please add the property address.');
 
-    Notification::assertSentTo($owner, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::OwnerApplicationRejected
+    Notification::assertSentTo($owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::OwnerApplicationRejected
             && $n->data['reason'] === 'Please add the property address.');
 });
 

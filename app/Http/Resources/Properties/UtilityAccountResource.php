@@ -25,6 +25,8 @@ class UtilityAccountResource extends JsonResource
             'method_label' => $this->method->label(),
             'billed_by' => $this->billed_by->value,
             'billed_by_label' => $this->billed_by->label(),
+            // null = the whole property; otherwise the room whose own meter this is
+            'room' => $this->room_id ? ['id' => $this->room_id, 'label' => $this->room?->label()] : null,
             'notes' => $this->notes,
             'has_fixed_amount' => $fixed,
             'amount_centavos' => $fixed ? $prices->amountOn($this->resource) : null,

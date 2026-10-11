@@ -17,7 +17,7 @@ it('stores in-app notifications and lists them with an unread count', function (
         ->getJson('/api/v1/notifications')
         ->assertOk()
         ->assertJsonPath('data.0.event', 'welcome')
-        ->assertJsonPath('data.0.title', 'Welcome to BoardMate')
+        ->assertJsonPath('data.0.title', 'Welcome to DormLink')
         ->assertJsonPath('data.0.read_at', null)
         ->assertJsonPath('meta.unread_count', 1);
 
@@ -57,7 +57,7 @@ it('sends nothing but password reset mail to suspended accounts', function () {
 
 it('queues notifications instead of sending them when NOTIFICATIONS_QUEUE is on', function () {
     Queue::fake();
-    config()->set('boardmate.notifications_queue', true);
+    config()->set('dormlink.notifications_queue', true);
 
     app(NotificationService::class)->send($this->user, NotificationEvent::Welcome);
 

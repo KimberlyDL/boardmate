@@ -15,6 +15,7 @@ use App\Models\RentableUnit;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Pricing\PriceBook;
+use App\Services\Properties\UnitStatusService;
 use App\Support\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -89,13 +90,16 @@ class UnitController extends Controller
         DB::transaction(function () use ($property, $room, $unit) {
             $property->lockForOccupancyChange();
             if ($unit->refresh()->isInUse()) {
-                throw ValidationException::withMessages(['unit' => 'Someone is booked into or living in this bedspace.']);
+                throw ValidationException::withMessages(['unit' => $unit->is_whole_option
+                    ? 'Someone has booked or rents this room as a whole.'
+                    : 'Someone is booked into or living in this bedspace.']);
             }
-            if ($room->units()->count() <= 1) {
+            if (! $unit->is_whole_option && $room->units()->places()->count() <= 1) {
                 throw ValidationException::withMessages(['unit' => 'A bedspace room needs at least one bedspace.']);
             }
 
             $unit->delete();
+            UnitStatusService::syncWholeOption($room->id);
         });
         $this->audit->record(AuditEvent::UnitRemoved, $unit, owner: $property->owner, note: "{$property->name} · {$unit->label}");
 

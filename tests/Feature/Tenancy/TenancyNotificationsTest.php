@@ -6,7 +6,7 @@ use App\Models\RoomLeader;
 use App\Models\RoomOccupant;
 use App\Models\Tenancy;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
@@ -38,7 +38,7 @@ afterEach(fn () => Date::setTestNow());
 function sentOf(User $user, NotificationEvent $event)
 {
     // The fake records a message once per channel (email, in-app); count each message once.
-    return Notification::sent($user, BoardMateNotification::class)
+    return Notification::sent($user, DormLinkNotification::class)
         ->filter(fn ($n) => $n->event === $event)
         ->unique(fn ($n) => spl_object_id($n))
         ->values();

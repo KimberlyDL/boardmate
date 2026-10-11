@@ -9,7 +9,7 @@ use Spatie\Activitylog\Models\Activity;
 
 /**
  * One audit log line: who did what, in which role, when, with before → after.
- * Platform admins appear as "BoardMate team" to owners.
+ * Platform admins appear as "DormLink team" to owners.
  *
  * @mixin Activity
  */
@@ -31,7 +31,7 @@ class AuditEntryResource extends JsonResource
         'owner' => 'Owner',
         'caretaker_manager' => 'Caretaker (Manager)',
         'caretaker_collector' => 'Caretaker (Collector)',
-        'admin' => 'BoardMate admin',
+        'admin' => 'DormLink admin',
         'self' => null,
         'system' => 'System',
     ];
@@ -52,7 +52,7 @@ class AuditEntryResource extends JsonResource
             'description' => AuditEvent::tryFrom((string) $this->event)?->label() ?? $this->description,
             'actor' => [
                 'id' => $hideAdmin ? null : $this->causer_id,
-                'name' => $hideAdmin ? 'BoardMate team' : ($properties->get('actor_name') ?? 'System'),
+                'name' => $hideAdmin ? 'DormLink team' : ($properties->get('actor_name') ?? 'System'),
                 'acting_as' => $this->acting_as,
                 'acting_as_label' => self::ROLE_LABELS[$this->acting_as] ?? null,
             ],

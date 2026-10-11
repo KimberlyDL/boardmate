@@ -53,7 +53,7 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'active_role' => UserRole::Boarder->value,
             'consented_at' => now(),
-            'privacy_policy_version' => config('boardmate.privacy_policy_version'),
+            'privacy_policy_version' => config('dormlink.privacy_policy_version'),
         ])->afterCreating(function (User $user) {
             $user->assignRole(UserRole::Boarder->value);
             $user->boarderProfile()->create();

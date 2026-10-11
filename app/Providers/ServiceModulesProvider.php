@@ -37,7 +37,7 @@ class ServiceModulesProvider extends ServiceProvider
         $this->app->singleton(GoogleTokenVerifier::class, fn () => new GoogleIdTokenVerifier(config('services.google.client_id')));
 
         $this->app->bind(DailyJobRunner::class, fn ($app) => new DailyJobRunner(
-            array_map(fn (string $class) => $app->make($class), config('boardmate.daily_jobs', [])),
+            array_map(fn (string $class) => $app->make($class), config('dormlink.daily_jobs', [])),
         ));
     }
 }

@@ -52,6 +52,7 @@ class UnitStatusService
         }
 
         $unit->setRawAttributes(array_merge($unit->getAttributes(), ['status' => $to->value]), true);
+        self::syncWholeOption($unit->room_id);
 
         return $unit;
     }
@@ -59,8 +60,43 @@ class UnitStatusService
     /** Reserved → Available if (and only if) it is still reserved; no-op otherwise. */
     public function releaseReservation(int $unitId): bool
     {
-        return RentableUnit::whereKey($unitId)
+        $released = RentableUnit::whereKey($unitId)
             ->where('status', S::Reserved->value)
             ->update(['status' => S::Available->value, 'updated_at' => now()]) > 0;
+        if ($released) {
+            self::syncWholeOption(RentableUnit::withTrashed()->whereKey($unitId)->value('room_id'));
+        }
+
+        return $released;
+    }
+
+    /**
+     * A bedspace room's whole-room option and its bedspaces block each other:
+     * while anyone holds a bedspace the whole room is not offered, and while
+     * someone holds the whole room no bedspace is. Rooms without the option
+     * are left alone.
+     */
+    public static function syncWholeOption(?int $roomId): void
+    {
+        if ($roomId === null) {
+            return;
+        }
+        $units = RentableUnit::where('room_id', $roomId)->get(['id', 'status', 'is_whole_option', 'blocked']);
+        $option = $units->firstWhere('is_whole_option', true);
+        $beds = $units->where('is_whole_option', false);
+        if (! $option) {
+            if ($beds->contains('blocked', true)) {
+                RentableUnit::whereIn('id', $beds->pluck('id'))->update(['blocked' => false]);
+            }
+
+            return;
+        }
+
+        $wholeTaken = $option->status->isInUse();
+        $bedTaken = $beds->contains(fn (RentableUnit $u) => $u->status->isInUse());
+        RentableUnit::whereIn('id', $beds->pluck('id'))->where('blocked', ! $wholeTaken)->update(['blocked' => $wholeTaken]);
+        if ($option->blocked !== $bedTaken) {
+            RentableUnit::whereKey($option->id)->update(['blocked' => $bedTaken]);
+        }
     }
 }

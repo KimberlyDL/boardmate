@@ -7,7 +7,6 @@ use App\Enums\AuditEvent;
 use App\Enums\DepositRule;
 use App\Enums\DiscountKind;
 use App\Enums\NotificationEvent;
-use App\Enums\RentalMode;
 use App\Enums\TenancyPaymentKind;
 use App\Enums\UnitKind;
 use App\Enums\UnitStatus;
@@ -246,13 +245,13 @@ class TenancyService
         $settings = $property->settings ?? new PropertySettings;
         $quote = $this->quote($unit, $movedInOn, $data['discount'] ?? null, $settings);
 
-        $becomesLeader = $room->rental_mode === RentalMode::Whole
+        $becomesLeader = $unit->kind === UnitKind::Whole
             ? true
             : (bool) ($data['make_leader'] ?? $application?->leader_on_move_in ?? false);
         if ($becomesLeader && empty($data['leader_consent'])) {
             throw ValidationException::withMessages(['leader_consent' => 'Confirm that this person agreed to be the room\'s leader.']);
         }
-        if ($becomesLeader && $room->rental_mode === RentalMode::Bedspaces && $room->leader()->exists()) {
+        if ($becomesLeader && $unit->kind === UnitKind::Bedspace && $room->leader()->exists()) {
             throw ValidationException::withMessages(['make_leader' => 'This room already has a leader.']);
         }
         $occupants = $this->occupantsFor($unit, $application, $data);
@@ -296,7 +295,7 @@ class TenancyService
         if ($becomesLeader) {
             $this->leaders->appoint($room, $tenant, $actor, true, notify: false);
         }
-        if ($room->rental_mode === RentalMode::Whole) {
+        if ($unit->kind === UnitKind::Whole) {
             $this->listOccupants($tenancy, $tenant, $occupants, $actor);
         }
 

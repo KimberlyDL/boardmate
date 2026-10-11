@@ -16,7 +16,7 @@ class PruneIdleTokensJob implements DailyJob
 
     public function run(CarbonImmutable $day): string
     {
-        $cutoff = now()->subDays(config('boardmate.token_idle_days'));
+        $cutoff = now()->subDays(config('dormlink.token_idle_days'));
 
         $deleted = PersonalAccessToken::query()
             ->where(fn ($q) => $q->where('last_used_at', '<', $cutoff)

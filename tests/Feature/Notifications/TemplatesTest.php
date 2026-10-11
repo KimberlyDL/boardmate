@@ -2,7 +2,7 @@
 
 use App\Enums\NotificationEvent;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Notifications\AnonymousNotifiable;
 
 /*
@@ -32,7 +32,7 @@ $sample = [
     'moved_in_on' => 'Oct 25, 2026',
     'next_due_on' => 'Nov 25, 2026',
     'is_leader' => true,
-    'room_code' => 'B1-F2-03',
+    'room_code' => 'F2-03',
     'appointed_by' => 'Santos Boarding House',
     'new_leader' => 'Ben Reyes',
     'leader_name' => 'Kim Santos',
@@ -42,14 +42,19 @@ $sample = [
     'change' => 'set',
     'from' => 'Nov 26, 2026',
     'description' => '₱500.00 off your rent',
+    'bill_number' => 'BILL-2026-000012',
+    'total' => '₱2,100.00',
+    'due_on' => 'Nov 25, 2026',
+    'period' => 'Nov 26 – Dec 25, 2026',
+    'summary' => "your room's share of the Meralco bill",
 ];
 
 it('renders every event as email and in-app, for an account and for a bare address', function (NotificationEvent $event) use ($sample) {
     $user = User::factory()->create(['name' => 'Kim Santos']);
-    $channels = (new BoardMateNotification($event, $sample))->via($user);
+    $channels = (new DormLinkNotification($event, $sample))->via($user);
 
     foreach ([$user, (new AnonymousNotifiable)->route('mail', 'someone@example.com')] as $to) {
-        $notification = new BoardMateNotification($event, $sample);
+        $notification = new DormLinkNotification($event, $sample);
 
         if (in_array('mail', $channels, true)) {
             $mail = $notification->toMail($to);

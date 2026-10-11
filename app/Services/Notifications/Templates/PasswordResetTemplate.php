@@ -17,7 +17,7 @@ class PasswordResetTemplate extends BaseTemplate
         $minutes = config('auth.passwords.users.expire');
 
         return $this->message($user)
-            ->subject('Reset your BoardMate password')
+            ->subject('Reset your DormLink password')
             ->line('We received a request to reset your password.')
             ->action('Reset password', $data['url'])
             ->line("This link works for {$minutes} minutes. If you did not ask for this, you can ignore this email. Your password stays the same.");

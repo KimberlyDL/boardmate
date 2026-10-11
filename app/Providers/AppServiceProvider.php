@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         // updates last_used_at on every request, so active users stay in.
         Sanctum::authenticateAccessTokensUsing(
             fn (PersonalAccessToken $token, bool $isValid) => $isValid
-                && ($token->last_used_at ?? $token->created_at)->greaterThan(now()->subDays(config('boardmate.token_idle_days')))
+                && ($token->last_used_at ?? $token->created_at)->greaterThan(now()->subDays(config('dormlink.token_idle_days')))
         );
     }
 }

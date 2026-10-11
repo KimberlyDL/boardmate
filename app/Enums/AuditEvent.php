@@ -21,6 +21,9 @@ enum AuditEvent: string
     case OwnerReinstated = 'owner.reinstated';
     case AccountSuspended = 'account.suspended';
     case AccountUnsuspended = 'account.unsuspended';
+    case CampusAdded = 'campus.added';
+    case CampusUpdated = 'campus.updated';
+    case CampusRemoved = 'campus.removed';
 
     // Owner business
     case OwnerApplied = 'owner.applied';
@@ -74,6 +77,11 @@ enum AuditEvent: string
     case EmergencyContactChanged = 'tenancy.emergency_contact_changed';
     case DiscountSet = 'tenancy.discount_set';
     case DiscountEnded = 'tenancy.discount_ended';
+    case BillIssued = 'billing.bill_issued';
+    case UtilityBillEntered = 'billing.utility_bill_entered';
+    case UtilityBillCorrected = 'billing.utility_bill_corrected';
+    case ChargeAdded = 'billing.charge_added';
+    case BillAdjusted = 'billing.bill_adjusted';
 
     // Account security
     case EmailChanged = 'account.email_changed';
@@ -85,7 +93,8 @@ enum AuditEvent: string
     {
         return match ($this) {
             self::OwnerVerified, self::OwnerRejected, self::OwnerSuspended, self::OwnerReinstated,
-            self::AccountSuspended, self::AccountUnsuspended => 'admin',
+            self::AccountSuspended, self::AccountUnsuspended,
+            self::CampusAdded, self::CampusUpdated, self::CampusRemoved => 'admin',
             self::EmailChanged, self::PasswordChanged, self::PasswordSet, self::GoogleLinked => 'account',
             default => 'owner',
         };
@@ -100,6 +109,9 @@ enum AuditEvent: string
             self::OwnerReinstated => 'Reinstated the owner account',
             self::AccountSuspended => 'Suspended an account',
             self::AccountUnsuspended => 'Lifted an account suspension',
+            self::CampusAdded => 'Added a campus',
+            self::CampusUpdated => 'Changed a campus',
+            self::CampusRemoved => 'Removed a campus',
             self::OwnerApplied => 'Applied to be an owner',
             self::OwnerDetailsChanged => 'Changed business or payment details',
             self::CaretakerInvited => 'Invited a caretaker',
@@ -145,6 +157,11 @@ enum AuditEvent: string
             self::EmergencyContactChanged => 'Changed a tenant\'s emergency contact',
             self::DiscountSet => 'Set a tenant\'s discount',
             self::DiscountEnded => 'Ended a tenant\'s discount',
+            self::BillIssued => 'Issued a bill',
+            self::UtilityBillEntered => 'Entered a utility bill',
+            self::UtilityBillCorrected => 'Corrected a utility bill',
+            self::ChargeAdded => 'Added a one-time charge',
+            self::BillAdjusted => 'Corrected a bill',
             self::EmailChanged => 'Changed email',
             self::PasswordChanged => 'Changed password',
             self::PasswordSet => 'Set a password',

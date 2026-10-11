@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * One row per daily job per day, so `boardmate:daily` is safe to run twice:
+ * One row per daily job per day, so `dormlink:daily` is safe to run twice:
  * a job that already succeeded for a day is skipped.
  */
 return new class extends Migration

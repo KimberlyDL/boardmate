@@ -13,8 +13,13 @@ class BookingApprovedTemplate extends BaseTemplate
     {
         $mail = $this->message($user)
             ->subject("Your booking at {$data['property_name']} is approved")
-            ->line("Good news: {$data['unit_label']} at {$data['property_name']} is reserved for you.")
-            ->line("Address: {$data['address']}")
+            ->line("Good news: {$this->place($data)} at {$data['property_name']} is reserved for you.");
+
+        if (! empty($data['requested_room'])) {
+            $mail->line("The owner placed you in room {$data['room_label']} instead of room {$data['requested_room']}, which you asked for.");
+        }
+
+        $mail->line("Address: {$data['address']}")
             ->line("Please move in by {$data['reserved_until']}. After that the reservation expires and the place is offered to others.")
             ->line('Bring the deposit and first month\'s rent when you move in.');
 
@@ -29,8 +34,17 @@ class BookingApprovedTemplate extends BaseTemplate
     {
         return [
             'title' => 'Booking approved',
-            'body' => "{$data['unit_label']} at {$data['property_name']} is reserved for you until {$data['reserved_until']}.",
+            'body' => "{$this->place($data)} at {$data['property_name']} is reserved for you until {$data['reserved_until']}."
+                .(! empty($data['requested_room']) ? " You were placed in room {$data['room_label']} instead of room {$data['requested_room']}." : ''),
             'action_url' => '/boarder/bookings',
         ];
+    }
+
+    /** "Bed 2 in room 201", or the unit alone when the room is not known (older messages). */
+    private function place(array $data): string
+    {
+        return empty($data['room_label']) || $data['room_label'] === $data['unit_label']
+            ? $data['unit_label']
+            : "{$data['unit_label']} in room {$data['room_label']}";
     }
 }

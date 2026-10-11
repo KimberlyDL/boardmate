@@ -34,7 +34,7 @@ it('records an admin decision in the admin log and the owner\'s log, hiding the 
         ->getJson('/api/v1/owner/audit-log')
         ->assertOk()
         ->assertJsonPath('data.0.event', 'owner.rejected')
-        ->assertJsonPath('data.0.actor.name', 'BoardMate team')
+        ->assertJsonPath('data.0.actor.name', 'DormLink team')
         ->assertJsonPath('data.0.actor.id', null);
 });
 

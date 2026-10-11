@@ -4,6 +4,7 @@ namespace App\Http\Resources\Tenancies;
 
 use App\Enums\FilePurpose;
 use App\Enums\TenancyPaymentKind;
+use App\Enums\UnitKind;
 use App\Models\RoomLeader;
 use App\Models\Tenancy;
 use App\Services\Files\Contracts\FileService;
@@ -39,7 +40,7 @@ class TenancyResource extends JsonResource
             'status' => $this->status->value,
             'status_label' => $this->status->label(),
             'property' => ['id' => $this->property_id, 'name' => $this->property->name],
-            'room' => ['id' => $this->room_id, 'code' => $this->room->code(), 'rental_mode' => $this->room->rental_mode->value],
+            'room' => ['id' => $this->room_id, 'code' => $this->room->code(), 'door_no' => $this->room->door_no, 'label' => $this->room->label(), 'rental_mode' => $this->room->rental_mode->value, 'let_whole' => $this->unit->kind === UnitKind::Whole],
             'unit' => ['id' => $this->unit_id, 'label' => $this->unit->label, 'kind' => $this->unit->kind->value],
             'tenant' => [
                 'id' => $this->tenant->id,

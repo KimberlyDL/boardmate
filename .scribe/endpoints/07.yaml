@@ -111,14 +111,14 @@ endpoints:
         name: id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 16
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -167,14 +167,14 @@ endpoints:
         name: id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 16
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -216,14 +216,14 @@ endpoints:
         name: id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: 16
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -265,14 +265,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -312,14 +312,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -362,14 +362,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -420,14 +420,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -481,7 +481,7 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -492,15 +492,15 @@ endpoints:
         name: photo_id
         description: 'The ID of the photo.'
         required: true
-        example: 16
+        example: 3
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
-      photo_id: 16
+      property_id: 4
+      photo_id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -540,7 +540,7 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -551,15 +551,15 @@ endpoints:
         name: id
         description: 'The ID of the photo.'
         required: true
-        example: 16
+        example: 3
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
-      id: 16
+      property_id: 4
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -601,14 +601,14 @@ endpoints:
         name: property_id
         description: 'The ID of the property.'
         required: true
-        example: 16
+        example: 4
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      property_id: 16
+      property_id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -639,7 +639,7 @@ endpoints:
         name: 'assignments[].access_level'
         description: ''
         required: true
-        example: collector
+        example: manager
         type: string
         enumValues:
           - collector
@@ -651,7 +651,7 @@ endpoints:
       assignments:
         -
           caretaker_id: 16
-          access_level: collector
+          access_level: manager
     fileParameters: []
     responses: []
     responseFields: []

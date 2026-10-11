@@ -8,7 +8,7 @@ use App\Models\PriceRule;
 use App\Models\PropertyCaretaker;
 use App\Models\User;
 use App\Services\Booking\BookingService;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use App\Services\Pricing\PriceBook;
 use App\Services\Properties\UnitStatusService;
 use Carbon\CarbonImmutable;
@@ -90,8 +90,8 @@ it('declines pending applications when a property is deleted, and tells the boar
 
     expect($application->fresh()->status->value)->toBe('declined')
         ->and($application->fresh()->closed_reason)->toBe('This place is no longer listed.');
-    Notification::assertSentTo($kim, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingDeclined);
+    Notification::assertSentTo($kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingDeclined);
 });
 
 it('still refuses to delete a property with a reservation, naming the unit', function () {
@@ -121,8 +121,8 @@ it('cancels a suspended boarder\'s applications and reservation and frees the un
     expect($reserved->fresh()->status->value)->toBe('cancelled')
         ->and($pending->fresh()->status->value)->toBe('cancelled')
         ->and($bed->fresh()->status)->toBe(UnitStatus::Available);
-    Notification::assertSentTo($this->owner, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingCancelled);
+    Notification::assertSentTo($this->owner, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingCancelled);
 });
 
 // 4. Unit status moves ---------------------------------------------------------
@@ -208,14 +208,14 @@ it('reports a locked price as a validation error on the rent endpoint', function
 // 7. Daily jobs on a future date ---------------------------------------------
 
 it('refuses a future --date unless simulating, and a simulation records nothing', function () {
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-10'])->assertFailed();
+    $this->artisan('dormlink:daily', ['--date' => '2026-10-10'])->assertFailed();
     expect(DB::table('scheduler_runs')->count())->toBe(0);
 
-    $this->artisan('boardmate:daily', ['--date' => '2026-10-10', '--simulate' => true])->assertSuccessful();
+    $this->artisan('dormlink:daily', ['--date' => '2026-10-10', '--simulate' => true])->assertSuccessful();
     expect(DB::table('scheduler_runs')->count())->toBe(0);
 
-    $this->artisan('boardmate:daily')->assertSuccessful();
-    expect(DB::table('scheduler_runs')->where('run_on', '2026-10-04')->count())->toBe(count(config('boardmate.daily_jobs')));
+    $this->artisan('dormlink:daily')->assertSuccessful();
+    expect(DB::table('scheduler_runs')->where('run_on', '2026-10-04')->count())->toBe(count(config('dormlink.daily_jobs')));
 });
 
 // 9–10. Database time and the activity log -----------------------------------
@@ -265,8 +265,8 @@ it('declines an owner\'s pending applicants when the owner is suspended', functi
 
     expect($application->fresh()->status->value)->toBe('declined')
         ->and($application->fresh()->closed_reason)->toBe('This place is not taking bookings right now.');
-    Notification::assertSentTo($kim, BoardMateNotification::class,
-        fn (BoardMateNotification $n) => $n->event === NotificationEvent::BookingDeclined);
+    Notification::assertSentTo($kim, DormLinkNotification::class,
+        fn (DormLinkNotification $n) => $n->event === NotificationEvent::BookingDeclined);
 })->with([
     'owner review' => '/api/v1/admin/owners/%d/suspend',
     'account' => '/api/v1/admin/users/%d/suspend',
@@ -282,5 +282,5 @@ it('does not notify a caretaker when their level did not change', function () {
         ->assertOk()
         ->assertJsonPath('message', 'That is already their access level.');
 
-    Notification::assertNotSentTo($maria, BoardMateNotification::class);
+    Notification::assertNotSentTo($maria, DormLinkNotification::class);
 });

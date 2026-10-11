@@ -25,7 +25,7 @@ it('never reserves the last bed twice', function () {
         return $application->id;
     });
 
-    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'boardmate_test', 'MAIL_MAILER' => 'array'];
+    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'dormlink_test', 'MAIL_MAILER' => 'array'];
     $script = fn (int $id) => sprintf(
         'try { app(App\Services\Booking\BookingService::class)->approve(App\Models\BookingApplication::find(%d), %d, App\Models\User::find(%d)); echo "won"; } catch (Illuminate\Validation\ValidationException $e) { echo "lost"; }',
         $id, $bed->id, $owner->id,
@@ -50,7 +50,7 @@ it('never reserves the last bed twice', function () {
 | Never a reservation on a deleted property. Several rounds to hit the race.
 */
 it('never leaves a reservation on a property deleted at the same moment', function () {
-    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'boardmate_test', 'MAIL_MAILER' => 'array'];
+    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'dormlink_test', 'MAIL_MAILER' => 'array'];
     $owner = User::factory()->owner()->create();
 
     foreach (range(1, 4) as $round) {

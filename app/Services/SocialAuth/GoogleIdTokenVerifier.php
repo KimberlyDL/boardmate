@@ -41,7 +41,7 @@ class GoogleIdTokenVerifier implements GoogleTokenVerifier
         }
 
         if (($claims['aud'] ?? null) !== $this->clientId) {
-            throw new InvalidGoogleToken('Google sign-in token was not issued for BoardMate.');
+            throw new InvalidGoogleToken('Google sign-in token was not issued for DormLink.');
         }
 
         if (empty($claims['sub']) || empty($claims['email']) || ($claims['email_verified'] ?? false) !== true) {

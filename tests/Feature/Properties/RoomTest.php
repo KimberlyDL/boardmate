@@ -2,7 +2,6 @@
 
 use App\Enums\UnitStatus;
 use App\Http\Resources\Listings\ListingResource;
-use App\Models\Building;
 use App\Models\Room;
 use App\Models\User;
 
@@ -21,30 +20,24 @@ it('gives every new property one room whose units belong to it', function () {
 });
 
 it('adds rooms rented whole or by bedspace in one property, with floor and code', function () {
-    $building = new Building(['name' => 'Main']);
-    $building->owner_id = $this->owner->id;
-    $building->number = 1;
-    $building->save();
-    $this->property->update(['building_id' => $building->id]);
-
     $this->actingAs($this->owner, 'sanctum')
         ->postJson("/api/v1/properties/{$this->property->id}/rooms", [
             'rental_mode' => 'whole', 'floor' => 4, 'units' => ['capacity' => 2, 'rent_centavos' => 400000],
         ])->assertCreated()
-        ->assertJsonPath('data.code', 'B1-F4-02')
+        ->assertJsonPath('data.code', 'F4-02')
         ->assertJsonPath('data.rental_mode', 'whole')
         ->assertJsonPath('data.units.0.kind', 'whole')
         ->assertJsonPath('data.units.0.capacity', 2);
 
     $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
         'rental_mode' => 'bedspaces', 'floor' => 4, 'units' => ['count' => 4, 'rent_centavos' => 150000],
-    ])->assertCreated()->assertJsonPath('data.code', 'B1-F4-03');
+    ])->assertCreated()->assertJsonPath('data.code', 'F4-03');
 
     $this->getJson("/api/v1/properties/{$this->property->id}")
         ->assertOk()
         ->assertJsonPath('data.rental_mode', 'mixed')
         ->assertJsonPath('data.counts.rooms', 3)
-        ->assertJsonPath('data.rooms.0.code', 'B1-01')
+        ->assertJsonPath('data.rooms.0.code', '01')
         ->assertJsonPath('data.rooms.2.floor', 4);
 });
 
@@ -56,6 +49,49 @@ it('changes a room\'s floor and keeps the room number', function () {
         ->assertOk()->assertJsonPath('data.code', 'F2-01');
 
     expect(Room::find($room->id)->floor)->toBe(2);
+});
+
+it('sets a door number and who can stay, and calls the room by its door number', function () {
+    $this->actingAs($this->owner, 'sanctum');
+    $room = $this->property->rooms()->first();
+
+    $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
+        'rental_mode' => 'whole', 'floor' => 2, 'door_no' => '201', 'who_can_stay' => 'female',
+        'units' => ['capacity' => 2, 'rent_centavos' => 400000],
+    ])->assertCreated()
+        ->assertJsonPath('message', 'Room 201 added.')
+        ->assertJsonPath('data.code', 'F2-02')
+        ->assertJsonPath('data.label', '201')
+        ->assertJsonPath('data.who_can_stay_label', 'Female only');
+
+    $this->patchJson("/api/v1/rooms/{$room->id}", ['door_no' => '2B'])
+        ->assertOk()
+        ->assertJsonPath('data.label', '2B')
+        ->assertJsonPath('data.floor', null)
+        ->assertJsonPath('data.who_can_stay', 'any');
+
+    $this->patchJson("/api/v1/rooms/{$room->id}", ['door_no' => null])
+        ->assertOk()->assertJsonPath('data.label', '01');
+});
+
+it('keeps door numbers unique within a property, ignoring case and removed rooms', function () {
+    $this->actingAs($this->owner, 'sanctum');
+    $room = $this->property->rooms()->first();
+    $room->update(['door_no' => '2B']);
+
+    $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
+        'rental_mode' => 'whole', 'door_no' => '2b', 'units' => ['capacity' => 1, 'rent_centavos' => 300000],
+    ])->assertUnprocessable()->assertJsonValidationErrors(['door_no']);
+
+    // The same room can keep its own number, and another property can use it.
+    $this->patchJson("/api/v1/rooms/{$room->id}", ['door_no' => '2B'])->assertOk();
+    makeProperty($this->owner)->rooms()->first()->update(['door_no' => '2B']);
+
+    $second = $this->postJson("/api/v1/properties/{$this->property->id}/rooms", [
+        'rental_mode' => 'whole', 'door_no' => '3A', 'units' => ['capacity' => 1, 'rent_centavos' => 300000],
+    ])->assertCreated()->json('data.id');
+    $this->deleteJson("/api/v1/rooms/{$second}")->assertOk()->assertJsonPath('message', 'Room 3A removed.');
+    $this->patchJson("/api/v1/rooms/{$room->id}", ['door_no' => '3A'])->assertOk();
 });
 
 it('never switches a room\'s mode because someone is staying, and refuses removing a room in use', function () {

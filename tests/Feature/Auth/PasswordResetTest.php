@@ -2,7 +2,7 @@
 
 use App\Enums\NotificationEvent;
 use App\Models\User;
-use App\Services\Notifications\BoardMateNotification;
+use App\Services\Notifications\DormLinkNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 
@@ -13,7 +13,7 @@ it('emails a reset link that opens the app', function () {
 
     $this->postJson('/api/v1/auth/forgot-password', ['email' => 'kim@example.com'])->assertOk();
 
-    Notification::assertSentTo($user, BoardMateNotification::class, function (BoardMateNotification $n) {
+    Notification::assertSentTo($user, DormLinkNotification::class, function (DormLinkNotification $n) {
         return $n->event === NotificationEvent::PasswordReset
             && str_starts_with($n->data['url'], config('app.frontend_url').'/reset-password?token=')
             && str_contains($n->data['url'], 'email=kim%40example.com');
@@ -34,7 +34,7 @@ it('resets the password, verifies the email and signs out every device', functio
 
     $token = null;
     $this->postJson('/api/v1/auth/forgot-password', ['email' => 'kim@example.com']);
-    Notification::assertSentTo($user, BoardMateNotification::class, function (BoardMateNotification $n) use (&$token) {
+    Notification::assertSentTo($user, DormLinkNotification::class, function (DormLinkNotification $n) use (&$token) {
         parse_str(parse_url($n->data['url'], PHP_URL_QUERY), $query);
         $token = $query['token'];
 

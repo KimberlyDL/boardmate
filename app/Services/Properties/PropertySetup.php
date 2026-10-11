@@ -43,7 +43,7 @@ class PropertySetup
             ])->save();
 
             $property->settings()->save(new PropertySettings);
-            $this->createRoom($property, $mode, $units, $owner, $floor);
+            $this->createRoom($property, $mode, $units, $owner, ['floor' => $floor]);
 
             return $property;
         });
@@ -51,17 +51,18 @@ class PropertySetup
 
     /**
      * Add a room with its units. The room number is the next free one in the
-     * property; the floor is optional.
+     * property; the floor, door number and who can stay are optional.
      *
+     * @param  array{floor?: int|null, door_no?: string|null, who_can_stay?: string}  $details
      * @param  array{capacity?: int, rent_centavos?: int|null, count?: int, label_pattern?: string, start_number?: int}  $units
      */
-    public function createRoom(Property $property, RentalMode $mode, array $units, User $by, ?int $floor = null): Room
+    public function createRoom(Property $property, RentalMode $mode, array $units, User $by, array $details = []): Room
     {
-        return DB::transaction(function () use ($property, $mode, $units, $by, $floor) {
+        return DB::transaction(function () use ($property, $mode, $units, $by, $details) {
             $number = Room::nextNumberFor($property);
             $room = $property->rooms()->create([
+                ...$details,
                 'number' => $number,
-                'floor' => $floor,
                 'rental_mode' => $mode,
                 'sort_order' => $number,
             ]);
@@ -156,13 +157,13 @@ class PropertySetup
         if ($room->rental_mode !== RentalMode::Bedspaces) {
             throw ValidationException::withMessages(['count' => 'Switch the room to bedspace mode to add bedspaces.']);
         }
-        $existing = $room->units()->count();
+        $existing = $room->units()->places()->count();
         if ($existing + $count > self::MAX_BEDSPACES) {
             throw ValidationException::withMessages(['count' => 'A room can have up to '.self::MAX_BEDSPACES.' bedspaces.']);
         }
 
         $start = $startNumber ?? $existing + 1;
-        $order = (int) $room->units()->max('sort_order');
+        $order = (int) $room->units()->places()->max('sort_order');
 
         return DB::transaction(function () use ($room, $count, $pattern, $start, $order, $rentCentavos, $by) {
             $created = collect();
@@ -179,8 +180,44 @@ class PropertySetup
                 }
                 $created->push($unit);
             }
+            // New bedspaces in a room someone rents whole start blocked.
+            UnitStatusService::syncWholeOption($room->id);
 
             return $created;
+        });
+    }
+
+    /**
+     * Let a bedspace room also be rented as one room: adds (or re-prices) its
+     * whole-room option, for up to `$capacity` people (default: one per
+     * bedspace). It is offered only while every bedspace is free.
+     */
+    public function offerWhole(Room $room, int $rentCentavos, ?int $capacity, User $by): RentableUnit
+    {
+        if ($room->rental_mode !== RentalMode::Bedspaces) {
+            throw ValidationException::withMessages(['room' => 'Only a bedspace room can also be rented whole; this room is already rented whole.']);
+        }
+
+        return DB::transaction(function () use ($room, $rentCentavos, $capacity, $by) {
+            $room->property->lockForOccupancyChange();
+            $option = $room->wholeOption()->first();
+            $capacity ??= $option?->capacity ?? max(1, $room->units()->places()->count());
+            if (! $option) {
+                $option = $room->property->units()->create([
+                    'room_id' => $room->id,
+                    'kind' => UnitKind::Whole,
+                    'label' => 'Whole room',
+                    'sort_order' => 1000,
+                    'capacity' => $capacity,
+                ]);
+                $option->forceFill(['is_whole_option' => true])->save();
+            } else {
+                $option->update(['capacity' => $capacity]);
+            }
+            $this->prices->set($option, $rentCentavos, null, $by);
+            UnitStatusService::syncWholeOption($room->id);
+
+            return $option->refresh();
         });
     }
 

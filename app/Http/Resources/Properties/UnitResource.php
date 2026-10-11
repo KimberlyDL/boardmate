@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 class UnitResource extends JsonResource
 {
     /**
-     * Load what every unit row shows (rents, reservation holder) for the
+     * Load what every unit row shows (rents, reservation holder, tenant) for the
      * whole list at once. Call before rendering a list of units.
      *
      * @param  Collection<int, RentableUnit>  $units
@@ -23,7 +23,7 @@ class UnitResource extends JsonResource
     public static function prepare(Collection $units): Collection
     {
         app(PriceBook::class)->preload($units);
-        (new EloquentCollection($units->all()))->loadMissing('activeReservation.boarder:id,name');
+        (new EloquentCollection($units->all()))->loadMissing(['activeReservation.boarder:id,name', 'currentTenancy.tenant:id,name']);
 
         return $units;
     }
@@ -44,9 +44,14 @@ class UnitResource extends JsonResource
             'status_label' => $this->status->label(),
             'not_ready' => $this->not_ready,
             'not_ready_reason' => $this->not_ready_reason,
+            // The bedspace room's "also rent whole" unit, and whether the other side of it holds this unit back.
+            'is_whole_option' => $this->is_whole_option,
+            'blocked' => $this->blocked,
             'rent_centavos' => $prices->amountOn($this->resource),
             // F2: who holds the reservation, for owners/caretakers.
             'reservation' => $this->reservation(),
+            // Who lives here now, for owners and caretakers (rooms view tiles).
+            'tenant_name' => $this->status->isInUse() ? $this->currentTenancy?->tenant?->name : null,
             'upcoming_rent' => $upcoming ? [
                 'amount_centavos' => $upcoming->amount_centavos,
                 'effective_from' => $upcoming->effective_from->toDateString(),

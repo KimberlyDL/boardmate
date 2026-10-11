@@ -57,7 +57,7 @@ class UtilityAccountController extends Controller
     {
         $this->authorizeProperty($request, $property, A::ManagePrices);
 
-        $data = $request->validate($this->rules($request, true));
+        $data = $request->validate($this->rules($request, true, $property));
         $method = UtilityMethod::from($data['method']);
 
         $account = DB::transaction(function () use ($property, $data, $method, $request) {
@@ -66,6 +66,7 @@ class UtilityAccountController extends Controller
                 'name' => $data['name'] ?? UtilityType::from($data['type'])->label(),
                 'method' => $method,
                 'billed_by' => $data['billed_by'] ?? BilledBy::Owner->value,
+                'room_id' => $data['room_id'] ?? null,
                 'notes' => $data['notes'] ?? null,
             ]);
             if ($method->hasFixedAmount()) {
@@ -92,8 +93,8 @@ class UtilityAccountController extends Controller
         $property = $account->property;
         $this->authorizeProperty($request, $property, A::ManagePrices);
 
-        $data = $request->validate($this->rules($request, false));
-        $before = $account->only(['type', 'name', 'method', 'billed_by', 'notes']);
+        $data = $request->validate($this->rules($request, false, $property));
+        $before = $account->only(['type', 'name', 'method', 'billed_by', 'room_id', 'notes']);
 
         $newMethod = isset($data['method']) ? UtilityMethod::from($data['method']) : $account->method;
         if ($newMethod->hasFixedAmount() && ! isset($data['amount_centavos']) && $this->prices->amountOn($account) === null) {
@@ -181,7 +182,7 @@ class UtilityAccountController extends Controller
         return ApiResponse::message("{$account->name} removed.");
     }
 
-    private function rules(Request $request, bool $creating): array
+    private function rules(Request $request, bool $creating, Property $property): array
     {
         $required = $creating ? 'required' : 'sometimes';
         $method = UtilityMethod::tryFrom((string) $request->input('method'));
@@ -191,6 +192,8 @@ class UtilityAccountController extends Controller
             'name' => ['sometimes', 'nullable', 'string', 'max:80', Rule::requiredIf($request->input('type') === 'other')],
             'method' => [$required, Rule::enum(UtilityMethod::class)],
             'billed_by' => ['sometimes', Rule::enum(BilledBy::class)],
+            // One room's own meter; leave out for the whole property.
+            'room_id' => ['sometimes', 'nullable', 'integer', Rule::exists('rooms', 'id')->where('property_id', $property->id)->whereNull('deleted_at')],
             'notes' => ['sometimes', 'nullable', 'string', 'max:255'],
             'amount_centavos' => [
                 Rule::requiredIf($creating && $method?->hasFixedAmount()),

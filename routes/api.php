@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Account\ActiveRoleController;
 use App\Http\Controllers\Api\V1\Account\EmailChangeController;
 use App\Http\Controllers\Api\V1\Account\NotificationController;
 use App\Http\Controllers\Api\V1\Account\ProfileController;
+use App\Http\Controllers\Api\V1\Admin\CampusController as AdminCampusController;
 use App\Http\Controllers\Api\V1\Admin\OwnerReviewController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\AuditLogController;
@@ -12,13 +13,14 @@ use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\SessionController;
+use App\Http\Controllers\Api\V1\Billing\ChargeController;
+use App\Http\Controllers\Api\V1\Billing\UtilityBillController;
 use App\Http\Controllers\Api\V1\Booking\ApplicationController;
 use App\Http\Controllers\Api\V1\Booking\MyApplicationController;
 use App\Http\Controllers\Api\V1\Caretaker\EmployerController;
 use App\Http\Controllers\Api\V1\Caretaker\InvitationController;
 use App\Http\Controllers\Api\V1\FileController;
 use App\Http\Controllers\Api\V1\HealthController;
-use App\Http\Controllers\Api\V1\Owner\BuildingController;
 use App\Http\Controllers\Api\V1\Owner\CaretakerController;
 use App\Http\Controllers\Api\V1\Owner\OwnerApplicationController;
 use App\Http\Controllers\Api\V1\Properties\CaretakerAssignmentController;
@@ -28,6 +30,7 @@ use App\Http\Controllers\Api\V1\Properties\RoomController;
 use App\Http\Controllers\Api\V1\Properties\SettingsController;
 use App\Http\Controllers\Api\V1\Properties\UnitController;
 use App\Http\Controllers\Api\V1\Properties\UtilityAccountController;
+use App\Http\Controllers\Api\V1\Public\CampusController;
 use App\Http\Controllers\Api\V1\Public\ListingController;
 use App\Http\Controllers\Api\V1\Tenancies\RoomLeaderController;
 use App\Http\Controllers\Api\V1\Tenancies\RoomOccupantController;
@@ -114,13 +117,6 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::delete('caretaker-invitations/{invitation}', [CaretakerController::class, 'revoke'])->name('invitations.destroy');
         });
 
-        Route::middleware('role:owner')->prefix('owner')->name('owner.')->group(function () {
-            Route::get('buildings', [BuildingController::class, 'index'])->name('buildings.index');
-            Route::post('buildings', [BuildingController::class, 'store'])->name('buildings.store');
-            Route::patch('buildings/{building}', [BuildingController::class, 'update'])->name('buildings.update');
-            Route::delete('buildings/{building}', [BuildingController::class, 'destroy'])->name('buildings.destroy');
-        });
-
         // Properties: owners and their assigned caretakers. Every action is
         // checked against PropertyAccess for that property.
         Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
@@ -143,6 +139,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             Route::get('utility-accounts', [UtilityAccountController::class, 'index'])->name('utility-accounts.index');
             Route::post('utility-accounts', [UtilityAccountController::class, 'store'])->name('utility-accounts.store');
+            Route::get('utility-bills', [UtilityBillController::class, 'index'])->name('utility-bills.index');
+            Route::post('utility-bills/preview', [UtilityBillController::class, 'preview'])->name('utility-bills.preview');
+            Route::post('utility-bills', [UtilityBillController::class, 'store'])->name('utility-bills.store');
+            Route::post('charges', [ChargeController::class, 'store'])->name('charges.store');
 
             Route::get('settings', [SettingsController::class, 'show'])->name('settings.show');
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -165,6 +165,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::delete('/', [RoomController::class, 'destroy'])->name('destroy');
             Route::post('rental-mode', [RoomController::class, 'switchMode'])->name('rental-mode');
             Route::post('bedspaces', [RoomController::class, 'addBedspaces'])->name('bedspaces');
+            Route::put('whole-option', [RoomController::class, 'offerWhole'])->name('whole-option');
         });
 
         Route::get('me/tenancies', [TenancyController::class, 'mine'])->name('me.tenancies.index');
@@ -188,6 +189,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::put('rent', [UnitController::class, 'setRent'])->name('rent');
             Route::get('price-history', [UnitController::class, 'priceHistory'])->name('price-history');
         });
+
+        Route::post('utility-bills/{utilityBill}/correct', [UtilityBillController::class, 'correct'])->name('utility-bills.correct');
+        Route::post('bills/{bill}/adjustments', [ChargeController::class, 'adjust'])->name('bills.adjustments.store');
 
         Route::prefix('utility-accounts/{account}')->name('utility-accounts.')->group(function () {
             Route::patch('/', [UtilityAccountController::class, 'update'])->name('update');
@@ -229,12 +233,18 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
             Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
             Route::post('users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');
+
+            Route::get('campuses', [AdminCampusController::class, 'index'])->name('campuses.index');
+            Route::post('campuses', [AdminCampusController::class, 'store'])->name('campuses.store');
+            Route::patch('campuses/{campus}', [AdminCampusController::class, 'update'])->name('campuses.update');
+            Route::delete('campuses/{campus}', [AdminCampusController::class, 'destroy'])->name('campuses.destroy');
         });
     });
 
     // Dorm Finder (F1): public.
     Route::middleware('throttle:60,1')->group(function () {
         Route::get('listings', [ListingController::class, 'index'])->name('listings.index');
+        Route::get('campuses', [CampusController::class, 'index'])->name('campuses.index');
         Route::get('listings/{property}', [ListingController::class, 'show'])->whereNumber('property')->name('listings.show');
     });
 

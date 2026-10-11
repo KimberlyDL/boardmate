@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Properties;
 use App\Enums\AuditEvent;
 use App\Enums\PropertyAbility as A;
 use App\Enums\RentalMode;
+use App\Enums\WhoCanStay;
 use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Properties\RoomResource;
@@ -15,6 +16,8 @@ use App\Models\Room;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Properties\PropertySetup;
+use App\Support\Money;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -47,7 +50,8 @@ class RoomController extends Controller
      *
      * The room is rented whole (`rental_mode: whole`, one unit with a max
      * `capacity`) or by bedspace (`rental_mode: bedspaces`, `count` beds). The
-     * floor is optional; the room number and code are automatic.
+     * floor, door number (`door_no`, unique within the property) and
+     * `who_can_stay` are optional; the room number and code are automatic.
      */
     public function store(Request $request, Property $property): JsonResponse
     {
@@ -55,32 +59,36 @@ class RoomController extends Controller
 
         $data = $request->validate([
             'rental_mode' => ['required', Rule::enum(RentalMode::class)],
-            'floor' => ['sometimes', 'nullable', 'integer', 'between:-5,100'],
+            ...$this->detailRules($property),
             ...$this->unitSpecRules(),
         ]);
 
-        $room = $this->setup->createRoom($property, RentalMode::from($data['rental_mode']), $data['units'] ?? [], $request->user(), $data['floor'] ?? null);
+        $details = collect($data)->only(['floor', 'door_no', 'who_can_stay'])->all();
+        $room = $this->setup->createRoom($property, RentalMode::from($data['rental_mode']), $data['units'] ?? [], $request->user(), $details);
 
         $this->audit->record(AuditEvent::RoomAdded, $room, owner: $property->owner, note: "{$property->name} · {$room->code()}");
 
-        return ApiResponse::created($this->one($room), "Room {$room->code()} added.");
+        return ApiResponse::created($this->one($room), "Room {$room->label()} added.");
     }
 
     /**
-     * Change a room's floor
+     * Change a room's floor, door number or who can stay
+     *
+     * Send only the fields that change.
      */
     public function update(Request $request, Room $room): JsonResponse
     {
         $property = $room->property;
         $this->authorizeProperty($request, $property, A::ManageUnits);
 
-        $data = $request->validate(['floor' => ['present', 'nullable', 'integer', 'between:-5,100']]);
+        $data = $request->validate($this->detailRules($property, $room));
 
-        $before = $room->only(['floor']);
+        $fields = ['floor', 'door_no', 'who_can_stay'];
+        $before = $room->only($fields);
         $codeBefore = $room->code();
         $room->update($data);
 
-        $changes = AuditDiff::between($before, $room->only(['floor']));
+        $changes = AuditDiff::between($before, $room->only($fields));
         if ($changes !== []) {
             $this->audit->record(AuditEvent::RoomUpdated, $room, $changes, owner: $property->owner, note: "{$property->name} · {$codeBefore} → {$room->code()}");
         }
@@ -100,7 +108,7 @@ class RoomController extends Controller
         $property = $room->property;
         $this->authorizeProperty($request, $property, A::ManageUnits);
 
-        $code = $room->code();
+        $code = $room->label();
         $blocks = $this->setup->deleteRoomIfFree($room);
         if ($blocks->isNotEmpty()) {
             return response()->json([
@@ -170,10 +178,37 @@ class RoomController extends Controller
         return ApiResponse::created(UnitResource::collection(UnitResource::prepare($units)), $units->count().' bedspace(s) added.');
     }
 
+    /**
+     * Also rent a bedspace room as a whole
+     *
+     * Adds (or re-prices) the room's whole-room option: `rent_centavos` per
+     * month, for up to `capacity` people (default one per bedspace). It is
+     * offered only while every bedspace is free, and while someone holds it
+     * the bedspaces are not offered. Remove it like any unit.
+     */
+    public function offerWhole(Request $request, Room $room): JsonResponse
+    {
+        $property = $room->property;
+        $this->authorizeProperty($request, $property, A::ManageUnits);
+        $this->authorizeProperty($request, $property, A::ManagePrices);
+
+        $data = $request->validate([
+            'rent_centavos' => ['required', 'integer', 'min:1', 'max:100000000'],
+            'capacity' => ['sometimes', 'nullable', 'integer', 'min:1', 'max:50'],
+        ]);
+
+        $had = $room->wholeOption()->exists();
+        $option = $this->setup->offerWhole($room, $data['rent_centavos'], $data['capacity'] ?? null, $request->user());
+
+        $this->audit->record($had ? AuditEvent::UnitUpdated : AuditEvent::UnitsAdded, $option, owner: $property->owner,
+            note: "{$property->name} · {$room->code()}: whole-room option, ".Money::format($data['rent_centavos']).", up to {$option->capacity}");
+
+        return ApiResponse::ok($this->one($room->refresh()), "Room {$room->label()} can also be rented whole.");
+    }
+
     /** @return Collection<int, Room> */
     private function prepared(Property $property): Collection
     {
-        $property->loadMissing('building');
         $units = UnitResource::prepare($property->units()->get())->groupBy('room_id');
 
         return $property->rooms()->with('leader.user')->withCount(['occupants' => fn ($q) => $q->whereNull('left_on')])->get()->each(function (Room $room) use ($property, $units) {
@@ -184,11 +219,29 @@ class RoomController extends Controller
 
     private function one(Room $room): RoomResource
     {
-        $room->property->loadMissing('building');
         $room->load('leader.user')->loadCount(['occupants' => fn ($q) => $q->whereNull('left_on')]);
         $room->setRelation('units', UnitResource::prepare($room->units()->get()));
 
         return new RoomResource($room);
+    }
+
+    /** Floor, door number and who can stay; the door number is unique within the property, ignoring case. */
+    private function detailRules(Property $property, ?Room $room = null): array
+    {
+        return [
+            'floor' => ['sometimes', 'nullable', 'integer', 'between:-5,100'],
+            'door_no' => ['sometimes', 'nullable', 'string', 'max:10',
+                function (string $attribute, mixed $value, Closure $fail) use ($property, $room) {
+                    $taken = Room::where('property_id', $property->id)
+                        ->whereRaw('lower(door_no) = ?', [mb_strtolower((string) $value)])
+                        ->when($room, fn ($q) => $q->whereKeyNot($room->id))
+                        ->exists();
+                    if ($taken) {
+                        $fail("Another room in this property already uses door {$value}.");
+                    }
+                }],
+            'who_can_stay' => ['sometimes', Rule::enum(WhoCanStay::class)],
+        ];
     }
 
     private function unitSpecRules(): array

@@ -4,7 +4,6 @@ namespace App\Services\Tenancies;
 
 use App\Enums\AuditEvent;
 use App\Enums\NotificationEvent;
-use App\Enums\RentalMode;
 use App\Models\Property;
 use App\Models\Room;
 use App\Models\RoomLeader;
@@ -62,7 +61,7 @@ class RoomLeaderService
             if ($current?->user_id === $user->id) {
                 throw ValidationException::withMessages(['user_id' => 'This person is already the leader.']);
             }
-            if ($current && $room->rental_mode === RentalMode::Whole) {
+            if ($current && $room->isLetWhole()) {
                 throw ValidationException::withMessages([
                     'user_id' => 'The leader of a room rented whole is the person who rents it. It changes when the lease is handed over.',
                 ]);
@@ -97,13 +96,13 @@ class RoomLeaderService
 
         if ($notify) {
             $this->notifications->send($user, NotificationEvent::LeaderAppointed, [
-                'room_code' => $room->code(),
+                'room_code' => $room->label(),
                 'property_name' => $room->property->name,
                 'appointed_by' => $actor->name,
             ]);
             if ($previous) {
                 $this->notifications->send($previous->user, NotificationEvent::LeaderEnded, [
-                    'room_code' => $room->code(),
+                    'room_code' => $room->label(),
                     'property_name' => $room->property->name,
                     'new_leader' => $user->name,
                 ]);

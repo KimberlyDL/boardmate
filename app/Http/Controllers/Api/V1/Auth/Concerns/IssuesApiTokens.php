@@ -18,7 +18,7 @@ trait IssuesApiTokens
     {
         if ($user->isSuspended()) {
             return response()->json([
-                'message' => 'This account is suspended. Contact BoardMate support.',
+                'message' => 'This account is suspended. Contact DormLink support.',
                 'code' => 'account_suspended',
             ], 403);
         }

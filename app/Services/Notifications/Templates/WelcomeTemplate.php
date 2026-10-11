@@ -14,13 +14,13 @@ class WelcomeTemplate extends BaseTemplate
 
     public function mail(?User $user, array $data): MailMessage
     {
-        return $this->message($user)->subject('Welcome to BoardMate');
+        return $this->message($user)->subject('Welcome to DormLink');
     }
 
     public function inApp(?User $user, array $data): array
     {
         return [
-            'title' => 'Welcome to BoardMate',
+            'title' => 'Welcome to DormLink',
             'body' => 'Your account is ready. Add your emergency contact in your profile so your boarding house can reach someone if needed.',
             'action_url' => '/profile',
         ];

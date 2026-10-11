@@ -10,10 +10,10 @@ class OwnerApplicationApprovedTemplate extends BaseTemplate
     public function mail(?User $user, array $data): MailMessage
     {
         return $this->message($user)
-            ->subject('Your BoardMate owner account is approved')
+            ->subject('Your DormLink owner account is approved')
             ->line('Good news: your owner account is verified.')
             ->line('Your listings can now be shown to the public once you publish them.')
-            ->action('Open BoardMate', rtrim(config('app.frontend_url'), '/').'/owner');
+            ->action('Open DormLink', rtrim(config('app.frontend_url'), '/').'/owner');
     }
 
     public function inApp(?User $user, array $data): array

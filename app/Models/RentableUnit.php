@@ -12,7 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/** A whole room or one bedspace (B1). Rent is an effective-dated price rule. */
+/**
+ * A whole room or one bedspace (B1). Rent is an effective-dated price rule.
+ * A bedspace room may also have a whole unit, its "whole-room option"
+ * (`is_whole_option`): it and the room's bedspaces block each other, so
+ * `blocked` is set on one side while the other side is in use
+ * (UnitStatusService::syncWholeOption).
+ */
 class RentableUnit extends Model
 {
     use SoftDeletes;
@@ -20,7 +26,7 @@ class RentableUnit extends Model
     protected $fillable = ['room_id', 'kind', 'label', 'sort_order', 'capacity'];
 
     /** New units are free and ready (matches the column defaults). */
-    protected $attributes = ['status' => 'available', 'not_ready' => false];
+    protected $attributes = ['status' => 'available', 'not_ready' => false, 'blocked' => false, 'is_whole_option' => false];
 
     protected function casts(): array
     {
@@ -28,6 +34,8 @@ class RentableUnit extends Model
             'kind' => UnitKind::class,
             'status' => UnitStatus::class,
             'not_ready' => 'boolean',
+            'blocked' => 'boolean',
+            'is_whole_option' => 'boolean',
         ];
     }
 
@@ -59,9 +67,22 @@ class RentableUnit extends Model
         return $this->hasOne(Tenancy::class, 'unit_id')->whereNotIn('status', ['ended', 'settled']);
     }
 
+    /** Bookable now: Available, ready, and not blocked by the other side of a whole-room option. */
     public function isAvailable(): bool
     {
-        return $this->status === UnitStatus::Available && ! $this->not_ready;
+        return $this->status === UnitStatus::Available && ! $this->not_ready && ! $this->blocked;
+    }
+
+    /** The query version of isAvailable(). */
+    public function scopeFree(Builder $query): Builder
+    {
+        return $query->where('status', UnitStatus::Available->value)->where('not_ready', false)->where('blocked', false);
+    }
+
+    /** Real places (bedspaces or a whole room), leaving out a bedspace room's whole-room option. */
+    public function scopePlaces(Builder $query): Builder
+    {
+        return $query->where('is_whole_option', false);
     }
 
     /**

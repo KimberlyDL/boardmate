@@ -19,7 +19,7 @@ it('never hands out the same number to two processes at once', function () {
         $owner->id,
     );
 
-    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'boardmate_test', 'MAIL_MAILER' => 'array'];
+    $env = ['APP_ENV' => 'testing', 'DB_CONNECTION' => 'pgsql', 'DB_DATABASE' => 'dormlink_test', 'MAIL_MAILER' => 'array'];
 
     $results = Process::pool(function ($pool) use ($script, $env) {
         for ($i = 0; $i < 4; $i++) {
