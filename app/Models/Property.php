@@ -116,6 +116,12 @@ class Property extends Model
         return $this->hasMany(UtilityBill::class);
     }
 
+    /** Remarks about payers who are behind (C7). */
+    public function collectionNotes(): HasMany
+    {
+        return $this->hasMany(CollectionNote::class);
+    }
+
     public function applications(): HasMany
     {
         return $this->hasMany(BookingApplication::class);

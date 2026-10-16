@@ -65,6 +65,7 @@ Current modules:
 | `Notifications` | Every message to a person: `send()` / `sendToAddress()`; wording in `Templates/` |
 | `Audit` | Every change to money, prices, approvals, overrides, caretaker actions: `record()`; `AuditDiff::between()` for before → after |
 | `Numbering` | Receipt / bill / notice numbers: `next()` inside the transaction that saves the document |
+| `Documents` | PDF receipts, statements of account and notices (dompdf, views in `resources/views/documents`): made on demand, opened through `link()` (signed, expiring) |
 | `Scheduler` | Daily work: implement `DailyJob`, add it to `config/dormlink.php` `daily_jobs` |
 | `Split` | Dividing any amount among people (S6): `SplitEngine` |
 | `BillingCalendar` | Due dates, rent periods, proration, utility due dates (S5): `BillingCalendar` |

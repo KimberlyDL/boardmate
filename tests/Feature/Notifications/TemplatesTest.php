@@ -55,6 +55,11 @@ $sample = [
     'paid_on' => 'Oct 25, 2026',
     'owed' => '₱300.00',
     'credit' => null,
+    'kind' => 'due_soon',
+    'bills' => [['number' => 'BILL-2026-000012', 'due_on' => 'Oct 25, 2026', 'balance' => '₱1,800.00']],
+    'days_overdue' => 4,
+    'notice_number' => 'NTC-2026-000001',
+    'balance' => '₱1,800.00',
 ];
 
 it('renders every event as email and in-app, for an account and for a bare address', function (NotificationEvent $event) use ($sample) {

@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\SessionController;
 use App\Http\Controllers\Api\V1\Billing\BillController;
 use App\Http\Controllers\Api\V1\Billing\ChargeController;
+use App\Http\Controllers\Api\V1\Billing\CollectionController;
+use App\Http\Controllers\Api\V1\Billing\DocumentController;
 use App\Http\Controllers\Api\V1\Billing\PaymentController;
 use App\Http\Controllers\Api\V1\Billing\UtilityBillController;
 use App\Http\Controllers\Api\V1\Booking\ApplicationController;
@@ -74,6 +76,13 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         ->where('path', '.*')
         ->middleware('signed')
         ->name('files.show');
+
+    // PDF documents: signed, expiring links from the Documents module.
+    Route::middleware(['signed', 'throttle:60,1'])->prefix('documents')->name('documents.')->group(function () {
+        Route::get('receipts/{payment}', [DocumentController::class, 'receipt'])->name('receipt');
+        Route::get('notices/{bill}', [DocumentController::class, 'notice'])->name('notice');
+        Route::get('statements/{property}/{payer}', [DocumentController::class, 'statement'])->whereNumber('property')->name('statement');
+    });
 
     Route::middleware(['auth:sanctum', EnsureAccountIsActive::class])->group(function () {
         Route::post('auth/logout', [SessionController::class, 'destroy'])->name('auth.logout');
@@ -149,6 +158,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
             Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
             Route::get('payers/{payer}/balance', [PaymentController::class, 'balance'])->name('payers.balance');
+            Route::get('payers/{payer}/statement-link', [DocumentController::class, 'statementLink'])->name('payers.statement-link');
+            Route::get('collections', [CollectionController::class, 'index'])->name('collections.index');
+            Route::get('collections/{payer}/notes', [CollectionController::class, 'notes'])->name('collections.notes.index');
+            Route::post('collections/{payer}/notes', [CollectionController::class, 'addNote'])->name('collections.notes.store');
+            Route::post('collections/{payer}/remind', [CollectionController::class, 'remind'])->middleware('throttle:30,1')->name('collections.remind');
 
             Route::get('settings', [SettingsController::class, 'show'])->name('settings.show');
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -198,6 +212,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         Route::post('utility-bills/{utilityBill}/correct', [UtilityBillController::class, 'correct'])->name('utility-bills.correct');
         Route::post('bills/{bill}/adjustments', [ChargeController::class, 'adjust'])->name('bills.adjustments.store');
+        Route::post('bills/{bill}/mark-late', [CollectionController::class, 'markLate'])->name('bills.mark-late');
+        Route::get('bills/{bill}/notice-link', [DocumentController::class, 'noticeLink'])->name('bills.notice-link');
+        Route::get('payments/{payment}/receipt-link', [DocumentController::class, 'receiptLink'])->name('payments.receipt-link');
+        Route::get('me/statement-link', [DocumentController::class, 'myStatementLink'])->name('me.statement-link');
+        Route::put('bills/{bill}/review', [CollectionController::class, 'startReview'])->name('bills.review.start');
+        Route::delete('bills/{bill}/review', [CollectionController::class, 'endReview'])->name('bills.review.end');
 
         Route::get('me/bills', [BillController::class, 'mine'])->name('me.bills.index');
         Route::get('me/payments', [PaymentController::class, 'mine'])->name('me.payments.index');

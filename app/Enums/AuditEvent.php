@@ -87,6 +87,9 @@ enum AuditEvent: string
     case PaymentConfirmed = 'billing.payment_confirmed';
     case PaymentRejected = 'billing.payment_rejected';
     case PaymentReversed = 'billing.payment_reversed';
+    case BillMarkedLate = 'billing.bill_marked_late';
+    case BillReviewStarted = 'billing.bill_review_started';
+    case BillReviewEnded = 'billing.bill_review_ended';
 
     // Account security
     case EmailChanged = 'account.email_changed';
@@ -172,6 +175,9 @@ enum AuditEvent: string
             self::PaymentConfirmed => 'Confirmed a reported payment',
             self::PaymentRejected => 'Rejected a reported payment',
             self::PaymentReversed => 'Reversed a payment',
+            self::BillMarkedLate => 'Marked a bill late',
+            self::BillReviewStarted => 'Put a bill under review',
+            self::BillReviewEnded => 'Ended a bill\'s review',
             self::EmailChanged => 'Changed email',
             self::PasswordChanged => 'Changed password',
             self::PasswordSet => 'Set a password',

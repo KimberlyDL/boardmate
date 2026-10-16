@@ -118,9 +118,6 @@ class SettingsController extends Controller
         if ($s['extra_occupant_fee_enabled'] && empty($s['extra_occupant_fee_centavos'])) {
             $errors['extra_occupant_fee_centavos'] = 'Enter the extra-occupant fee.';
         }
-        if ($s['mark_late_day'] <= $s['grace_days']) {
-            $errors['mark_late_day'] = 'Mark late after the grace days end.';
-        }
         if (($s['visitor_hours_start'] === null) !== ($s['visitor_hours_end'] === null)) {
             $errors['visitor_hours_end'] = 'Set both the start and end of visitor hours, or neither.';
         }
@@ -154,7 +151,6 @@ class SettingsController extends Controller
             'overdue_reminder_days' => ['sometimes', 'array', 'max:10'],
             'overdue_reminder_days.*' => ['integer', 'min:1', 'max:90', 'distinct'],
             'mark_late_enabled' => ['sometimes', 'boolean'],
-            'mark_late_day' => ['sometimes', 'integer', 'min:1', 'max:90'],
             'correction_credit_handling' => ['sometimes', Rule::enum(CorrectionCreditHandling::class)],
 
             'reservation_expiry_days' => ['sometimes', 'integer', 'min:1', 'max:60'],

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\Audit\ActivityLogAuditService;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Documents\Contracts\DocumentService;
+use App\Services\Documents\DompdfDocumentService;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Files\LocalFileService;
 use App\Services\Notifications\Contracts\NotificationService;
@@ -30,6 +32,7 @@ class ServiceModulesProvider extends ServiceProvider
         NotificationService::class => LaravelNotificationService::class,
         NumberingService::class => DatabaseNumberingService::class,
         AuditService::class => ActivityLogAuditService::class,
+        DocumentService::class => DompdfDocumentService::class,
     ];
 
     public function register(): void

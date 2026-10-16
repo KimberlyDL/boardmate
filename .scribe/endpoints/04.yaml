@@ -1,27 +1,236 @@
-name: Notifications
+name: Documents
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/me/notification-preferences
+    uri: 'api/v1/documents/receipts/{payment_id}'
     metadata:
       custom: []
-      groupName: Notifications
+      groupName: Documents
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Notification preferences'
-      description: 'Lists the notifications a user may turn off, and which are off.'
+      title: 'Download a receipt'
+      description: 'Only through a signed, expiring link from the endpoints above.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      payment_id:
+        custom: []
+        name: payment_id
+        description: 'The ID of the payment.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      payment_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "No query results for model [App\\Models\\Payment] 16"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          vary: Origin
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/documents/notices/{bill_id}'
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Download a late notice'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bill_id:
+        custom: []
+        name: bill_id
+        description: 'The ID of the bill.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bill_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "No query results for model [App\\Models\\Bill] 16"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          vary: Origin
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/documents/statements/{property}/{payer_id}'
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Download a statement of account'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property:
+        custom: []
+        name: property
+        description: ''
+        required: true
+        example: '564'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      payer_id:
+        custom: []
+        name: payer_id
+        description: 'The ID of the payer.'
+        required: true
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property: '564'
+      payer_id: 7
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 403
+        content: |-
+          {
+              "message": "Invalid signature."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          vary: Origin
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/payers/{payer_id}/statement-link'
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Link to a payer's statement of account"
+      description: |-
+        Owner and caretakers. `from` and `to` (Y-m-d) are optional: from the
+        first bill, to today.
       authenticated: true
       deprecated: false
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      payer_id:
+        custom: []
+        name: payer_id
+        description: 'The ID of the payer.'
+        required: true
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+      payer_id: 7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -48,16 +257,130 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - PUT
-    uri: api/v1/me/notification-preferences
+      - GET
+    uri: 'api/v1/bills/{bill_id}/notice-link'
     metadata:
       custom: []
-      groupName: Notifications
+      groupName: Documents
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update notification preferences'
-      description: ''
+      title: 'Link to a late notice'
+      description: 'For the payer, or the owner and caretakers. Only a bill marked late has one.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      bill_id:
+        custom: []
+        name: bill_id
+        description: 'The ID of the bill.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      bill_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/payments/{payment_id}/receipt-link'
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Link to a receipt'
+      description: |-
+        For the payer, or the owner and caretakers. Only a payment with a
+        receipt number (confirmed, or since reversed) has one.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      payment_id:
+        custom: []
+        name: payment_id
+        description: 'The ID of the payment.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      payment_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/me/statement-link
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Link to my statement of account'
+      description: 'For a place where I stay or stayed.'
       authenticated: true
       deprecated: false
     headers:
@@ -69,56 +392,19 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      muted:
+      property_id:
         custom: []
-        name: muted
-        description: 'Events to turn off. Only mutable events are accepted.'
-        required: false
-        example:
-          - architecto
-        type: 'string[]'
+        name: property_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      muted:
-        - architecto
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/notifications
-    metadata:
-      custom: []
-      groupName: Notifications
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'List notifications'
-      description: 'Newest first, 20 per page.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      property_id: 16
     fileParameters: []
     responses:
       -
@@ -130,132 +416,6 @@ endpoints:
           content-type: application/json
           vary: Origin
         description: null
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/v1/notifications/unread-count
-    metadata:
-      custom: []
-      groupName: Notifications
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Unread count'
-      description: ''
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          vary: Origin
-        description: null
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/v1/notifications/read-all
-    metadata:
-      custom: []
-      groupName: Notifications
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Mark all as read'
-      description: ''
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: 'api/v1/notifications/{id}/read'
-    metadata:
-      custom: []
-      groupName: Notifications
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Mark one as read'
-      description: ''
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the notification.'
-        required: true
-        example: BcECdBDA-CdED-bFEA-CbCE-BcCdeBfbbebc
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: BcECdBDA-CdED-bFEA-CbCE-BcCdeBfbbebc
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth:
       - headers

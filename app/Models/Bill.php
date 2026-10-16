@@ -29,7 +29,37 @@ class Bill extends Model
             'period_end_on' => 'immutable_date',
             'issued_on' => 'immutable_date',
             'due_on' => 'immutable_date',
+            'late_at' => 'datetime',
+            'under_review_at' => 'datetime',
         ];
+    }
+
+    /** Reminders sent for this bill (C7). */
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(BillReminder::class)->orderBy('sent_on')->orderBy('id');
+    }
+
+    public function lateMarker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'late_marked_by');
+    }
+
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'under_review_by');
+    }
+
+    /** Marked late after the grace days, with a numbered first notice (C7 level 3). */
+    public function isLate(): bool
+    {
+        return $this->late_at !== null;
+    }
+
+    /** Under review: no reminders and no late marking while it is checked. */
+    public function isUnderReview(): bool
+    {
+        return $this->under_review_at !== null;
     }
 
     public function property(): BelongsTo

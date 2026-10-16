@@ -1,21 +1,22 @@
-name: 'Tenancy discounts'
+name: 'Room occupants'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/tenancies/{tenancy_id}/discounts'
+    uri: 'api/v1/rooms/{room_id}/occupants'
     metadata:
       custom: []
-      groupName: 'Tenancy discounts'
+      groupName: 'Room occupants'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Discount history'
+      title: "List a room's occupants"
       description: |-
-        Newest first, with each row's status (scheduled, active or ended). For
-        the property's staff and the tenant.
+        The owner and the property's caretakers see everyone with their
+        emergency contacts. The leader sees the same list without emergency
+        contacts.
       authenticated: true
       deprecated: false
     headers:
@@ -23,10 +24,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      tenancy_id:
+      room_id:
         custom: []
-        name: tenancy_id
-        description: 'The ID of the tenancy.'
+        name: room_id
+        description: 'The ID of the room.'
         required: true
         example: 1
         type: integer
@@ -35,7 +36,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      tenancy_id: 1
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -62,21 +63,19 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - PUT
-    uri: 'api/v1/tenancies/{tenancy_id}/discount'
+      - POST
+    uri: 'api/v1/rooms/{room_id}/occupants'
     metadata:
       custom: []
-      groupName: 'Tenancy discounts'
+      groupName: 'Room occupants'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Set the discount'
+      title: 'Add an occupant'
       description: |-
-        Owner or Manager. `kind` is `fixed` (`value` in centavos) or `percent`
-        (`value` in basis points: 1000 = 10%). It starts on `effective_from`
-        (today if omitted; never in the past). The discount in force is closed
-        the day before, and a discount scheduled for later is replaced.
-        Billing applies the discount in force on the start of each rent period.
+        Owner, Manager or the room's leader. Only for a room rented whole that
+        someone has moved into, and never above the room's capacity. `email`
+        optionally links an existing DormLink account.
       authenticated: true
       deprecated: false
     headers:
@@ -84,10 +83,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      tenancy_id:
+      room_id:
         custom: []
-        name: tenancy_id
-        description: 'The ID of the tenancy.'
+        name: room_id
+        description: 'The ID of the room.'
         required: true
         example: 1
         type: integer
@@ -96,49 +95,145 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      tenancy_id: 1
+      room_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      kind:
+      name:
         custom: []
-        name: kind
-        description: ''
+        name: name
+        description: 'Must not be greater than 120 characters.'
         required: true
-        example: fixed
+        example: b
         type: string
-        enumValues:
-          - fixed
-          - percent
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      value:
-        custom: []
-        name: value
-        description: 'Must be at least 1. Must not be greater than 100000000.'
-        required: true
-        example: 1
-        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      effective_from:
+      contact_phone:
         custom: []
-        name: effective_from
-        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        name: contact_phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
         required: false
-        example: '2026-10-16'
+        example: '-666-09'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
+      email:
+        custom: []
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: theo.hauck@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      joined_on:
+        custom: []
+        name: joined_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-17'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact_name:
+        custom: []
+        name: emergency_contact_name
+        description: 'Must not be greater than 120 characters.'
+        required: true
+        example: w
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      emergency_contact_relationship:
+        custom: []
+        name: emergency_contact_relationship
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: r
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      emergency_contact_phone:
+        custom: []
+        name: emergency_contact_phone
+        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        required: true
+        example: '-666-09'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
     cleanBodyParameters:
-      kind: fixed
-      value: 1
-      effective_from: '2026-10-16'
+      name: b
+      contact_phone: '-666-09'
+      email: theo.hauck@example.com
+      joined_on: '2026-10-17'
+      emergency_contact_name: w
+      emergency_contact_relationship: r
+      emergency_contact_phone: '-666-09'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/occupants/{id}'
+    metadata:
+      custom: []
+      groupName: 'Room occupants'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Change an occupant'
+      description: |-
+        Owner or Manager can change everything. The leader can change the name,
+        phone and the leave date only. Setting `left_on` marks the person as
+        having left; clearing it (owner or Manager) brings them back.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the occupant.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -153,17 +248,15 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/v1/tenancies/{tenancy_id}/discount'
+    uri: 'api/v1/occupants/{id}'
     metadata:
       custom: []
-      groupName: 'Tenancy discounts'
+      groupName: 'Room occupants'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Take the discount away'
-      description: |-
-        From `effective_from` (today if omitted). The discount in force is
-        closed the day before; scheduled ones are removed.
+      title: 'Remove an occupant'
+      description: 'Owner or Manager only. The person who rents the room cannot be removed.'
       authenticated: true
       deprecated: false
     headers:
@@ -171,35 +264,23 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      tenancy_id:
+      id:
         custom: []
-        name: tenancy_id
-        description: 'The ID of the tenancy.'
+        name: id
+        description: 'The ID of the occupant.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      tenancy_id: 1
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      effective_from:
-        custom: []
-        name: effective_from
-        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
-        required: false
-        example: '2026-10-16'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      effective_from: '2026-10-16'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []

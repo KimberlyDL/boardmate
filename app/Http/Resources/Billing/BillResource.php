@@ -39,6 +39,13 @@ class BillResource extends JsonResource
                 default => 'unpaid',
             },
             'is_overdue' => $balance > 0 && $this->due_on->lt(ManilaDate::today()),
+            'is_late' => $this->isLate(),
+            'late_notice_number' => $this->late_notice_number,
+            'under_review' => $this->isUnderReview() ? [
+                'since' => $this->under_review_at->toIso8601String(),
+                'reason' => $this->under_review_reason,
+                'by' => $this->whenLoaded('reviewer', fn () => $this->reviewer?->name),
+            ] : null,
             'lines' => $this->lines->map(fn (BillLine $l) => [
                 'id' => $l->id,
                 'kind' => $l->kind->value,

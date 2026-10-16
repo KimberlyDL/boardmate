@@ -27,7 +27,6 @@ it('starts every property with the guides\' default settings', function () {
         'remind_before_days' => 3,
         'remind_on_due' => true,
         'overdue_reminder_days' => [1, 3],
-        'mark_late_day' => 4,
         'correction_credit_handling' => 'roll_forward', // SC-14
         'reservation_expiry_days' => 7,              // F2
         'curfew_time' => null,                       // F9
@@ -38,7 +37,7 @@ it('starts every property with the guides\' default settings', function () {
     ]);
 
     // Features left out of the first release are neither shown nor settable.
-    expect(array_keys($values))->not->toContain('due_date_policy', 'late_fee_type', 'final_utility_handling', 'split_manager');
+    expect(array_keys($values))->not->toContain('due_date_policy', 'late_fee_type', 'final_utility_handling', 'split_manager', 'mark_late_day');
 });
 
 it('saves settings, checks combinations, logs before → after, and resets a section', function () {
@@ -46,7 +45,6 @@ it('saves settings, checks combinations, logs before → after, and resets a sec
     $url = "/api/v1/properties/{$this->property->id}/settings";
 
     $this->putJson($url, ['deposit_rule' => 'fixed_amount'])->assertUnprocessable()->assertJsonValidationErrors(['deposit_fixed_centavos']);
-    $this->putJson($url, ['grace_days' => 5])->assertUnprocessable()->assertJsonValidationErrors(['mark_late_day']);
 
     // Settings of removed features are ignored, not saved.
     $this->putJson($url, ['late_fee_type' => 'fixed', 'due_date_policy' => 'common', 'curfew_time' => '22:00', 'grace_days' => 2])

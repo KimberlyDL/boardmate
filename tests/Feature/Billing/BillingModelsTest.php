@@ -4,8 +4,11 @@ use App\Enums\BillKind;
 use App\Enums\BillLineKind;
 use App\Enums\FilePurpose;
 use App\Enums\PaymentStatus;
+use App\Enums\ReminderKind;
 use App\Models\Bill;
 use App\Models\BillLine;
+use App\Models\BillReminder;
+use App\Models\CollectionNote;
 use App\Models\Payment;
 use App\Models\PaymentAllocation;
 use App\Models\Tenancy;
@@ -76,4 +79,33 @@ it('keeps payment proofs and utility bill photos private, as sent', function () 
             ->and($purpose->isImage())->toBeFalse()
             ->and($purpose->allowedExtensions())->toContain('pdf');
     }
+});
+
+it('marks a bill late with its notice, puts one under review, and logs its reminders once a day per kind (C7)', function () {
+    $bill = Bill::factory()->forTenancy($this->tenancy)->create();
+    expect($bill->isLate())->toBeFalse()->and($bill->isUnderReview())->toBeFalse();
+
+    $bill->update(['late_at' => now(), 'late_notice_number' => 'NTC-2026-000001', 'under_review_at' => now(), 'under_review_by' => $this->owner->id, 'under_review_reason' => 'Boarder says she paid']);
+    BillReminder::factory()->forBill($bill)->create(['kind' => ReminderKind::DueSoon, 'sent_on' => '2026-10-22']);
+    BillReminder::factory()->forBill($bill)->create(['kind' => ReminderKind::Overdue, 'sent_on' => '2026-10-26']);
+    BillReminder::factory()->forBill($bill)->create(['kind' => ReminderKind::Overdue, 'sent_on' => '2026-10-28']);
+
+    $bill->refresh();
+    expect($bill->isLate())->toBeTrue()
+        ->and($bill->isUnderReview())->toBeTrue()
+        ->and($bill->reviewer->id)->toBe($this->owner->id)
+        ->and($bill->reminders->pluck('kind')->all())->toBe([ReminderKind::DueSoon, ReminderKind::Overdue, ReminderKind::Overdue])
+        ->and($bill->reminders[0]->payer->id)->toBe($this->tenancy->tenant_id);
+
+    expect(fn () => BillReminder::factory()->forBill($bill)->create(['kind' => ReminderKind::Overdue, 'sent_on' => '2026-10-26']))
+        ->toThrow(UniqueConstraintViolationException::class);
+});
+
+it('keeps remarks about a payer who is behind, with an optional promised date', function () {
+    CollectionNote::factory()->forPayer($this->property, $this->tenancy->tenant)->create(['promised_on' => '2026-10-30', 'created_by' => $this->owner->id]);
+
+    $note = $this->property->collectionNotes()->sole();
+    expect($note->promised_on->toDateString())->toBe('2026-10-30')
+        ->and($note->payer->id)->toBe($this->tenancy->tenant_id)
+        ->and($note->author->id)->toBe($this->owner->id);
 });

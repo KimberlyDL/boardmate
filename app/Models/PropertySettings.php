@@ -48,14 +48,13 @@ class PropertySettings extends Model
         'utility_due_days' => 7,                       // N = 7
 
         // Payments and arrears (S8 default escalation timings)
-        'grace_days' => 3,                             // days 1–3 overdue, no penalty
+        'grace_days' => 3,                             // days 1–3 overdue, no penalty; marked late on day 4
         'remind_before_due' => true,
         'remind_before_days' => 3,                     // 3 days before the due date
         'remind_on_due' => true,
         'remind_overdue' => true,
         'overdue_reminder_days' => [1, 3],             // reminder on day 1 and day 3
         'mark_late_enabled' => true,
-        'mark_late_day' => 4,                          // day 4: marked late, first notice
         'late_fee_type' => 'off',                      // late fee off
         'late_fee_fixed_centavos' => null,
         'late_fee_basis_points' => null,
@@ -107,7 +106,7 @@ class PropertySettings extends Model
         'move_out' => ['minimum_notice_days', 'suggested_notice_days'],
         'utilities' => ['split_method', 'utility_due_days'],
         'payments' => ['grace_days', 'remind_before_due', 'remind_before_days', 'remind_on_due', 'remind_overdue',
-            'overdue_reminder_days', 'mark_late_enabled', 'mark_late_day', 'correction_credit_handling'],
+            'overdue_reminder_days', 'mark_late_enabled', 'correction_credit_handling'],
         'booking' => ['reservation_expiry_days'],
         'curfew' => ['curfew_time', 'curfew_reminder_minutes'],
         'visitors' => ['overnight_requires_approval', 'overnight_limit_per_month', 'extra_occupant_fee_enabled',

@@ -1,22 +1,21 @@
-name: 'Room occupants'
+name: 'Room leaders'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/rooms/{room_id}/occupants'
+    uri: 'api/v1/rooms/{room_id}/leader'
     metadata:
       custom: []
-      groupName: 'Room occupants'
+      groupName: 'Room leaders'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: "List a room's occupants"
+      title: "Get a room's leader"
       description: |-
-        The owner and the property's caretakers see everyone with their
-        emergency contacts. The leader sees the same list without emergency
-        contacts.
+        `data` is null when the room has no leader yet. Visible to the owner,
+        the property's caretakers and the leader.
       authenticated: true
       deprecated: false
     headers:
@@ -63,19 +62,20 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/rooms/{room_id}/occupants'
+      - PUT
+    uri: 'api/v1/rooms/{room_id}/leader'
     metadata:
       custom: []
-      groupName: 'Room occupants'
+      groupName: 'Room leaders'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Add an occupant'
+      title: 'Appoint or replace the leader'
       description: |-
-        Owner, Manager or the room's leader. Only for a room rented whole that
-        someone has moved into, and never above the room's capacity. `email`
-        optionally links an existing DormLink account.
+        Owner or Manager. `user_id` must be someone who lives in the room, and
+        `consent` must be true: the person agreed to be the leader (date and
+        approver are recorded). A room rented whole has the person who rents it
+        as its leader, so it cannot be replaced here.
       authenticated: true
       deprecated: false
     headers:
@@ -99,188 +99,43 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
+      user_id:
         custom: []
-        name: name
-        description: 'Must not be greater than 120 characters.'
+        name: user_id
+        description: 'Must match an existing stored value.'
         required: true
-        example: b
-        type: string
+        example: 16
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      contact_phone:
+      consent:
         custom: []
-        name: contact_phone
-        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
+        name: consent
+        description: ''
+        required: true
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 500 characters.'
         required: false
-        example: '-666-09'
+        example: 'n'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
-        deprecated: false
-      email:
-        custom: []
-        name: email
-        description: 'Must be a valid email address. Must not be greater than 255 characters.'
-        required: false
-        example: theo.hauck@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      joined_on:
-        custom: []
-        name: joined_on
-        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
-        required: true
-        example: '2026-10-16'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      emergency_contact_name:
-        custom: []
-        name: emergency_contact_name
-        description: 'Must not be greater than 120 characters.'
-        required: true
-        example: w
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      emergency_contact_relationship:
-        custom: []
-        name: emergency_contact_relationship
-        description: 'Must not be greater than 50 characters.'
-        required: false
-        example: r
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      emergency_contact_phone:
-        custom: []
-        name: emergency_contact_phone
-        description: 'Must match the regex /^[0-9+\-\s()]{7,20}$/.'
-        required: true
-        example: '-666-09'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
         deprecated: false
     cleanBodyParameters:
-      name: b
-      contact_phone: '-666-09'
-      email: theo.hauck@example.com
-      joined_on: '2026-10-16'
-      emergency_contact_name: w
-      emergency_contact_relationship: r
-      emergency_contact_phone: '-666-09'
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PATCH
-    uri: 'api/v1/occupants/{id}'
-    metadata:
-      custom: []
-      groupName: 'Room occupants'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Change an occupant'
-      description: |-
-        Owner or Manager can change everything. The leader can change the name,
-        phone and the leave date only. Setting `left_on` marks the person as
-        having left; clearing it (owner or Manager) brings them back.
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the occupant.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/occupants/{id}'
-    metadata:
-      custom: []
-      groupName: 'Room occupants'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove an occupant'
-      description: 'Owner or Manager only. The person who rents the room cannot be removed.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the occupant.'
-        required: true
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: 16
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      user_id: 16
+      consent: true
+      reason: 'n'
     fileParameters: []
     responses: []
     responseFields: []

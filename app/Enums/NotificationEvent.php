@@ -43,6 +43,9 @@ enum NotificationEvent: string
     case PaymentConfirmed = 'payment_confirmed';
     case PaymentRejected = 'payment_rejected';
     case PaymentReversed = 'payment_reversed';
+    case PaymentDue = 'payment_due';
+    case PaymentOverdue = 'payment_overdue';
+    case BillMarkedLate = 'bill_marked_late';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -80,6 +83,9 @@ enum NotificationEvent: string
             self::PaymentConfirmed => Templates\Billing\PaymentConfirmedTemplate::class,
             self::PaymentRejected => Templates\Billing\PaymentRejectedTemplate::class,
             self::PaymentReversed => Templates\Billing\PaymentReversedTemplate::class,
+            self::PaymentDue => Templates\Billing\PaymentDueTemplate::class,
+            self::PaymentOverdue => Templates\Billing\PaymentOverdueTemplate::class,
+            self::BillMarkedLate => Templates\Billing\BillMarkedLateTemplate::class,
         };
     }
 
@@ -130,6 +136,9 @@ enum NotificationEvent: string
             self::PaymentConfirmed => 'Payment received',
             self::PaymentRejected => 'Payment not confirmed',
             self::PaymentReversed => 'Payment reversed',
+            self::PaymentDue => 'Payment due',
+            self::PaymentOverdue => 'Payment overdue',
+            self::BillMarkedLate => 'Bill marked late',
         };
     }
 
