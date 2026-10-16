@@ -13,7 +13,9 @@ use App\Http\Controllers\Api\V1\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\V1\Auth\PasswordResetController;
 use App\Http\Controllers\Api\V1\Auth\RegisterController;
 use App\Http\Controllers\Api\V1\Auth\SessionController;
+use App\Http\Controllers\Api\V1\Billing\BillController;
 use App\Http\Controllers\Api\V1\Billing\ChargeController;
+use App\Http\Controllers\Api\V1\Billing\PaymentController;
 use App\Http\Controllers\Api\V1\Billing\UtilityBillController;
 use App\Http\Controllers\Api\V1\Booking\ApplicationController;
 use App\Http\Controllers\Api\V1\Booking\MyApplicationController;
@@ -143,6 +145,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('utility-bills/preview', [UtilityBillController::class, 'preview'])->name('utility-bills.preview');
             Route::post('utility-bills', [UtilityBillController::class, 'store'])->name('utility-bills.store');
             Route::post('charges', [ChargeController::class, 'store'])->name('charges.store');
+            Route::get('bills', [BillController::class, 'index'])->name('bills.index');
+            Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
+            Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
+            Route::get('payers/{payer}/balance', [PaymentController::class, 'balance'])->name('payers.balance');
 
             Route::get('settings', [SettingsController::class, 'show'])->name('settings.show');
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -192,6 +198,15 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         Route::post('utility-bills/{utilityBill}/correct', [UtilityBillController::class, 'correct'])->name('utility-bills.correct');
         Route::post('bills/{bill}/adjustments', [ChargeController::class, 'adjust'])->name('bills.adjustments.store');
+
+        Route::get('me/bills', [BillController::class, 'mine'])->name('me.bills.index');
+        Route::get('me/payments', [PaymentController::class, 'mine'])->name('me.payments.index');
+        Route::post('me/payments', [PaymentController::class, 'report'])->middleware('throttle:20,1')->name('me.payments.store');
+        Route::prefix('payments/{payment}')->name('payments.')->group(function () {
+            Route::post('confirm', [PaymentController::class, 'confirm'])->name('confirm');
+            Route::post('reject', [PaymentController::class, 'reject'])->name('reject');
+            Route::post('reverse', [PaymentController::class, 'reverse'])->name('reverse');
+        });
 
         Route::prefix('utility-accounts/{account}')->name('utility-accounts.')->group(function () {
             Route::patch('/', [UtilityAccountController::class, 'update'])->name('update');

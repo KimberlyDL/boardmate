@@ -36,6 +36,7 @@ class ChargeService
         private readonly NumberingService $numbering,
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
+        private readonly PaymentLedger $ledger,
     ) {}
 
     public function charge(Tenancy $tenancy, int $amountCentavos, string $description, string $reason, ?string $dueOn, User $by): Bill
@@ -69,6 +70,7 @@ class ChargeService
             return $bill;
         });
 
+        $this->ledger->settle($bill->property_id, $bill->payer_id);
         $this->audit->record(AuditEvent::ChargeAdded, $bill, owner: $property->owner, reason: $reason,
             note: "{$bill->number} · {$tenancy->tenant->name} · {$description} · ".Money::format($amountCentavos));
 
@@ -117,6 +119,7 @@ class ChargeService
             ]);
         });
 
+        $this->ledger->settle($bill->property_id, $bill->payer_id);
         $bill->load('property.owner', 'payer');
         $change = ($amountCentavos > 0 ? '+' : '').Money::format($amountCentavos);
         $this->audit->record(AuditEvent::BillAdjusted, $bill, ['amount' => [null, $change]], owner: $bill->property->owner, reason: $reason,

@@ -127,7 +127,7 @@ endpoints:
         name: moved_in_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -157,7 +157,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       unit_id: 16
-      moved_in_on: '2026-10-11'
+      moved_in_on: '2026-10-16'
       discount_value: 22
     fileParameters: []
     responses:
@@ -244,7 +244,7 @@ endpoints:
         name: moved_in_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: true
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -356,7 +356,7 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: e_wallet
+        example: bank_transfer
         type: string
         enumValues:
           - cash
@@ -370,7 +370,7 @@ endpoints:
         name: deposit.received_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -428,7 +428,7 @@ endpoints:
         name: first_rent.received_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -547,7 +547,7 @@ endpoints:
     cleanBodyParameters:
       unit_id: 16
       email: zbailey@example.net
-      moved_in_on: '2026-10-11'
+      moved_in_on: '2026-10-16'
       emergency_contact:
         name: b
         relationship: 'n'
@@ -557,13 +557,13 @@ endpoints:
         value: 25
       deposit:
         amount_centavos: 8
-        method: e_wallet
-        received_on: '2026-10-11'
+        method: bank_transfer
+        received_on: '2026-10-16'
         reference: l
       first_rent:
         amount_centavos: 20
         method: cash
-        received_on: '2026-10-11'
+        received_on: '2026-10-16'
         reference: q
       override_reason: w
       leader_consent: false
@@ -818,7 +818,7 @@ endpoints:
         name: moved_in_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: true
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -884,7 +884,7 @@ endpoints:
         name: discount.kind
         description: 'This field is required when <code>discount</code> is present.'
         required: false
-        example: fixed
+        example: percent
         type: string
         enumValues:
           - fixed
@@ -930,7 +930,7 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: bank_transfer
+        example: cash
         type: string
         enumValues:
           - cash
@@ -944,7 +944,7 @@ endpoints:
         name: deposit.received_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -988,7 +988,7 @@ endpoints:
         name: first_rent.method
         description: 'This field is required when <code>first_rent</code> is present.'
         required: false
-        example: bank_transfer
+        example: e_wallet
         type: string
         enumValues:
           - cash
@@ -1002,7 +1002,7 @@ endpoints:
         name: first_rent.received_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1035,7 +1035,7 @@ endpoints:
         name: leader_consent
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1046,7 +1046,7 @@ endpoints:
         name: make_leader
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1119,27 +1119,27 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      moved_in_on: '2026-10-11'
+      moved_in_on: '2026-10-16'
       emergency_contact:
         name: b
         relationship: 'n'
         phone: '-666-09'
       discount:
-        kind: fixed
+        kind: percent
         value: 25
       deposit:
         amount_centavos: 8
-        method: bank_transfer
-        received_on: '2026-10-11'
+        method: cash
+        received_on: '2026-10-16'
         reference: l
       first_rent:
         amount_centavos: 20
-        method: bank_transfer
-        received_on: '2026-10-11'
+        method: e_wallet
+        received_on: '2026-10-16'
         reference: q
       override_reason: w
-      leader_consent: false
-      make_leader: false
+      leader_consent: true
+      make_leader: true
       occupants:
         -
           name: r

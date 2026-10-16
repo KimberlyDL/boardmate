@@ -639,7 +639,7 @@ endpoints:
         name: 'assignments[].access_level'
         description: ''
         required: true
-        example: manager
+        example: collector
         type: string
         enumValues:
           - collector
@@ -651,7 +651,7 @@ endpoints:
       assignments:
         -
           caretaker_id: 16
-          access_level: manager
+          access_level: collector
     fileParameters: []
     responses: []
     responseFields: []

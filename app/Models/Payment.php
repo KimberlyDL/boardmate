@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Money a payer gave the owner, recorded by hand (C6). Only a Confirmed
@@ -57,6 +58,12 @@ class Payment extends Model
     public function reverses(): BelongsTo
     {
         return $this->belongsTo(self::class, 'reverses_id');
+    }
+
+    /** The entry recording who reversed this payment, when and why. */
+    public function reversal(): HasOne
+    {
+        return $this->hasOne(self::class, 'reverses_id');
     }
 
     public function allocations(): HasMany

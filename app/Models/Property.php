@@ -143,6 +143,17 @@ class Property extends Model
         return $managers->prepend($this->owner);
     }
 
+    /** The owner and every caretaker assigned here (Managers and Collectors): who confirms reported payments. */
+    public function paymentConfirmers(): Collection
+    {
+        $caretakers = User::query()
+            ->whereIn('id', $this->caretakerAssignments()->select('caretaker_id'))
+            ->whereHas('employerLinks', fn ($q) => $q->where('owner_id', $this->owner_id)->whereNull('removed_at'))
+            ->get();
+
+        return $caretakers->prepend($this->owner);
+    }
+
     /**
      * Shown on Dorm Finder (F1): published by a verified owner whose account
      * is active. Full places are shown too, marked full.

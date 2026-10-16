@@ -50,6 +50,7 @@ class BillingService
         private readonly NumberingService $numbering,
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
+        private readonly PaymentLedger $ledger,
     ) {}
 
     /**
@@ -135,6 +136,7 @@ class BillingService
         }
 
         if ($bill) {
+            $this->ledger->settle($bill->property_id, $bill->payer_id); // credit from early payments (SC-34)
             $this->announce($bill->load('lines'), $tenancy);
         }
 

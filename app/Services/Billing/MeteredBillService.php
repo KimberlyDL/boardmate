@@ -54,6 +54,7 @@ class MeteredBillService
         private readonly NumberingService $numbering,
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
+        private readonly PaymentLedger $ledger,
         private readonly FileService $files,
     ) {}
 
@@ -158,6 +159,7 @@ class MeteredBillService
                 .' · '.$bills->count().' room(s) billed'.($waived->isNotEmpty() ? ' · waived: '.$waived->implode(', ') : ''));
 
         foreach ($bills as $bill) {
+            $this->ledger->settle($bill->property_id, $bill->payer_id);
             $this->notifications->send($bill->payer, NotificationEvent::BillIssued, [
                 'property_name' => $property->name,
                 'bill_number' => $bill->number,
@@ -236,6 +238,7 @@ class MeteredBillService
             note: "{$property->name} · {$old->account->name} {$this->span($old)}");
 
         foreach ($adjusted as [$bill, $diff]) {
+            $this->ledger->settle($bill->property_id, $bill->payer_id);
             $this->notifications->send($bill->payer, NotificationEvent::BillAdjusted, [
                 'property_name' => $property->name,
                 'bill_number' => $bill->number,

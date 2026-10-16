@@ -107,7 +107,7 @@ endpoints:
         name: kind
         description: ''
         required: true
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -131,16 +131,16 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      kind: percent
+      kind: fixed
       value: 1
-      effective_from: '2026-10-11'
+      effective_from: '2026-10-16'
     fileParameters: []
     responses: []
     responseFields: []
@@ -194,14 +194,14 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      effective_from: '2026-10-11'
+      effective_from: '2026-10-16'
     fileParameters: []
     responses: []
     responseFields: []

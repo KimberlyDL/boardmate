@@ -4,11 +4,13 @@ use App\Enums\BillKind;
 use App\Enums\BillLineKind;
 use App\Enums\NotificationEvent;
 use App\Models\Bill;
+use App\Models\Payment;
 use App\Models\PriceRule;
 use App\Models\Tenancy;
 use App\Models\TenancyDiscount;
 use App\Models\User;
 use App\Services\Billing\BillingService;
+use App\Services\Billing\PaymentLedger;
 use App\Services\Notifications\DormLinkNotification;
 use App\Services\Pricing\PriceBook;
 use Carbon\CarbonImmutable;
@@ -132,4 +134,40 @@ it('runs from the daily scheduler', function () {
     $this->artisan('dormlink:daily')->assertSuccessful();
 
     expect(Bill::where('tenancy_id', $this->tenancy->id)->count())->toBe(1);
+});
+
+it('applies an early payment to the bill when it is issued (SC-34)', function () {
+    Payment::factory()->forPayer($this->property, $this->kim)->confirmed()->create(['amount_centavos' => 400000, 'paid_on' => '2026-10-20']);
+
+    billOn('2026-10-25');
+
+    $bill = Bill::sole();
+    expect($bill->totalCentavos())->toBe(210000)
+        ->and($bill->balanceCentavos())->toBe(0)
+        ->and(app(PaymentLedger::class)->summary($this->property->id, $this->kim->id))->toBe(['owed_centavos' => 0, 'credit_centavos' => 190000]);
+});
+
+it('takes Kim\'s Oct 25 bill from issued to paid: cash, then a confirmed GCash report (worked example)', function () {
+    billOn('2026-10-25');
+    $bill = Bill::sole();
+    expect($bill->totalCentavos())->toBe(210000);
+
+    Date::setTestNow(CarbonImmutable::parse('2026-10-26 10:00', 'Asia/Manila'));
+    $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/properties/{$this->property->id}/payments", [
+        'payer_id' => $this->kim->id, 'amount_centavos' => 200000, 'method' => 'cash', 'paid_on' => '2026-10-26',
+    ])->assertCreated()->assertJsonPath('data.receipt_number', 'OR-2026-000001');
+    // Rent first: ₱1,800 rent paid, ₱200 of the ₱300 water.
+    expect($bill->balanceCentavos())->toBe(10000);
+
+    $reported = $this->actingAs($this->kim, 'sanctum')->postJson('/api/v1/me/payments', [
+        'property_id' => $this->property->id, 'amount_centavos' => 10000, 'method' => 'e_wallet', 'reference' => '5012 345 678', 'paid_on' => '2026-10-26',
+    ])->assertCreated()->json('data.id');
+    $this->getJson('/api/v1/me/bills')->assertJsonPath('meta.places.0.owed_centavos', 10000);
+
+    $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/payments/{$reported}/confirm")
+        ->assertOk()->assertJsonPath('data.receipt_number', 'OR-2026-000002');
+    expect($bill->balanceCentavos())->toBe(0);
+    $this->actingAs($this->kim, 'sanctum')->getJson('/api/v1/me/bills?status=paid')
+        ->assertJsonPath('data.0.status', 'paid')
+        ->assertJsonPath('meta.places.0.owed_centavos', 0);
 });

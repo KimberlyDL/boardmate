@@ -329,7 +329,7 @@ endpoints:
         name: role
         description: ''
         required: false
-        example: owner
+        example: boarder
         type: string
         enumValues:
           - platform_admin
@@ -344,7 +344,7 @@ endpoints:
         name: suspended
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -352,8 +352,8 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       search: b
-      role: owner
-      suspended: true
+      role: boarder
+      suspended: false
     fileParameters: []
     responses:
       -

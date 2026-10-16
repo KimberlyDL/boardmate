@@ -82,6 +82,11 @@ enum AuditEvent: string
     case UtilityBillCorrected = 'billing.utility_bill_corrected';
     case ChargeAdded = 'billing.charge_added';
     case BillAdjusted = 'billing.bill_adjusted';
+    case PaymentRecorded = 'billing.payment_recorded';
+    case PaymentReported = 'billing.payment_reported';
+    case PaymentConfirmed = 'billing.payment_confirmed';
+    case PaymentRejected = 'billing.payment_rejected';
+    case PaymentReversed = 'billing.payment_reversed';
 
     // Account security
     case EmailChanged = 'account.email_changed';
@@ -162,6 +167,11 @@ enum AuditEvent: string
             self::UtilityBillCorrected => 'Corrected a utility bill',
             self::ChargeAdded => 'Added a one-time charge',
             self::BillAdjusted => 'Corrected a bill',
+            self::PaymentRecorded => 'Recorded a payment',
+            self::PaymentReported => 'Reported a payment',
+            self::PaymentConfirmed => 'Confirmed a reported payment',
+            self::PaymentRejected => 'Rejected a reported payment',
+            self::PaymentReversed => 'Reversed a payment',
             self::EmailChanged => 'Changed email',
             self::PasswordChanged => 'Changed password',
             self::PasswordSet => 'Set a password',

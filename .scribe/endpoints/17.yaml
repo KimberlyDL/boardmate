@@ -49,7 +49,7 @@ endpoints:
         name: planned_move_in_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: true
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -111,7 +111,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      planned_move_in_on: '2026-10-11'
+      planned_move_in_on: '2026-10-16'
       message: b
       contact_phone: '-666-09'
       room_id: 16
@@ -260,7 +260,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: approved
+        example: pending
         type: string
         enumValues:
           - pending
@@ -284,7 +284,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: approved
+      status: pending
       property_id: 16
     fileParameters: []
     responses:
@@ -418,7 +418,7 @@ endpoints:
         name: leader
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -492,7 +492,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       unit_id: 16
-      leader: true
+      leader: false
       occupants:
         -
           name: 'n'

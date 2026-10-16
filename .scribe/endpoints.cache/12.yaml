@@ -248,7 +248,7 @@ endpoints:
         name: due_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -259,9 +259,315 @@ endpoints:
       amount_centavos: 22
       description: 'Animi quos velit et fugiat.'
       reason: d
-      due_on: '2026-10-11'
+      due_on: '2026-10-16'
     fileParameters: []
     responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/bills'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List a property's bills"
+      description: |-
+        `status`: `unpaid` (default; oldest due first, partly paid included),
+        `paid`, or `all` (newest first). Optional `payer_id` and `kind`. Each
+        bill has its lines, `balance_centavos` (still owed) and `is_overdue`.
+        `meta.unpaid_total_centavos` is everything still owed at the property.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      payer_id:
+        custom: []
+        name: payer_id
+        description: ''
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      kind:
+        custom: []
+        name: kind
+        description: ''
+        required: false
+        example: utility
+        type: string
+        enumValues:
+          - periodic
+          - utility
+          - charge
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      payer_id: 16
+      kind: utility
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/payments'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "List a property's payments"
+      description: |-
+        Newest first; `status` (pending first, oldest first) and `payer_id`
+        filter. Each payment says whether its reference no. was used on another
+        payment to the same owner (`reference_reused`). Owner and caretakers.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: pending
+        type: string
+        enumValues:
+          - pending
+          - confirmed
+          - rejected
+          - reversed
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      payer_id:
+        custom: []
+        name: payer_id
+        description: ''
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      status: pending
+      payer_id: 16
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/properties/{property_id}/payments'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Record a payment received'
+      description: |-
+        By the owner or a caretaker: confirmed at once with a numbered receipt
+        and applied to the payer's oldest charges (rent, then utilities, then
+        other charges on the same due date); any extra is credit. `reference`
+        and `proof` (jpg/png/webp/pdf, up to 5 MB) are optional.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/payers/{payer_id}/balance'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'What a payer owes here'
+      description: |-
+        Their unpaid and partly paid bills, oldest first, with the total owed
+        and any credit. For the record-payment screen.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      payer_id:
+        custom: []
+        name: payer_id
+        description: 'The ID of the payer.'
+        required: true
+        example: 7
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+      payer_id: 7
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
     responseFields: []
     auth:
       - headers
@@ -431,6 +737,327 @@ endpoints:
       description: 'Et animi quos velit et fugiat.'
       reason: d
       line_id: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/me/bills
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'My bills'
+      description: |-
+        The signed-in boarder's bills everywhere they stay or stayed. `status`:
+        `unpaid` (default, oldest due first), `paid` or `all` (newest first).
+        `meta.places` lists each place with what they owe, their credit, and
+        how to pay the owner (GCash or bank, when the owner gave them).
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/me/payments
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'My payments'
+      description: 'Everything the signed-in boarder paid or reported, newest first.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/me/payments
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Report a payment I made'
+      description: |-
+        For a bank transfer or e-wallet payment to a place where I stay or
+        stayed. Needs `reference` or `proof` (a screenshot). Stays Pending until
+        the owner or a caretaker confirms it.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: ''
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      property_id: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/payments/{payment_id}/confirm'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Confirm a reported payment'
+      description: 'Gives it a receipt number and applies it like a recorded payment.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      payment_id:
+        custom: []
+        name: payment_id
+        description: 'The ID of the payment.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      payment_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/payments/{payment_id}/reject'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Reject a reported payment'
+      description: '`reason` is required and sent to the boarder; their bills stay unpaid.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      payment_id:
+        custom: []
+        name: payment_id
+        description: 'The ID of the payment.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      payment_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/payments/{payment_id}/reverse'
+    metadata:
+      custom: []
+      groupName: Billing
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Reverse a confirmed payment'
+      description: |-
+        For a mistake (wrong person or amount). Owner or Manager, with a
+        reason. The payment and its receipt number stay on record as Reversed;
+        the charges it paid are owed again. Record the right payment afterwards.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      payment_id:
+        custom: []
+        name: payment_id
+        description: 'The ID of the payment.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      payment_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
     fileParameters: []
     responses: []
     responseFields: []

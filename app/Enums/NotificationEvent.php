@@ -39,6 +39,10 @@ enum NotificationEvent: string
     case DiscountChanged = 'discount_changed';
     case BillIssued = 'bill_issued';
     case BillAdjusted = 'bill_adjusted';
+    case PaymentReported = 'payment_reported';
+    case PaymentConfirmed = 'payment_confirmed';
+    case PaymentRejected = 'payment_rejected';
+    case PaymentReversed = 'payment_reversed';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -72,6 +76,10 @@ enum NotificationEvent: string
             self::DiscountChanged => Templates\Tenancy\DiscountChangedTemplate::class,
             self::BillIssued => Templates\Billing\BillIssuedTemplate::class,
             self::BillAdjusted => Templates\Billing\BillAdjustedTemplate::class,
+            self::PaymentReported => Templates\Billing\PaymentReportedTemplate::class,
+            self::PaymentConfirmed => Templates\Billing\PaymentConfirmedTemplate::class,
+            self::PaymentRejected => Templates\Billing\PaymentRejectedTemplate::class,
+            self::PaymentReversed => Templates\Billing\PaymentReversedTemplate::class,
         };
     }
 
@@ -118,6 +126,10 @@ enum NotificationEvent: string
             self::DiscountChanged => 'Agreed rate changed',
             self::BillIssued => 'New bill',
             self::BillAdjusted => 'Bill corrected',
+            self::PaymentReported => 'Payment reported',
+            self::PaymentConfirmed => 'Payment received',
+            self::PaymentRejected => 'Payment not confirmed',
+            self::PaymentReversed => 'Payment reversed',
         };
     }
 

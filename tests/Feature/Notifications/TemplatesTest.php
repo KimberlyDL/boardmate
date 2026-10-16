@@ -47,6 +47,14 @@ $sample = [
     'due_on' => 'Nov 25, 2026',
     'period' => 'Nov 26 – Dec 25, 2026',
     'summary' => "your room's share of the Meralco bill",
+    'payer_name' => 'Kim Santos',
+    'amount' => '₱1,800.00',
+    'method' => 'E-wallet (GCash, Maya)',
+    'reference_reused' => true,
+    'receipt_number' => 'OR-2026-000045',
+    'paid_on' => 'Oct 25, 2026',
+    'owed' => '₱300.00',
+    'credit' => null,
 ];
 
 it('renders every event as email and in-app, for an account and for a bare address', function (NotificationEvent $event) use ($sample) {

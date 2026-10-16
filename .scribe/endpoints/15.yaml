@@ -137,7 +137,7 @@ endpoints:
         name: joined_on
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: true
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -180,7 +180,7 @@ endpoints:
       name: b
       contact_phone: '-666-09'
       email: theo.hauck@example.com
-      joined_on: '2026-10-11'
+      joined_on: '2026-10-16'
       emergency_contact_name: w
       emergency_contact_relationship: r
       emergency_contact_phone: '-666-09'

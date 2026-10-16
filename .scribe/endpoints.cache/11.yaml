@@ -257,7 +257,7 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date in the format <code>Y-m-d</code>.'
         required: false
-        example: '2026-10-11'
+        example: '2026-10-16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -265,7 +265,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       amount_centavos: 1
-      effective_from: '2026-10-11'
+      effective_from: '2026-10-16'
     fileParameters: []
     responses: []
     responseFields: []

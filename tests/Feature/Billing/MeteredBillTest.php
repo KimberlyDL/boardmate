@@ -154,3 +154,15 @@ it('lets a utility account cover one room of the property', function () {
         'type' => 'electricity', 'method' => 'actual_bill', 'room_id' => $other->id,
     ])->assertUnprocessable()->assertJsonValidationErrors(['room_id']);
 });
+
+it('lets the room leader pay the room\'s whole share with one receipt (C6)', function () {
+    enterMeralco()->assertCreated();
+    $share = Bill::where('payer_id', $this->leo->id)->sole();
+
+    $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/properties/{$this->property->id}/payments", [
+        'payer_id' => $this->leo->id, 'amount_centavos' => 102857, 'method' => 'cash', 'paid_on' => '2026-10-12',
+    ])->assertCreated()->assertJsonPath('data.receipt_number', 'OR-2026-000001');
+
+    expect($share->balanceCentavos())->toBe(0)
+        ->and(Bill::where('payer_id', $this->kim->id)->sole()->balanceCentavos())->toBe(77143); // room A's share is Kim's
+});
