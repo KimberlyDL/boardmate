@@ -6,6 +6,7 @@ use App\Enums\PaymentStatus;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\Property;
+use App\Models\Settlement;
 use App\Models\User;
 use App\Services\Billing\PaymentLedger;
 use App\Services\Billing\StatementBuilder;
@@ -61,6 +62,18 @@ class DompdfDocumentService implements DocumentService
             'issuer' => $this->issuer($bill->property),
             'balance_centavos' => $bill->balanceCentavos(),
             'days_overdue' => (int) $bill->due_on->diffInDays(ManilaDate::parse($bill->late_at)),
+        ]);
+    }
+
+    public function settlementSummary(Settlement $settlement): Response
+    {
+        $settlement->load(['tenancy.property.owner.ownerProfile', 'tenancy.tenant', 'tenancy.room', 'tenancy.unit', 'settler']);
+        $tenancy = $settlement->tenancy;
+
+        return $this->render('documents.settlement', 'settlement-'.str($tenancy->tenant->name)->slug().'.pdf', [
+            'settlement' => $settlement,
+            'tenancy' => $tenancy,
+            'issuer' => $this->issuer($tenancy->property),
         ]);
     }
 

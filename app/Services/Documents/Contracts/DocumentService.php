@@ -5,6 +5,7 @@ namespace App\Services\Documents\Contracts;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\Property;
+use App\Models\Settlement;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,11 +25,14 @@ interface DocumentService
     /** The first notice for a bill marked late (NTC-…). */
     public function lateNotice(Bill $bill): Response;
 
+    /** How a deposit was settled after move-out (C8). */
+    public function settlementSummary(Settlement $settlement): Response;
+
     /**
      * A signed, expiring link to one of these documents.
      *
-     * @param  'receipt'|'notice'|'statement'  $type
-     * @param  array<string, mixed>  $params  route parameters (payment / bill, or property + payer + from + to)
+     * @param  'receipt'|'notice'|'statement'|'settlement'  $type
+     * @param  array<string, mixed>  $params  route parameters (payment / bill / settlement, or property + payer + from + to)
      */
     public function link(string $type, array $params): string;
 }

@@ -39,7 +39,8 @@ class ChargeService
         private readonly PaymentLedger $ledger,
     ) {}
 
-    public function charge(Tenancy $tenancy, int $amountCentavos, string $description, string $reason, ?string $dueOn, User $by): Bill
+    /** `$notify` false: the caller tells the payer itself (e.g. one settlement message for all deductions). */
+    public function charge(Tenancy $tenancy, int $amountCentavos, string $description, string $reason, ?string $dueOn, User $by, bool $notify = true): Bill
     {
         $tenancy->loadMissing('property.owner', 'property.settings', 'tenant');
         $property = $tenancy->property;
@@ -74,14 +75,16 @@ class ChargeService
         $this->audit->record(AuditEvent::ChargeAdded, $bill, owner: $property->owner, reason: $reason,
             note: "{$bill->number} · {$tenancy->tenant->name} · {$description} · ".Money::format($amountCentavos));
 
-        $this->notifications->send($tenancy->tenant, NotificationEvent::BillIssued, [
-            'property_name' => $property->name,
-            'bill_number' => $bill->number,
-            'total' => Money::format($amountCentavos),
-            'due_on' => $bill->due_on->format('M j, Y'),
-            'period' => $bill->issued_on->format('M j, Y'),
-            'summary' => "a one-time charge: {$description} ({$reason})",
-        ]);
+        if ($notify) {
+            $this->notifications->send($tenancy->tenant, NotificationEvent::BillIssued, [
+                'property_name' => $property->name,
+                'bill_number' => $bill->number,
+                'total' => Money::format($amountCentavos),
+                'due_on' => $bill->due_on->format('M j, Y'),
+                'period' => $bill->issued_on->format('M j, Y'),
+                'summary' => "a one-time charge: {$description} ({$reason})",
+            ]);
+        }
 
         return $bill;
     }

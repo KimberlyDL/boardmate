@@ -46,7 +46,7 @@ class MoveInRequest extends FormRequest
         $payment = fn (string $key) => [
             $key => ['sometimes', 'nullable', 'array'],
             "{$key}.amount_centavos" => ["required_with:{$key}", 'integer', 'min:0', 'max:100000000'],
-            "{$key}.method" => ["required_with:{$key}", Rule::enum(PaymentMethod::class)],
+            "{$key}.method" => ["required_with:{$key}", Rule::enum(PaymentMethod::class)->only(PaymentMethod::manual())],
             "{$key}.received_on" => ['sometimes', 'nullable', 'date_format:Y-m-d'],
             "{$key}.reference" => ['sometimes', 'nullable', 'string', 'max:100'],
         ];

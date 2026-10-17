@@ -123,7 +123,7 @@ class MeteredBillService
                     continue;
                 }
                 $tenancy = Tenancy::where('room_id', $share['room_id'])->where('tenant_id', $share['leader']['id'])
-                    ->where('status', TenancyStatus::Active->value)->first();
+                    ->whereIn('status', TenancyStatus::currentValues())->first();
                 $bill = Bill::create([
                     'property_id' => $property->id,
                     'payer_id' => $share['leader']['id'],
@@ -259,9 +259,10 @@ class MeteredBillService
     public function occupantDays(UtilityAccount $account, string $from, string $to): array
     {
         $roomIds = $account->room_id ? [$account->room_id] : $account->property->rooms()->pluck('id')->all();
+        // Everyone who stayed during the coverage, including those who moved out since (until their move-out day).
         $tenancies = Tenancy::whereIn('room_id', $roomIds)
-            ->where('status', TenancyStatus::Active->value)
             ->where('moved_in_on', '<=', $to)
+            ->where(fn ($q) => $q->whereNull('moved_out_on')->orWhere('moved_out_on', '>=', $from))
             ->with(['unit', 'occupants'])
             ->get();
 
@@ -269,7 +270,7 @@ class MeteredBillService
         foreach ($tenancies as $tenancy) {
             $stays = $tenancy->unit->kind === UnitKind::Whole && $tenancy->occupants->isNotEmpty()
                 ? $tenancy->occupants->map(fn ($o) => [$o->joined_on, $o->left_on])
-                : collect([[$tenancy->moved_in_on, null]]);
+                : collect([[$tenancy->moved_in_on, $tenancy->moved_out_on]]);
             foreach ($stays as [$joined, $left]) {
                 $days[$tenancy->room_id] = ($days[$tenancy->room_id] ?? 0) + SplitEngine::daysPresent($from, $to, $joined, $left);
             }

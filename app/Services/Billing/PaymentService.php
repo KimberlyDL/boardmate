@@ -166,6 +166,9 @@ class PaymentService
             if ($payment->status !== PaymentStatus::Confirmed || $payment->reverses_id) {
                 throw ValidationException::withMessages(['payment' => 'Only a confirmed payment can be reversed.']);
             }
+            if ($payment->method === PaymentMethod::Deposit) {
+                throw ValidationException::withMessages(['payment' => 'A deposit applied at settlement is part of the settlement record and cannot be reversed.']);
+            }
 
             $payment->allocations()->delete();
             $payment->update(['status' => PaymentStatus::Reversed]);

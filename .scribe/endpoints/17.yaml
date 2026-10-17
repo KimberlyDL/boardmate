@@ -105,7 +105,7 @@ endpoints:
         name: kind
         description: ''
         required: true
-        example: fixed
+        example: percent
         type: string
         enumValues:
           - fixed
@@ -136,7 +136,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      kind: fixed
+      kind: percent
       value: 1
       effective_from: '2026-10-17'
     fileParameters: []

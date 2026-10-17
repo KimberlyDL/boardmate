@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\NoticeStatus;
 use App\Enums\TenancyPaymentKind;
 use App\Enums\TenancyStatus;
 use App\Services\BillingCalendar\BillingCalendar;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * A stay from move-in (System Design C1). In a bedspace room each bedspacer
@@ -32,6 +34,8 @@ class Tenancy extends Model
         return [
             'status' => TenancyStatus::class,
             'moved_in_on' => 'immutable_date',
+            'end_on' => 'immutable_date',
+            'moved_out_on' => 'immutable_date',
             'anchor_day' => 'integer',
             'house_rules_accepted_at' => 'datetime',
         ];
@@ -92,6 +96,35 @@ class Tenancy extends Model
     public function scopeCurrent(Builder $query): Builder
     {
         return $query->whereNotIn('status', ['ended', 'settled']);
+    }
+
+    /** Every end date asked for or set, newest first (C1). */
+    public function notices(): HasMany
+    {
+        return $this->hasMany(TenancyNotice::class)->latest('id');
+    }
+
+    /** A boarder's notice waiting for the owner or a caretaker. */
+    public function pendingNotice(): HasOne
+    {
+        return $this->hasOne(TenancyNotice::class)->where('status', NoticeStatus::Pending->value)->latestOfMany();
+    }
+
+    /** The deposit settlement after move-out (C8). */
+    public function settlement(): HasOne
+    {
+        return $this->hasOne(Settlement::class);
+    }
+
+    public function moveOutRecorder(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'moved_out_by');
+    }
+
+    /** Past its approved end date and nobody recorded the move-out: the unit shows Overstaying. */
+    public function isOverstaying(CarbonImmutable $today): bool
+    {
+        return $this->status === TenancyStatus::NoticeGiven && $this->end_on !== null && $this->end_on->lt($today);
     }
 
     /** The next rent due date on or after $today: the end of the period that has not yet ended. */

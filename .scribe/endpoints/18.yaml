@@ -93,7 +93,7 @@ endpoints:
         name: whole
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -115,7 +115,7 @@ endpoints:
       message: b
       contact_phone: '-666-09'
       room_id: 16
-      whole: false
+      whole: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -260,7 +260,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: approved
+        example: cancelled
         type: string
         enumValues:
           - pending
@@ -284,7 +284,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: approved
+      status: cancelled
       property_id: 16
     fileParameters: []
     responses:
@@ -418,7 +418,7 @@ endpoints:
         name: leader
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -492,7 +492,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       unit_id: 16
-      leader: false
+      leader: true
       occupants:
         -
           name: 'n'

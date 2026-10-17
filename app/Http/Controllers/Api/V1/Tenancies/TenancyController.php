@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Tenancies;
 
 use App\Authorization\PropertyAccess;
 use App\Enums\PropertyAbility as A;
+use App\Enums\TenancyStatus;
 use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenancies\MoveInRequest;
@@ -34,22 +35,30 @@ class TenancyController extends Controller
 {
     use AuthorizesProperty;
 
-    private const WITH = ['tenant', 'room', 'unit', 'property', 'discounts'];
+    private const WITH = ['tenant', 'room', 'unit', 'property', 'discounts', 'pendingNotice'];
 
     public function __construct(private readonly TenancyService $tenancies) {}
 
     /**
      * List a property's tenancies
      *
-     * Current tenancies by default; `room_id` narrows to one room. Includes
-     * the move-in payments and emergency contacts (staff only).
+     * Current tenancies by default (`status`: `current`, `ended` = moved out
+     * and waiting for the deposit settlement, `settled`); `room_id` narrows
+     * to one room. Includes the move-in payments and emergency contacts
+     * (staff only).
      */
     public function index(Request $request, Property $property): JsonResponse
     {
         $this->authorizeProperty($request, $property, A::View);
-        $data = $request->validate(['room_id' => ['nullable', 'integer']]);
+        $data = $request->validate([
+            'room_id' => ['nullable', 'integer'],
+            'status' => ['nullable', Rule::in(['current', 'ended', 'settled'])],
+        ]);
+        $status = $data['status'] ?? 'current';
 
-        $page = $property->tenancies()->current()
+        $page = $property->tenancies()
+            ->when($status === 'current', fn ($q) => $q->current())
+            ->when($status !== 'current', fn ($q) => $q->where('status', $status))
             ->with([...self::WITH, 'payments'])
             ->when($data['room_id'] ?? null, fn ($q, $id) => $q->where('room_id', $id))
             ->orderByDesc('moved_in_on')->orderByDesc('id')
@@ -84,11 +93,18 @@ class TenancyController extends Controller
     /**
      * My tenancies
      *
-     * The signed-in boarder's current stay (a list, normally of one).
+     * The signed-in boarder's current stay (a list, normally of one). With
+     * `past=1`: their moved-out stays instead, newest first (up to 10), each
+     * saying whether the deposit is settled.
      */
     public function mine(Request $request): JsonResponse
     {
-        $tenancies = Tenancy::current()->where('tenant_id', $request->user()->id)->with(self::WITH)->get();
+        $data = $request->validate(['past' => ['sometimes', 'boolean']]);
+        $tenancies = Tenancy::where('tenant_id', $request->user()->id)
+            ->when(! ($data['past'] ?? false), fn ($q) => $q->current())
+            ->when($data['past'] ?? false, fn ($q) => $q->whereNotIn('status', TenancyStatus::currentValues())->latest('moved_out_on')->limit(10))
+            ->with([...self::WITH, 'property.settings'])
+            ->get();
         app(PriceBook::class)->preload($tenancies->pluck('unit'));
 
         return ApiResponse::ok($tenancies->map(fn (Tenancy $t) => new TenancyResource($t, 'tenant')));

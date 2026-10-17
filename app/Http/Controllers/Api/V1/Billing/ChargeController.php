@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1\Billing;
 
 use App\Enums\PropertyAbility as A;
-use App\Enums\TenancyStatus;
 use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Billing\BillResource;
@@ -39,12 +38,13 @@ class ChargeController extends Controller
     {
         $this->authorizeProperty($request, $property, A::EditIssuedBills);
         $data = $request->validate([
-            'tenancy_id' => ['required', 'integer', Rule::exists('tenancies', 'id')->where('property_id', $property->id)->where('status', TenancyStatus::Active->value)],
+            // Any tenancy here, moved-out ones included (e.g. a final utility bill that came later, C8).
+            'tenancy_id' => ['required', 'integer', Rule::exists('tenancies', 'id')->where('property_id', $property->id)],
             'amount_centavos' => ['required', 'integer', 'min:1', 'max:100000000'],
             'description' => ['required', 'string', 'max:160'],
             'reason' => ['required', 'string', 'max:255'],
             'due_on' => ['sometimes', 'nullable', 'date_format:Y-m-d', 'after_or_equal:'.ManilaDate::today()->toDateString()],
-        ], ['tenancy_id.exists' => 'Choose someone who lives here now.']);
+        ], ['tenancy_id.exists' => 'Choose someone who stays or stayed here.']);
 
         $bill = $this->charges->charge(Tenancy::findOrFail($data['tenancy_id']), $data['amount_centavos'], $data['description'],
             $data['reason'], $data['due_on'] ?? null, $request->user());

@@ -36,8 +36,11 @@ use App\Http\Controllers\Api\V1\Properties\UnitController;
 use App\Http\Controllers\Api\V1\Properties\UtilityAccountController;
 use App\Http\Controllers\Api\V1\Public\CampusController;
 use App\Http\Controllers\Api\V1\Public\ListingController;
+use App\Http\Controllers\Api\V1\Tenancies\MoveOutController;
+use App\Http\Controllers\Api\V1\Tenancies\NoticeController;
 use App\Http\Controllers\Api\V1\Tenancies\RoomLeaderController;
 use App\Http\Controllers\Api\V1\Tenancies\RoomOccupantController;
+use App\Http\Controllers\Api\V1\Tenancies\SettlementController;
 use App\Http\Controllers\Api\V1\Tenancies\TenancyController;
 use App\Http\Controllers\Api\V1\Tenancies\TenancyDiscountController;
 use App\Http\Middleware\EnsureAccountIsActive;
@@ -82,6 +85,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('receipts/{payment}', [DocumentController::class, 'receipt'])->name('receipt');
         Route::get('notices/{bill}', [DocumentController::class, 'notice'])->name('notice');
         Route::get('statements/{property}/{payer}', [DocumentController::class, 'statement'])->whereNumber('property')->name('statement');
+        Route::get('settlements/{settlement}', [DocumentController::class, 'settlement'])->name('settlement');
     });
 
     Route::middleware(['auth:sanctum', EnsureAccountIsActive::class])->group(function () {
@@ -141,6 +145,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             Route::get('tenancies', [TenancyController::class, 'index'])->name('tenancies.index');
             Route::get('tenancies/preview', [TenancyController::class, 'preview'])->name('tenancies.preview');
+            Route::get('notices', [NoticeController::class, 'pending'])->name('notices.pending');
             Route::post('tenancies', [TenancyController::class, 'store'])->name('tenancies.store');
 
             Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -195,6 +200,19 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('discounts', [TenancyDiscountController::class, 'index'])->name('discounts.index');
             Route::put('discount', [TenancyDiscountController::class, 'update'])->name('discount.update');
             Route::delete('discount', [TenancyDiscountController::class, 'destroy'])->name('discount.destroy');
+
+            // Notice and end date (C1): the tenant files or withdraws; staff decide or set.
+            Route::get('notices', [NoticeController::class, 'history'])->name('notices.index');
+            Route::post('notice', [NoticeController::class, 'file'])->middleware('throttle:10,1')->name('notice.store');
+            Route::delete('notice', [NoticeController::class, 'withdraw'])->name('notice.destroy');
+            Route::post('notice/approve', [NoticeController::class, 'approve'])->name('notice.approve');
+            Route::post('notice/decline', [NoticeController::class, 'decline'])->name('notice.decline');
+            Route::put('end-date', [NoticeController::class, 'setEndDate'])->name('end-date.update');
+            Route::delete('end-date', [NoticeController::class, 'cancelEndDate'])->name('end-date.destroy');
+            Route::post('move-out', [MoveOutController::class, 'store'])->name('move-out.store');
+            Route::get('settlement', [SettlementController::class, 'show'])->name('settlement.show');
+            Route::post('settlement', [SettlementController::class, 'store'])->name('settlement.store');
+            Route::get('settlement/summary-link', [SettlementController::class, 'summaryLink'])->name('settlement.summary-link');
         });
 
         Route::prefix('occupants/{occupant}')->name('occupants.')->group(function () {

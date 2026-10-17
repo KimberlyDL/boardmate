@@ -27,14 +27,14 @@ endpoints:
         name: payment_id
         description: 'The ID of the payment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      payment_id: 16
+      payment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -43,10 +43,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
+        status: 403
         content: |-
           {
-              "message": "No query results for model [App\\Models\\Payment] 16"
+              "message": "Invalid signature."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -84,14 +84,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -100,10 +100,10 @@ endpoints:
     responses:
       -
         custom: []
-        status: 404
+        status: 403
         content: |-
           {
-              "message": "No query results for model [App\\Models\\Bill] 16"
+              "message": "Invalid signature."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -173,6 +173,63 @@ endpoints:
         content: |-
           {
               "message": "Invalid signature."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '59'
+          vary: Origin
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/documents/settlements/{settlement_id}'
+    metadata:
+      custom: []
+      groupName: Documents
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Download a settlement summary'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      settlement_id:
+        custom: []
+        name: settlement_id
+        description: 'The ID of the settlement.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      settlement_id: 16
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 404
+        content: |-
+          {
+              "message": "No query results for model [App\\Models\\Settlement] 16"
           }
         headers:
           cache-control: 'no-cache, private'
@@ -281,14 +338,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -339,14 +396,14 @@ endpoints:
         name: payment_id
         description: 'The ID of the payment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      payment_id: 16
+      payment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

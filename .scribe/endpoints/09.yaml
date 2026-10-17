@@ -14,8 +14,10 @@ endpoints:
       subgroupDescription: ''
       title: "List a property's tenancies"
       description: |-
-        Current tenancies by default; `room_id` narrows to one room. Includes
-        the move-in payments and emergency contacts (staff only).
+        Current tenancies by default (`status`: `current`, `ended` = moved out
+        and waiting for the deposit settlement, `settled`); `room_id` narrows
+        to one room. Includes the move-in payments and emergency contacts
+        (staff only).
       authenticated: true
       deprecated: false
     headers:
@@ -46,6 +48,17 @@ endpoints:
         required: false
         example: 16
         type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      status:
+        custom: []
+        name: status
+        description: ''
+        required: false
+        example: null
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -159,6 +172,62 @@ endpoints:
       unit_id: 16
       moved_in_on: '2026-10-17'
       discount_value: 22
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/properties/{property_id}/notices'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Notices waiting for approval'
+      description: 'At this property, oldest first.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      property_id:
+        custom: []
+        name: property_id
+        description: 'The ID of the property.'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      property_id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses:
       -
@@ -356,12 +425,13 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: cash
+        example: bank_transfer
         type: string
         enumValues:
           - cash
           - bank_transfer
           - e_wallet
+          - deposit
         exampleWasSpecified: false
         nullable: false
         deprecated: false
@@ -420,6 +490,7 @@ endpoints:
           - cash
           - bank_transfer
           - e_wallet
+          - deposit
         exampleWasSpecified: false
         nullable: false
         deprecated: false
@@ -557,7 +628,7 @@ endpoints:
         value: 25
       deposit:
         amount_centavos: 8
-        method: cash
+        method: bank_transfer
         received_on: '2026-10-17'
         reference: l
       first_rent:
@@ -597,7 +668,10 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'My tenancies'
-      description: "The signed-in boarder's current stay (a list, normally of one)."
+      description: |-
+        The signed-in boarder's current stay (a list, normally of one). With
+        `past=1`: their moved-out stays instead, newest first (up to 10), each
+        saying whether the deposit is settled.
       authenticated: true
       deprecated: false
     headers:
@@ -608,8 +682,20 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      past:
+        custom: []
+        name: past
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      past: true
     fileParameters: []
     responses:
       -
@@ -773,6 +859,778 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - GET
+    uri: 'api/v1/tenancies/{tenancy_id}/notices'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "A tenancy's notices"
+      description: |-
+        Every end date asked for or set, newest first. Staff of the property
+        and the tenant.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tenancies/{tenancy_id}/notice'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Give notice'
+      description: |-
+        The last day of stay (`end_on`, today or later). Waits for the owner or
+        a caretaker. Fewer days than the property's minimum is flagged as short
+        notice; there is no fee.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      end_on:
+        custom: []
+        name: end_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-17'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      end_on: '2026-10-17'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/tenancies/{tenancy_id}/notice'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Withdraw my notice'
+      description: 'Only while it is waiting for approval.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tenancies/{tenancy_id}/notice/approve'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Approve a notice'
+      description: |-
+        The tenancy becomes "Leaving" with that end date, and the unit shows
+        Leaving. No rent period starts after the end date.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tenancies/{tenancy_id}/notice/decline'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Decline a notice'
+      description: '`reason` is required and sent to the boarder; they stay on.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/v1/tenancies/{tenancy_id}/end-date'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Set or change the end date'
+      description: |-
+        When the boarder gave no notice (SC-11), for an agreed date, or to
+        extend a stay (SC-29). Up to 30 days back for someone who already left.
+        `reason` is required. A notice still waiting is replaced.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      end_on:
+        custom: []
+        name: end_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-17'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      end_on: '2026-10-17'
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/tenancies/{tenancy_id}/end-date'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Cancel the end date'
+      description: 'The boarder stays on, month to month. `reason` is required.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tenancies/{tenancy_id}/move-out'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Record a move-out'
+      description: |-
+        The day the boarder actually left (`moved_out_on`, today or up to 30
+        days back). Owner or any caretaker. Without an end date yet (left
+        without notice), `reason` is required. The tenancy ends, the unit is
+        available again, a whole room's occupants leave, and the last month's
+        fixed utilities go on a final bill. The deposit is settled next.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      moved_out_on:
+        custom: []
+        name: moved_out_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: true
+        example: '2026-10-17'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reason:
+        custom: []
+        name: reason
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: b
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      moved_out_on: '2026-10-17'
+      reason: b
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/tenancies/{tenancy_id}/settlement'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Settlement worksheet or result'
+      description: |-
+        Before settling (staff): the deposit held, what is owed and the unpaid
+        bills, any credit, the suggested use of the deposit and refund, and the
+        rent now against the deposit. After settling: the settlement (staff and
+        the tenant).
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/v1/tenancies/{tenancy_id}/settlement'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Settle the deposit'
+      description: |-
+        `deductions` (each `description`, `amount_centavos`, `reason`) become
+        one-time charges. The deposit then pays what is owed, oldest first.
+        `keep_centavos` of what is left may be kept with `keep_reason`; the rest
+        is refunded with any unused credit (`refund_method` required when there
+        is a refund). Anything not covered stays owed. Once per tenancy.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      deductions:
+        custom: []
+        name: deductions
+        description: 'Must not have more than 20 items.'
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      keep_centavos:
+        custom: []
+        name: keep_centavos
+        description: 'Must be at least 0. Must not be greater than 100000000.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      keep_reason:
+        custom: []
+        name: keep_reason
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: 'n'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      refund_method:
+        custom: []
+        name: refund_method
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      refund_reference:
+        custom: []
+        name: refund_reference
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: g
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      refunded_on:
+        custom: []
+        name: refunded_on
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2026-10-17'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      note:
+        custom: []
+        name: note
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: z
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      'deductions[].description':
+        custom: []
+        name: 'deductions[].description'
+        description: 'Must not be greater than 160 characters.'
+        required: true
+        example: 'Velit et fugiat sunt nihil accusantium.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'deductions[].amount_centavos':
+        custom: []
+        name: 'deductions[].amount_centavos'
+        description: 'Must be at least 1. Must not be greater than 100000000.'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      'deductions[].reason':
+        custom: []
+        name: 'deductions[].reason'
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: i
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      keep_centavos: 1
+      keep_reason: 'n'
+      refund_reference: g
+      refunded_on: '2026-10-17'
+      note: z
+      deductions:
+        -
+          description: 'Velit et fugiat sunt nihil accusantium.'
+          amount_centavos: 17
+          reason: i
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/tenancies/{tenancy_id}/settlement/summary-link'
+    metadata:
+      custom: []
+      groupName: Tenancies
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Link to the settlement summary (PDF)'
+      description: 'For the tenant and the owner and caretakers.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      tenancy_id:
+        custom: []
+        name: tenancy_id
+        description: 'The ID of the tenancy.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      tenancy_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - POST
     uri: 'api/v1/applications/{application_id}/move-in'
     metadata:
@@ -884,7 +1742,7 @@ endpoints:
         name: discount.kind
         description: 'This field is required when <code>discount</code> is present.'
         required: false
-        example: percent
+        example: fixed
         type: string
         enumValues:
           - fixed
@@ -930,12 +1788,13 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: bank_transfer
+        example: deposit
         type: string
         enumValues:
           - cash
           - bank_transfer
           - e_wallet
+          - deposit
         exampleWasSpecified: false
         nullable: false
         deprecated: false
@@ -988,12 +1847,13 @@ endpoints:
         name: first_rent.method
         description: 'This field is required when <code>first_rent</code> is present.'
         required: false
-        example: e_wallet
+        example: cash
         type: string
         enumValues:
           - cash
           - bank_transfer
           - e_wallet
+          - deposit
         exampleWasSpecified: false
         nullable: false
         deprecated: false
@@ -1046,7 +1906,7 @@ endpoints:
         name: make_leader
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1125,21 +1985,21 @@ endpoints:
         relationship: 'n'
         phone: '-666-09'
       discount:
-        kind: percent
+        kind: fixed
         value: 25
       deposit:
         amount_centavos: 8
-        method: bank_transfer
+        method: deposit
         received_on: '2026-10-17'
         reference: l
       first_rent:
         amount_centavos: 20
-        method: e_wallet
+        method: cash
         received_on: '2026-10-17'
         reference: q
       override_reason: w
       leader_consent: false
-      make_leader: false
+      make_leader: true
       occupants:
         -
           name: r

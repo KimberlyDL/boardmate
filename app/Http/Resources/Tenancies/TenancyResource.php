@@ -4,6 +4,7 @@ namespace App\Http\Resources\Tenancies;
 
 use App\Enums\FilePurpose;
 use App\Enums\TenancyPaymentKind;
+use App\Enums\TenancyStatus;
 use App\Enums\UnitKind;
 use App\Models\RoomLeader;
 use App\Models\Tenancy;
@@ -53,6 +54,16 @@ class TenancyResource extends JsonResource
             'first_day_on' => $this->moved_in_on->addDay()->toDateString(),
             'anchor_day' => $this->anchor_day,
             'next_rent_due_on' => $this->nextRentDueOn($today)->toDateString(),
+            // C1: the approved last day of stay, a notice still waiting, and the move-out.
+            'end_on' => $this->end_on?->toDateString(),
+            'is_overstaying' => $this->isOverstaying($today),
+            'moved_out_on' => $this->moved_out_on?->toDateString(),
+            'pending_notice' => $this->whenLoaded('pendingNotice', fn () => $this->pendingNotice ? [
+                'id' => $this->pendingNotice->id,
+                'end_on' => $this->pendingNotice->end_on->toDateString(),
+                'is_short_notice' => $this->pendingNotice->is_short_notice,
+                'filed_at' => $this->pendingNotice->created_at?->toIso8601String(),
+            ] : null),
             'rent_centavos' => $rent,
             'discount' => $discount ? [
                 'label' => $discount::LABEL,
@@ -80,6 +91,13 @@ class TenancyResource extends JsonResource
         if ($this->view === 'tenant') {
             // Leaders manage who stays; the app shows them that option.
             $data['is_leader'] = RoomLeader::current()->where('room_id', $this->room_id)->where('user_id', $this->tenant_id)->exists();
+            // The place's notice rules, shown when giving notice (C1). Short notice is only flagged.
+            $settings = $this->property->settings;
+            $data['notice_rules'] = [
+                'suggested_days' => $settings?->suggested_notice_days,
+                'minimum_days' => $settings?->minimum_notice_days,
+            ];
+            $data['is_settled'] = $this->status === TenancyStatus::Settled;
         }
 
         if ($this->view === 'staff') {

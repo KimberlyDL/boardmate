@@ -209,7 +209,7 @@ class PaymentController extends Controller
     {
         $rules = [
             'amount_centavos' => ['required', 'integer', 'min:1', 'max:100000000'],
-            'method' => ['required', Rule::enum(PaymentMethod::class)],
+            'method' => ['required', Rule::enum(PaymentMethod::class)->only(PaymentMethod::manual())],
             'paid_on' => ['required', 'date_format:Y-m-d', 'before_or_equal:'.ManilaDate::today()->toDateString()],
             'reference' => ['nullable', 'string', 'max:100'],
             'note' => ['nullable', 'string', 'max:255'],

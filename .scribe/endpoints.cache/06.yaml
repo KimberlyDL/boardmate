@@ -276,7 +276,7 @@ endpoints:
         name: access_level
         description: ''
         required: true
-        example: manager
+        example: collector
         type: string
         enumValues:
           - collector
@@ -285,7 +285,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      access_level: manager
+      access_level: collector
     fileParameters: []
     responses: []
     responseFields: []
@@ -385,7 +385,7 @@ endpoints:
         name: access_level
         description: ''
         required: false
-        example: collector
+        example: manager
         type: string
         enumValues:
           - collector
@@ -407,7 +407,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       email: gbailey@example.net
-      access_level: collector
+      access_level: manager
       property_ids:
         - 16
     fileParameters: []

@@ -60,6 +60,19 @@ $sample = [
     'days_overdue' => 4,
     'notice_number' => 'NTC-2026-000001',
     'balance' => '₱1,800.00',
+    'tenant_name' => 'Kim Santos',
+    'room_label' => '203',
+    'end_on' => 'Nov 25, 2026',
+    'is_short_notice' => true,
+    'moved_out_on' => 'Nov 25, 2026',
+    'final_bill' => '₱300.00',
+    'deposit' => '₱4,000.00',
+    'deductions' => ['Broken chair: ₱300.00 (Found at move-out)'],
+    'applied' => '₱400.00',
+    'refund' => '₱3,100.00',
+    'kept' => '₱500.00',
+    'kept_reason' => 'Cleaning after move-out',
+    'still_owed' => null,
 ];
 
 it('renders every event as email and in-app, for an account and for a bare address', function (NotificationEvent $event) use ($sample) {

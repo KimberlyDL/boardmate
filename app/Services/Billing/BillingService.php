@@ -14,6 +14,7 @@ use App\Enums\UtilityMethod;
 use App\Models\Bill;
 use App\Models\PriceRule;
 use App\Models\Tenancy;
+use App\Models\User;
 use App\Models\UtilityAccount;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\BillingCalendar\BillingCalendar;
@@ -64,7 +65,7 @@ class BillingService
         $skipped = [];
 
         Tenancy::query()
-            ->where('status', TenancyStatus::Active->value)
+            ->whereIn('status', TenancyStatus::currentValues())
             ->where('moved_in_on', '<', $day->toDateString())
             ->with(['property.owner', 'unit', 'room', 'tenant'])
             ->chunkById(100, function (Collection $tenancies) use ($day, &$issued, &$skipped) {
@@ -75,6 +76,10 @@ class BillingService
                     $previous = null;
                     foreach (BillingCalendar::periods($tenancy->moved_in_on, $tenancy->anchor_day) as $period) {
                         if ($period->dueOn->greaterThan($day)) {
+                            break;
+                        }
+                        // Leaving: no period starts after the last day of stay (C1).
+                        if ($tenancy->end_on && $period->startsOn->greaterThan($tenancy->end_on)) {
                             break;
                         }
                         if ($period->number >= 2 && ! $billed->has($period->startsOn->toDateString())) {
@@ -143,6 +148,62 @@ class BillingService
         return $bill;
     }
 
+    /**
+     * At move-out (owner decision 2026-10-17): the fixed utilities of the
+     * last period stayed, which would otherwise go on the next anniversary
+     * bill that never comes. Full period, no proration, like rent. The last
+     * period is the one holding the last day of stay (the end date, or the
+     * move-out if earlier). Nothing is issued when there are no fixed
+     * utilities, or a later bill already carried them.
+     */
+    public function issueFinalUtilities(Tenancy $tenancy, CarbonImmutable $day, ?User $by): ?Bill
+    {
+        $tenancy->loadMissing('property.owner', 'unit', 'tenant');
+        $lastDay = collect([$tenancy->end_on, $tenancy->moved_out_on])->filter()->min();
+        if (! $lastDay) {
+            return null;
+        }
+
+        $last = null;
+        foreach (BillingCalendar::periods($tenancy->moved_in_on, $tenancy->anchor_day) as $period) {
+            if ($period->startsOn->greaterThan($lastDay)) {
+                break;
+            }
+            $last = $period;
+        }
+        $carriedLater = $tenancy->bills()->where('kind', BillKind::Periodic->value)
+            ->whereDate('period_start_on', $last->endsOn->addDay()->toDateString())->exists();
+        if ($carriedLater || $tenancy->bills()->where('kind', BillKind::Final->value)->exists() || $this->fixedUtilities($tenancy, $last)->isEmpty()) {
+            return null;
+        }
+
+        $bill = DB::transaction(function () use ($tenancy, $last, $day, $by) {
+            $bill = Bill::create([
+                'property_id' => $tenancy->property_id,
+                'payer_id' => $tenancy->tenant_id,
+                'tenancy_id' => $tenancy->id,
+                'room_id' => $tenancy->room_id,
+                'kind' => BillKind::Final,
+                'number' => $this->numbering->next($tenancy->property->owner, DocumentType::Bill, $day),
+                'period_start_on' => $last->startsOn->toDateString(),
+                'period_end_on' => $last->endsOn->toDateString(),
+                'issued_on' => $day->toDateString(),
+                'due_on' => $day->toDateString(),
+                'issued_by' => $by?->id,
+            ]);
+            $this->prices->lock($this->addFixedUtilityLines($bill, $tenancy, $last));
+
+            return $bill;
+        });
+
+        if ($bill) {
+            $this->ledger->settle($bill->property_id, $bill->payer_id);
+            $this->announce($bill->load('lines'), $tenancy);
+        }
+
+        return $bill;
+    }
+
     private function addRentLine(Bill $bill, Tenancy $tenancy, RentPeriod $period, PriceRule $rule): void
     {
         $discount = $tenancy->discounts()->inForceOn($period->startsOn->toDateString())->latest('effective_from')->first();
@@ -170,21 +231,8 @@ class BillingService
      */
     private function addFixedUtilityLines(Bill $bill, Tenancy $tenancy, RentPeriod $finished): Collection
     {
-        $method = $tenancy->unit->kind === UnitKind::Whole ? UtilityMethod::FixedPerProperty : UtilityMethod::FixedPerBedspace;
-        $accounts = UtilityAccount::query()
-            ->where('property_id', $tenancy->property_id)
-            ->where('method', $method->value)
-            ->where('billed_by', BilledBy::Owner->value)
-            ->where(fn ($q) => $q->whereNull('room_id')->orWhere('room_id', $tenancy->room_id))
-            ->orderBy('id')
-            ->get();
-
         $used = collect();
-        foreach ($accounts as $i => $account) {
-            $rule = $this->prices->ruleOn($account, $finished->startsOn);
-            if (! $rule || $rule->amount_centavos <= 0) {
-                continue;
-            }
+        foreach ($this->fixedUtilities($tenancy, $finished)->values() as $i => [$account, $rule]) {
             $bill->lines()->create([
                 'kind' => BillLineKind::FixedUtility,
                 'description' => "{$account->name}, {$this->span($finished)}",
@@ -197,6 +245,30 @@ class BillingService
         }
 
         return $used;
+    }
+
+    /**
+     * The fixed utilities this tenancy pays for a period, with the price in
+     * force on its first day: "per bedspace" for bedspaces, "per property"
+     * for a whole room; only those the owner bills; a room's own account
+     * only for that room.
+     *
+     * @return Collection<int, array{0: UtilityAccount, 1: PriceRule}>
+     */
+    private function fixedUtilities(Tenancy $tenancy, RentPeriod $period): Collection
+    {
+        $method = $tenancy->unit->kind === UnitKind::Whole ? UtilityMethod::FixedPerProperty : UtilityMethod::FixedPerBedspace;
+
+        return UtilityAccount::query()
+            ->where('property_id', $tenancy->property_id)
+            ->where('method', $method->value)
+            ->where('billed_by', BilledBy::Owner->value)
+            ->where(fn ($q) => $q->whereNull('room_id')->orWhere('room_id', $tenancy->room_id))
+            ->orderBy('id')
+            ->get()
+            ->map(fn (UtilityAccount $account) => [$account, $this->prices->ruleOn($account, $period->startsOn)])
+            ->filter(fn (array $pair) => $pair[1] && $pair[1]->amount_centavos > 0)
+            ->values();
     }
 
     private function announce(Bill $bill, Tenancy $tenancy): void
@@ -213,7 +285,7 @@ class BillingService
             'total' => Money::format($total),
             'due_on' => $bill->due_on->format('M j, Y'),
             'period' => $bill->period_start_on?->format('M j').' – '.$bill->period_end_on?->format('M j, Y'),
-        ]);
+        ] + ($bill->kind === BillKind::Final ? ['summary' => 'the fixed utilities for your last month, billed now because you moved out'] : []));
     }
 
     private function span(RentPeriod $period): string

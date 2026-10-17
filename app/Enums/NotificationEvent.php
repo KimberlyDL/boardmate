@@ -46,6 +46,11 @@ enum NotificationEvent: string
     case PaymentDue = 'payment_due';
     case PaymentOverdue = 'payment_overdue';
     case BillMarkedLate = 'bill_marked_late';
+    case NoticeFiled = 'notice_filed';
+    case EndDateChanged = 'end_date_changed';
+    case MovedOut = 'moved_out';
+    case TenancyOverstaying = 'tenancy_overstaying';
+    case DepositSettled = 'deposit_settled';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -86,6 +91,11 @@ enum NotificationEvent: string
             self::PaymentDue => Templates\Billing\PaymentDueTemplate::class,
             self::PaymentOverdue => Templates\Billing\PaymentOverdueTemplate::class,
             self::BillMarkedLate => Templates\Billing\BillMarkedLateTemplate::class,
+            self::NoticeFiled => Templates\Tenancy\NoticeFiledTemplate::class,
+            self::EndDateChanged => Templates\Tenancy\EndDateChangedTemplate::class,
+            self::MovedOut => Templates\Tenancy\MovedOutTemplate::class,
+            self::TenancyOverstaying => Templates\Tenancy\TenancyOverstayingTemplate::class,
+            self::DepositSettled => Templates\Tenancy\DepositSettledTemplate::class,
         };
     }
 
@@ -139,6 +149,11 @@ enum NotificationEvent: string
             self::PaymentDue => 'Payment due',
             self::PaymentOverdue => 'Payment overdue',
             self::BillMarkedLate => 'Bill marked late',
+            self::NoticeFiled => 'Move-out notice',
+            self::EndDateChanged => 'Last day of stay',
+            self::MovedOut => 'Moved out',
+            self::TenancyOverstaying => 'Stayed past the last day',
+            self::DepositSettled => 'Deposit settled',
         };
     }
 

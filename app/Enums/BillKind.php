@@ -11,6 +11,8 @@ enum BillKind: string
     case Utility = 'utility';
     /** A one-time charge (damage, lost key, extra occupant). */
     case Charge = 'charge';
+    /** At move-out: the last period's fixed utilities (billed in arrears, so no later bill carries them). Full period, no proration. */
+    case Final = 'final';
 
     public function label(): string
     {
@@ -18,6 +20,7 @@ enum BillKind: string
             self::Periodic => 'Monthly bill',
             self::Utility => 'Utility bill',
             self::Charge => 'Charge',
+            self::Final => 'Final bill',
         };
     }
 }

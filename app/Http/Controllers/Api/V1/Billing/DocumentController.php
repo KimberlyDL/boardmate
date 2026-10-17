@@ -9,6 +9,7 @@ use App\Http\Responses\ApiResponse;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\Property;
+use App\Models\Settlement;
 use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Documents\Contracts\DocumentService;
@@ -117,6 +118,16 @@ class DocumentController extends Controller
     public function statement(Request $request, int $property, User $payer): Response
     {
         return $this->documents->statement(Property::withTrashed()->findOrFail($property), $payer, $request->query('from'), $request->query('to'));
+    }
+
+    /**
+     * Download a settlement summary
+     *
+     * @unauthenticated
+     */
+    public function settlement(Settlement $settlement): Response
+    {
+        return $this->documents->settlementSummary($settlement);
     }
 
     private function allowPayerOrStaff(Request $request, int $payerId, Property $property, A $ability): void

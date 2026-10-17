@@ -90,6 +90,14 @@ enum AuditEvent: string
     case BillMarkedLate = 'billing.bill_marked_late';
     case BillReviewStarted = 'billing.bill_review_started';
     case BillReviewEnded = 'billing.bill_review_ended';
+    case NoticeFiled = 'tenancy.notice_filed';
+    case NoticeWithdrawn = 'tenancy.notice_withdrawn';
+    case NoticeApproved = 'tenancy.notice_approved';
+    case NoticeDeclined = 'tenancy.notice_declined';
+    case EndDateSet = 'tenancy.end_date_set';
+    case EndDateCancelled = 'tenancy.end_date_cancelled';
+    case TenancyEnded = 'tenancy.moved_out';
+    case DepositSettled = 'tenancy.deposit_settled';
 
     // Account security
     case EmailChanged = 'account.email_changed';
@@ -178,6 +186,14 @@ enum AuditEvent: string
             self::BillMarkedLate => 'Marked a bill late',
             self::BillReviewStarted => 'Put a bill under review',
             self::BillReviewEnded => 'Ended a bill\'s review',
+            self::NoticeFiled => 'Gave notice',
+            self::NoticeWithdrawn => 'Withdrew a notice',
+            self::NoticeApproved => 'Approved a notice',
+            self::NoticeDeclined => 'Declined a notice',
+            self::EndDateSet => 'Set a last day of stay',
+            self::EndDateCancelled => 'Cancelled a last day of stay',
+            self::TenancyEnded => 'Recorded a move-out',
+            self::DepositSettled => 'Settled a deposit',
             self::EmailChanged => 'Changed email',
             self::PasswordChanged => 'Changed password',
             self::PasswordSet => 'Set a password',

@@ -113,7 +113,7 @@ endpoints:
         name: available
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -180,7 +180,7 @@ endpoints:
       max_price: 84
       rental_mode: whole
       who: z
-      available: false
+      available: true
       near: '3,14.2326'
       per_page: 79
       bbox: '1,42.3268)))'

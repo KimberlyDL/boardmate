@@ -202,7 +202,7 @@ endpoints:
       tenancy_id:
         custom: []
         name: tenancy_id
-        description: ''
+        description: 'Any tenancy here, moved-out ones included (e.g. a final utility bill that came later, C8).'
         required: true
         example: 16
         type: integer
@@ -337,18 +337,19 @@ endpoints:
         name: kind
         description: ''
         required: false
-        example: periodic
+        example: charge
         type: string
         enumValues:
           - periodic
           - utility
           - charge
+          - final
         exampleWasSpecified: false
         nullable: true
         deprecated: false
     cleanBodyParameters:
       payer_id: 16
-      kind: periodic
+      kind: charge
     fileParameters: []
     responses:
       -
@@ -412,7 +413,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: pending
+        example: reversed
         type: string
         enumValues:
           - pending
@@ -434,7 +435,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: pending
+      status: reversed
       payer_id: 16
     fileParameters: []
     responses:
@@ -951,14 +952,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1048,14 +1049,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1098,14 +1099,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1157,14 +1158,14 @@ endpoints:
         name: bill_id
         description: 'The ID of the bill.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      bill_id: 16
+      bill_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1357,14 +1358,14 @@ endpoints:
         name: payment_id
         description: 'The ID of the payment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      payment_id: 16
+      payment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1404,14 +1405,14 @@ endpoints:
         name: payment_id
         description: 'The ID of the payment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      payment_id: 16
+      payment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1466,14 +1467,14 @@ endpoints:
         name: payment_id
         description: 'The ID of the payment.'
         required: true
-        example: 16
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      payment_id: 16
+      payment_id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
