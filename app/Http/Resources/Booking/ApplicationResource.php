@@ -83,6 +83,7 @@ class ApplicationResource extends JsonResource
             'created_at' => $this->created_at?->toIso8601String(),
             'can_cancel' => $this->status->isOpen(),
             'leader_on_move_in' => $this->leader_on_move_in,
+            'house_rules_version' => $this->house_rules_version, // D3: accepted when applying
         ];
 
         if ($this->view === 'reviewer') {

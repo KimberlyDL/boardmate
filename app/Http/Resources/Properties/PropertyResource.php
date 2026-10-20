@@ -96,6 +96,7 @@ class PropertyResource extends JsonResource
         return $summary + [
             'description' => $this->description,
             'who_can_apply' => $this->who_can_apply,
+            'emergency_numbers' => $this->emergency_numbers, // A10: shown to tenants
             'street' => $this->street,
             'barangay' => $this->barangay,
             'province' => $this->province,

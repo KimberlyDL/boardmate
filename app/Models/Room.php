@@ -64,6 +64,12 @@ class Room extends Model
         return $this->hasMany(RoomOccupant::class)->orderBy('joined_on')->orderBy('id');
     }
 
+    /** The room's shared-contributions group (D5), created automatically. */
+    public function contributionGroup(): HasOne
+    {
+        return $this->hasOne(ContributionGroup::class);
+    }
+
     public function tenancies(): HasMany
     {
         return $this->hasMany(Tenancy::class);

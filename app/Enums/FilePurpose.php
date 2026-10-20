@@ -15,12 +15,16 @@ enum FilePurpose: string
     case OwnerDocument = 'owner_document';
     case PaymentProof = 'payment_proof';
     case UtilityBillPhoto = 'utility_bill_photo';
+    /** D5: a receipt or transfer screenshot between room-group members. */
+    case GroupProof = 'group_proof';
+    /** D1: a photo of the problem in a maintenance request. */
+    case MaintenancePhoto = 'maintenance_photo';
 
     /** Public files get a permanent URL; private ones only a signed, expiring link. */
     public function isPublic(): bool
     {
         return match ($this) {
-            self::ProfilePhoto, self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto => false,
+            self::ProfilePhoto, self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto, self::GroupProof, self::MaintenancePhoto => false,
             self::ListingPhoto => true, // shown on Dorm Finder (F1)
         };
     }
@@ -34,6 +38,8 @@ enum FilePurpose: string
             self::OwnerDocument => 'owner-documents',
             self::PaymentProof => 'payment-proofs',
             self::UtilityBillPhoto => 'utility-bills',
+            self::GroupProof => 'group-proofs',
+            self::MaintenancePhoto => 'maintenance-photos',
         };
     }
 
@@ -41,8 +47,8 @@ enum FilePurpose: string
     public function allowedExtensions(): array
     {
         return match ($this) {
-            self::ProfilePhoto, self::ListingPhoto => ['jpg', 'jpeg', 'png', 'webp'],
-            self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto => ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
+            self::ProfilePhoto, self::ListingPhoto, self::MaintenancePhoto => ['jpg', 'jpeg', 'png', 'webp'],
+            self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto, self::GroupProof => ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
         };
     }
 
@@ -57,8 +63,9 @@ enum FilePurpose: string
         return match ($this) {
             self::ListingPhoto => ['large' => ['fit' => 'inside', 'size' => 1600], 'thumb' => ['fit' => 'inside', 'size' => 480]],
             self::ProfilePhoto => ['main' => ['fit' => 'square', 'size' => 256]],
+            self::MaintenancePhoto => ['main' => ['fit' => 'inside', 'size' => 1600]],
             // Kept as sent, so the admin, owner or caretaker can read them.
-            self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto => [],
+            self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto, self::GroupProof => [],
         };
     }
 
@@ -70,7 +77,7 @@ enum FilePurpose: string
     public function maxKilobytes(): int
     {
         return match ($this) {
-            self::ProfilePhoto, self::ListingPhoto, self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto => 5 * 1024,
+            self::ProfilePhoto, self::ListingPhoto, self::IdDocument, self::OwnerDocument, self::PaymentProof, self::UtilityBillPhoto, self::GroupProof, self::MaintenancePhoto => 5 * 1024,
         };
     }
 
@@ -83,6 +90,8 @@ enum FilePurpose: string
             self::OwnerDocument => 'Owner document',
             self::PaymentProof => 'Proof of payment',
             self::UtilityBillPhoto => 'Utility bill photo',
+            self::GroupProof => 'Shared expense proof',
+            self::MaintenancePhoto => 'Maintenance photo',
         };
     }
 }

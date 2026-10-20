@@ -23,6 +23,7 @@ use App\Models\UtilityBill;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\BillingCalendar\BillingCalendar;
 use App\Services\Files\Contracts\FileService;
+use App\Services\Groups\OwnerBillPoster;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Numbering\Contracts\NumberingService;
 use App\Services\Split\SplitEngine;
@@ -55,6 +56,7 @@ class MeteredBillService
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
         private readonly PaymentLedger $ledger,
+        private readonly OwnerBillPoster $groupLines,
         private readonly FileService $files,
     ) {}
 
@@ -160,6 +162,7 @@ class MeteredBillService
 
         foreach ($bills as $bill) {
             $this->ledger->settle($bill->property_id, $bill->payer_id);
+            $this->groupLines->forBill($bill); // the room's group shares it (D5)
             $this->notifications->send($bill->payer, NotificationEvent::BillIssued, [
                 'property_name' => $property->name,
                 'bill_number' => $bill->number,
@@ -239,6 +242,7 @@ class MeteredBillService
 
         foreach ($adjusted as [$bill, $diff]) {
             $this->ledger->settle($bill->property_id, $bill->payer_id);
+            $this->groupLines->forBill($bill);
             $this->notifications->send($bill->payer, NotificationEvent::BillAdjusted, [
                 'property_name' => $property->name,
                 'bill_number' => $bill->number,

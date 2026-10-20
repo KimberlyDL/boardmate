@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Schedule;
 | 'daily_jobs'), at the guide's reminder time of 9:00 AM Asia/Manila.
 */
 
+// D2: the reminder before curfew (each property's own time; once a night).
+Schedule::command('dormlink:curfew-reminders')
+    ->everyFiveMinutes()
+    ->timezone('Asia/Manila')
+    ->withoutOverlapping();
+
 Schedule::command('dormlink:daily')
     ->dailyAt('09:00')
     ->timezone('Asia/Manila')

@@ -1,10 +1,12 @@
 <?php
 
+use App\Services\Scheduler\Jobs\CloseResolvedMaintenanceJob;
 use App\Services\Scheduler\Jobs\ExpireReservationsJob;
 use App\Services\Scheduler\Jobs\FlagOverstaysJob;
 use App\Services\Scheduler\Jobs\IssueRentBillsJob;
 use App\Services\Scheduler\Jobs\PruneIdleTokensJob;
 use App\Services\Scheduler\Jobs\PurgeClosedApplicationIdsJob;
+use App\Services\Scheduler\Jobs\PurgeOldVisitorsJob;
 use App\Services\Scheduler\Jobs\PurgeOwnerDocumentsJob;
 use App\Services\Scheduler\Jobs\SendPaymentRemindersJob;
 
@@ -54,6 +56,8 @@ return [
         IssueRentBillsJob::class,
         SendPaymentRemindersJob::class, // after the day's bills are issued
         FlagOverstaysJob::class,
+        CloseResolvedMaintenanceJob::class,
+        PurgeOldVisitorsJob::class,
     ],
 
     /*

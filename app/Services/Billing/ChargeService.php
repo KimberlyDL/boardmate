@@ -11,6 +11,7 @@ use App\Models\Bill;
 use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Groups\OwnerBillPoster;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Numbering\Contracts\NumberingService;
 use App\Support\ManilaDate;
@@ -37,6 +38,7 @@ class ChargeService
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
         private readonly PaymentLedger $ledger,
+        private readonly OwnerBillPoster $groupLines,
     ) {}
 
     /** `$notify` false: the caller tells the payer itself (e.g. one settlement message for all deductions). */
@@ -123,6 +125,7 @@ class ChargeService
         });
 
         $this->ledger->settle($bill->property_id, $bill->payer_id);
+        $this->groupLines->forBill($bill); // a posted bill's group line follows the correction (D5)
         $bill->load('property.owner', 'payer');
         $change = ($amountCentavos > 0 ? '+' : '').Money::format($amountCentavos);
         $this->audit->record(AuditEvent::BillAdjusted, $bill, ['amount' => [null, $change]], owner: $bill->property->owner, reason: $reason,

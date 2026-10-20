@@ -98,6 +98,12 @@ class TenancyResource extends JsonResource
                 'minimum_days' => $settings?->minimum_notice_days,
             ];
             $data['is_settled'] = $this->status === TenancyStatus::Settled;
+            // D2: the place's curfew and whether the tenant muted the reminder.
+            $data['curfew'] = [
+                'time' => $settings?->curfew_time ? substr((string) $settings->curfew_time, 0, 5) : null,
+                'reminder_minutes' => (int) ($settings?->curfew_reminder_minutes ?? 30),
+                'reminders_muted' => (bool) $this->curfew_reminders_muted,
+            ];
         }
 
         if ($this->view === 'staff') {

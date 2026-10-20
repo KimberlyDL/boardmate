@@ -115,7 +115,7 @@ endpoints:
         name: consent
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -134,7 +134,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       user_id: 16
-      consent: true
+      consent: false
       reason: 'n'
     fileParameters: []
     responses: []

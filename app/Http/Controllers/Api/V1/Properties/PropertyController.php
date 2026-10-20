@@ -202,6 +202,7 @@ class PropertyController extends Controller
             'name' => [$required, 'string', 'max:120'],
             'description' => ['sometimes', 'nullable', 'string', 'max:3000'],
             'who_can_apply' => ['sometimes', 'nullable', 'string', 'max:120'],
+            'emergency_numbers' => ['sometimes', 'nullable', 'string', 'max:500'],
             'street' => ['sometimes', 'nullable', 'string', 'max:255'],
             'barangay' => ['sometimes', 'nullable', 'string', 'max:120'],
             'city' => ['sometimes', 'nullable', 'string', 'max:120'],

@@ -19,6 +19,7 @@ use App\Models\UtilityAccount;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\BillingCalendar\BillingCalendar;
 use App\Services\BillingCalendar\RentPeriod;
+use App\Services\Groups\OwnerBillPoster;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Numbering\Contracts\NumberingService;
 use App\Services\Pricing\PriceBook;
@@ -52,6 +53,7 @@ class BillingService
         private readonly NotificationService $notifications,
         private readonly AuditService $audit,
         private readonly PaymentLedger $ledger,
+        private readonly OwnerBillPoster $groupLines,
     ) {}
 
     /**
@@ -143,6 +145,7 @@ class BillingService
         if ($bill) {
             $this->ledger->settle($bill->property_id, $bill->payer_id); // credit from early payments (SC-34)
             $this->announce($bill->load('lines'), $tenancy);
+            $this->groupLines->forBill($bill); // a whole room's group shares it (D5)
         }
 
         return $bill;
@@ -199,6 +202,7 @@ class BillingService
         if ($bill) {
             $this->ledger->settle($bill->property_id, $bill->payer_id);
             $this->announce($bill->load('lines'), $tenancy);
+            $this->groupLines->forBill($bill);
         }
 
         return $bill;

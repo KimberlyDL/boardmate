@@ -67,6 +67,7 @@ class MoveInRequest extends FormRequest
             'override_reason' => ['sometimes', 'nullable', 'string', 'max:500'],
 
             'leader_consent' => ['sometimes', 'boolean'],
+            'house_rules_accepted_in_person' => ['sometimes', 'boolean'],
             'make_leader' => ['sometimes', 'boolean'],
             'occupants' => ['sometimes', 'nullable', 'array', 'max:49'],
             'occupants.*.name' => ['required', 'string', 'max:120'],

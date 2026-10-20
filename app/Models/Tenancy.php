@@ -38,6 +38,7 @@ class Tenancy extends Model
             'moved_out_on' => 'immutable_date',
             'anchor_day' => 'integer',
             'house_rules_accepted_at' => 'datetime',
+            'curfew_reminders_muted' => 'boolean',
         ];
     }
 
@@ -74,6 +75,12 @@ class Tenancy extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(TenancyPayment::class)->orderBy('received_on')->orderBy('id');
+    }
+
+    /** Every version of the house rules the tenant accepted for this stay (D3). */
+    public function houseRuleAcceptances(): HasMany
+    {
+        return $this->hasMany(HouseRuleAcceptance::class);
     }
 
     public function discounts(): HasMany

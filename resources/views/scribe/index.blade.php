@@ -491,6 +491,61 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-room-groups" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="room-groups">
+                    <a href="#room-groups">Room groups</a>
+                </li>
+                                    <ul id="tocify-subheader-room-groups" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-rooms--room_id--group">
+                                <a href="#room-groups-GETapi-v1-rooms--room_id--group">A room's group (staff)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-me-groups">
+                                <a href="#room-groups-GETapi-v1-me-groups">My room groups</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-groups--id-">
+                                <a href="#room-groups-GETapi-v1-groups--id-">A room group</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-PUTapi-v1-groups--group_id--default-split">
+                                <a href="#room-groups-PUTapi-v1-groups--group_id--default-split">Set the group's default split</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-PUTapi-v1-groups--group_id--members--member_id--role">
+                                <a href="#room-groups-PUTapi-v1-groups--group_id--members--member_id--role">Make someone a moderator (or a member again)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-groups--group_id--expenses">
+                                <a href="#room-groups-GETapi-v1-groups--group_id--expenses">The group's lines</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-PUTapi-v1-groups--group_id--expenses--expense_id--split">
+                                <a href="#room-groups-PUTapi-v1-groups--group_id--expenses--expense_id--split">Change how a line is split</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-POSTapi-v1-groups--group_id--expenses">
+                                <a href="#room-groups-POSTapi-v1-groups--group_id--expenses">Add a shared expense</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-PATCHapi-v1-groups--group_id--expenses--id-">
+                                <a href="#room-groups-PATCHapi-v1-groups--group_id--expenses--id-">Edit a shared expense</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-DELETEapi-v1-groups--group_id--expenses--id-">
+                                <a href="#room-groups-DELETEapi-v1-groups--group_id--expenses--id-">Delete a shared expense</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">
+                                <a href="#room-groups-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">Add a correction</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-groups--group_id--balances">
+                                <a href="#room-groups-GETapi-v1-groups--group_id--balances">Who owes whom</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-GETapi-v1-groups--group_id--repayments">
+                                <a href="#room-groups-GETapi-v1-groups--group_id--repayments">Repayments</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-POSTapi-v1-groups--group_id--repayments">
+                                <a href="#room-groups-POSTapi-v1-groups--group_id--repayments">Mark a repayment</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">
+                                <a href="#room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">Confirm a repayment</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">
+                                <a href="#room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">Reject a repayment</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-room-leaders" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="room-leaders">
                     <a href="#room-leaders">Room leaders</a>
@@ -2383,7 +2438,7 @@ and search by name, email or business name.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"suspended\",
+    \"status\": \"verified\",
     \"search\": \"b\"
 }"
 </code></pre></div>
@@ -2401,7 +2456,7 @@ const headers = {
 };
 
 let body = {
-    "status": "suspended",
+    "status": "verified",
     "search": "b"
 };
 
@@ -2522,10 +2577,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="GETapi-v1-admin-owners"
-               value="suspended"
+               value="verified"
                data-component="body">
     <br>
-<p>Example: <code>suspended</code></p>
+<p>Example: <code>verified</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>pending</code></li> <li><code>verified</code></li> <li><code>rejected</code></li> <li><code>suspended</code></li></ul>
         </div>
@@ -3162,7 +3217,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"search\": \"b\",
-    \"role\": \"caretaker\",
+    \"role\": \"boarder\",
     \"suspended\": true
 }"
 </code></pre></div>
@@ -3181,7 +3236,7 @@ const headers = {
 
 let body = {
     "search": "b",
-    "role": "caretaker",
+    "role": "boarder",
     "suspended": true
 };
 
@@ -3314,10 +3369,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="role"                data-endpoint="GETapi-v1-admin-users"
-               value="caretaker"
+               value="boarder"
                data-component="body">
     <br>
-<p>Example: <code>caretaker</code></p>
+<p>Example: <code>boarder</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>platform_admin</code></li> <li><code>owner</code></li> <li><code>caretaker</code></li> <li><code>boarder</code></li></ul>
         </div>
@@ -6415,7 +6470,7 @@ bill has its lines, <code>balance_centavos</code> (still owed) and <code>is_over
     --header "Accept: application/json" \
     --data "{
     \"payer_id\": 16,
-    \"kind\": \"charge\"
+    \"kind\": \"final\"
 }"
 </code></pre></div>
 
@@ -6433,7 +6488,7 @@ const headers = {
 
 let body = {
     "payer_id": 16,
-    "kind": "charge"
+    "kind": "final"
 };
 
 fetch(url, {
@@ -6590,10 +6645,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="kind"                data-endpoint="GETapi-v1-properties--property_id--bills"
-               value="charge"
+               value="final"
                data-component="body">
     <br>
-<p>Example: <code>charge</code></p>
+<p>Example: <code>final</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>periodic</code></li> <li><code>utility</code></li> <li><code>charge</code></li> <li><code>final</code></li></ul>
         </div>
@@ -10407,7 +10462,7 @@ room's leader when it has none yet.</p>
     --header "Accept: application/json" \
     --data "{
     \"unit_id\": 16,
-    \"leader\": true,
+    \"leader\": false,
     \"occupants\": [
         {
             \"name\": \"n\",
@@ -10434,7 +10489,7 @@ const headers = {
 
 let body = {
     "unit_id": 16,
-    "leader": true,
+    "leader": false,
     "occupants": [
         {
             "name": "n",
@@ -10585,7 +10640,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
         <details>
@@ -17326,7 +17381,7 @@ Only the owner's active caretakers can be assigned.</p>
     \"assignments\": [
         {
             \"caretaker_id\": 16,
-            \"access_level\": \"manager\"
+            \"access_level\": \"collector\"
         }
     ]
 }"
@@ -17348,7 +17403,7 @@ let body = {
     "assignments": [
         {
             "caretaker_id": 16,
-            "access_level": "manager"
+            "access_level": "collector"
         }
     ]
 };
@@ -17489,10 +17544,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="assignments.0.access_level"                data-endpoint="PUTapi-v1-properties--property_id--caretakers"
-               value="manager"
+               value="collector"
                data-component="body">
     <br>
-<p>Example: <code>manager</code></p>
+<p>Example: <code>collector</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>collector</code></li> <li><code>manager</code></li></ul>
                     </div>
@@ -17954,6 +18009,2705 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
+                <h1 id="room-groups">Room groups</h1>
+
+    
+
+                                <h2 id="room-groups-GETapi-v1-rooms--room_id--group">A room&#039;s group (staff)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>For the owner and caretakers: creates the group if needed.</p>
+
+<span id="example-requests-GETapi-v1-rooms--room_id--group">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/rooms/1/group" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/rooms/1/group"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-rooms--room_id--group">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-rooms--room_id--group" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-rooms--room_id--group"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-rooms--room_id--group"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-rooms--room_id--group" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-rooms--room_id--group">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-rooms--room_id--group" data-method="GET"
+      data-path="api/v1/rooms/{room_id}/group"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-rooms--room_id--group', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-rooms--room_id--group"
+                    onclick="tryItOut('GETapi-v1-rooms--room_id--group');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-rooms--room_id--group"
+                    onclick="cancelTryOut('GETapi-v1-rooms--room_id--group');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-rooms--room_id--group"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/rooms/{room_id}/group</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-rooms--room_id--group"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-rooms--room_id--group"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-rooms--room_id--group"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>room_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="room_id"                data-endpoint="GETapi-v1-rooms--room_id--group"
+               value="1"
+               data-component="url">
+    <br>
+<p>The ID of the room. Example: <code>1</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-GETapi-v1-me-groups">My room groups</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Every room group I am or was in, the current one first.</p>
+
+<span id="example-requests-GETapi-v1-me-groups">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/me/groups" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/me/groups"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-me-groups">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-me-groups" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-me-groups"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-me-groups"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-me-groups" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-me-groups">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-me-groups" data-method="GET"
+      data-path="api/v1/me/groups"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-me-groups', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-me-groups"
+                    onclick="tryItOut('GETapi-v1-me-groups');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-me-groups"
+                    onclick="cancelTryOut('GETapi-v1-me-groups');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-me-groups"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/me/groups</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-me-groups"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-me-groups"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-me-groups"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="room-groups-GETapi-v1-groups--id-">A room group</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Members see the whole group. The owner and caretakers see the members
+only (and, later, the owner's own bills posted to the group).</p>
+
+<span id="example-requests-GETapi-v1-groups--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/groups/16" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-groups--id-">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-groups--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-groups--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-groups--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-groups--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-groups--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-groups--id-" data-method="GET"
+      data-path="api/v1/groups/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-groups--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-groups--id-"
+                    onclick="tryItOut('GETapi-v1-groups--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-groups--id-"
+                    onclick="cancelTryOut('GETapi-v1-groups--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-groups--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/groups/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-groups--id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-groups--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-groups--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="GETapi-v1-groups--id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-PUTapi-v1-groups--group_id--default-split">Set the group&#039;s default split</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>"equal" or "occupant_days" (by days stayed). By the leader or a moderator.</p>
+
+<span id="example-requests-PUTapi-v1-groups--group_id--default-split">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost:8000/api/v1/groups/16/default-split" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"method\": \"weighted_absorb\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/default-split"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "method": "weighted_absorb"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-v1-groups--group_id--default-split">
+</span>
+<span id="execution-results-PUTapi-v1-groups--group_id--default-split" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-v1-groups--group_id--default-split"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-groups--group_id--default-split"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-v1-groups--group_id--default-split" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-v1-groups--group_id--default-split">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-v1-groups--group_id--default-split" data-method="PUT"
+      data-path="api/v1/groups/{group_id}/default-split"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-groups--group_id--default-split', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-v1-groups--group_id--default-split"
+                    onclick="tryItOut('PUTapi-v1-groups--group_id--default-split');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-v1-groups--group_id--default-split"
+                    onclick="cancelTryOut('PUTapi-v1-groups--group_id--default-split');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-v1-groups--group_id--default-split"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/v1/groups/{group_id}/default-split</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-v1-groups--group_id--default-split"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-groups--group_id--default-split"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-v1-groups--group_id--default-split"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="PUTapi-v1-groups--group_id--default-split"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>method</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="method"                data-endpoint="PUTapi-v1-groups--group_id--default-split"
+               value="weighted_absorb"
+               data-component="body">
+    <br>
+<p>Example: <code>weighted_absorb</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>equal</code></li> <li><code>weights</code></li> <li><code>occupant_days</code></li> <li><code>custom</code></li> <li><code>fixed_plus_remainder</code></li> <li><code>weighted_absorb</code></li></ul>
+        </div>
+        </form>
+
+                    <h2 id="room-groups-PUTapi-v1-groups--group_id--members--member_id--role">Make someone a moderator (or a member again)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>By the leader, or the owner or a Manager. The leader is always the admin.</p>
+
+<span id="example-requests-PUTapi-v1-groups--group_id--members--member_id--role">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost:8000/api/v1/groups/16/members/16/role" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"role\": \"architecto\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/members/16/role"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "role": "architecto"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-v1-groups--group_id--members--member_id--role">
+</span>
+<span id="execution-results-PUTapi-v1-groups--group_id--members--member_id--role" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-v1-groups--group_id--members--member_id--role"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-groups--group_id--members--member_id--role"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-v1-groups--group_id--members--member_id--role" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-v1-groups--group_id--members--member_id--role">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-v1-groups--group_id--members--member_id--role" data-method="PUT"
+      data-path="api/v1/groups/{group_id}/members/{member_id}/role"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-groups--group_id--members--member_id--role', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-v1-groups--group_id--members--member_id--role"
+                    onclick="tryItOut('PUTapi-v1-groups--group_id--members--member_id--role');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-v1-groups--group_id--members--member_id--role"
+                    onclick="cancelTryOut('PUTapi-v1-groups--group_id--members--member_id--role');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-v1-groups--group_id--members--member_id--role"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/v1/groups/{group_id}/members/{member_id}/role</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>member_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="member_id"                data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the member. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>role</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="role"                data-endpoint="PUTapi-v1-groups--group_id--members--member_id--role"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+        </form>
+
+                    <h2 id="room-groups-GETapi-v1-groups--group_id--expenses">The group&#039;s lines</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Newest first. Members see every line with each member's share and
+their own. The owner and caretakers see only the owner's bills posted
+to the group, without the shares.</p>
+
+<span id="example-requests-GETapi-v1-groups--group_id--expenses">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/groups/16/expenses" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-groups--group_id--expenses">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-groups--group_id--expenses" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-groups--group_id--expenses"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-groups--group_id--expenses"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-groups--group_id--expenses" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-groups--group_id--expenses">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-groups--group_id--expenses" data-method="GET"
+      data-path="api/v1/groups/{group_id}/expenses"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-groups--group_id--expenses', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-groups--group_id--expenses"
+                    onclick="tryItOut('GETapi-v1-groups--group_id--expenses');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-groups--group_id--expenses"
+                    onclick="cancelTryOut('GETapi-v1-groups--group_id--expenses');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-groups--group_id--expenses"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/groups/{group_id}/expenses</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-groups--group_id--expenses"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-groups--group_id--expenses"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-groups--group_id--expenses"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="GETapi-v1-groups--group_id--expenses"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-PUTapi-v1-groups--group_id--expenses--expense_id--split">Change how a line is split</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p><code>method</code>: equal, occupant_days, weights (<code>weights</code>: member id =&gt; weight)
+or custom (<code>amounts</code>: member id =&gt; centavos, adding up to the line). By
+the leader or a moderator, until someone has paid back for it.</p>
+
+<span id="example-requests-PUTapi-v1-groups--group_id--expenses--expense_id--split">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://localhost:8000/api/v1/groups/16/expenses/16/split" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"method\": \"architecto\",
+    \"weights\": [
+        22
+    ],
+    \"amounts\": [
+        7
+    ]
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses/16/split"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "method": "architecto",
+    "weights": [
+        22
+    ],
+    "amounts": [
+        7
+    ]
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-v1-groups--group_id--expenses--expense_id--split">
+</span>
+<span id="execution-results-PUTapi-v1-groups--group_id--expenses--expense_id--split" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-v1-groups--group_id--expenses--expense_id--split"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-v1-groups--group_id--expenses--expense_id--split"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-v1-groups--group_id--expenses--expense_id--split" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-v1-groups--group_id--expenses--expense_id--split">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-v1-groups--group_id--expenses--expense_id--split" data-method="PUT"
+      data-path="api/v1/groups/{group_id}/expenses/{expense_id}/split"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-v1-groups--group_id--expenses--expense_id--split', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-v1-groups--group_id--expenses--expense_id--split"
+                    onclick="tryItOut('PUTapi-v1-groups--group_id--expenses--expense_id--split');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-v1-groups--group_id--expenses--expense_id--split"
+                    onclick="cancelTryOut('PUTapi-v1-groups--group_id--expenses--expense_id--split');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-v1-groups--group_id--expenses--expense_id--split"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/v1/groups/{group_id}/expenses/{expense_id}/split</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>expense_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="expense_id"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>method</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="method"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               value="architecto"
+               data-component="body">
+    <br>
+<p>Example: <code>architecto</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>weights</code></b>&nbsp;&nbsp;
+<small>number[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="weights[0]"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               data-component="body">
+        <input type="number" style="display: none"
+               name="weights[1]"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               data-component="body">
+    <br>
+<p>Must be at least 0. Must not be greater than 100.</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amounts</code></b>&nbsp;&nbsp;
+<small>integer[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="amounts[0]"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               data-component="body">
+        <input type="number" style="display: none"
+               name="amounts[1]"                data-endpoint="PUTapi-v1-groups--group_id--expenses--expense_id--split"
+               data-component="body">
+    <br>
+<p>Must be at least 0. Must not be greater than 100000000.</p>
+        </div>
+        </form>
+
+                    <h2 id="room-groups-POSTapi-v1-groups--group_id--expenses">Add a shared expense</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Something a member paid for the room (SC-31: e.g. internet the boarders
+pay themselves). <code>participants</code> (member ids) default to everyone there
+now; <code>method</code> equal (default), weights (<code>weights</code>) or custom
+(<code>amounts</code>, adding up). <code>paid_by_member_id</code>: the leader or a moderator
+may record someone else's. Optional <code>proof</code> (photo or PDF, private).</p>
+
+<span id="example-requests-POSTapi-v1-groups--group_id--expenses">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/groups/16/expenses" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-groups--group_id--expenses">
+</span>
+<span id="execution-results-POSTapi-v1-groups--group_id--expenses" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-groups--group_id--expenses"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-groups--group_id--expenses"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-groups--group_id--expenses" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-groups--group_id--expenses">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-groups--group_id--expenses" data-method="POST"
+      data-path="api/v1/groups/{group_id}/expenses"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-groups--group_id--expenses', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-groups--group_id--expenses"
+                    onclick="tryItOut('POSTapi-v1-groups--group_id--expenses');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-groups--group_id--expenses"
+                    onclick="cancelTryOut('POSTapi-v1-groups--group_id--expenses');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-groups--group_id--expenses"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/groups/{group_id}/expenses</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-groups--group_id--expenses"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-groups--group_id--expenses"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-groups--group_id--expenses"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="POSTapi-v1-groups--group_id--expenses"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-PATCHapi-v1-groups--group_id--expenses--id-">Edit a shared expense</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>By the leader, a moderator or whoever added it, until the one who paid
+has been paid back. After that, add a correction.</p>
+
+<span id="example-requests-PATCHapi-v1-groups--group_id--expenses--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PATCH \
+    "http://localhost:8000/api/v1/groups/16/expenses/16" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses/16"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "PATCH",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PATCHapi-v1-groups--group_id--expenses--id-">
+</span>
+<span id="execution-results-PATCHapi-v1-groups--group_id--expenses--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PATCHapi-v1-groups--group_id--expenses--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PATCHapi-v1-groups--group_id--expenses--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PATCHapi-v1-groups--group_id--expenses--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PATCHapi-v1-groups--group_id--expenses--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PATCHapi-v1-groups--group_id--expenses--id-" data-method="PATCH"
+      data-path="api/v1/groups/{group_id}/expenses/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PATCHapi-v1-groups--group_id--expenses--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PATCHapi-v1-groups--group_id--expenses--id-"
+                    onclick="tryItOut('PATCHapi-v1-groups--group_id--expenses--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PATCHapi-v1-groups--group_id--expenses--id-"
+                    onclick="cancelTryOut('PATCHapi-v1-groups--group_id--expenses--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PATCHapi-v1-groups--group_id--expenses--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-purple">PATCH</small>
+            <b><code>api/v1/groups/{group_id}/expenses/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PATCHapi-v1-groups--group_id--expenses--id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PATCHapi-v1-groups--group_id--expenses--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PATCHapi-v1-groups--group_id--expenses--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="PATCHapi-v1-groups--group_id--expenses--id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="PATCHapi-v1-groups--group_id--expenses--id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-DELETEapi-v1-groups--group_id--expenses--id-">Delete a shared expense</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Same rule as editing.</p>
+
+<span id="example-requests-DELETEapi-v1-groups--group_id--expenses--id-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request DELETE \
+    "http://localhost:8000/api/v1/groups/16/expenses/16" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses/16"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "DELETE",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-DELETEapi-v1-groups--group_id--expenses--id-">
+</span>
+<span id="execution-results-DELETEapi-v1-groups--group_id--expenses--id-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-DELETEapi-v1-groups--group_id--expenses--id-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-DELETEapi-v1-groups--group_id--expenses--id-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-DELETEapi-v1-groups--group_id--expenses--id-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-DELETEapi-v1-groups--group_id--expenses--id-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-DELETEapi-v1-groups--group_id--expenses--id-" data-method="DELETE"
+      data-path="api/v1/groups/{group_id}/expenses/{id}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-v1-groups--group_id--expenses--id-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-DELETEapi-v1-groups--group_id--expenses--id-"
+                    onclick="tryItOut('DELETEapi-v1-groups--group_id--expenses--id-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-DELETEapi-v1-groups--group_id--expenses--id-"
+                    onclick="cancelTryOut('DELETEapi-v1-groups--group_id--expenses--id-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-DELETEapi-v1-groups--group_id--expenses--id-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-red">DELETE</small>
+            <b><code>api/v1/groups/{group_id}/expenses/{id}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-v1-groups--group_id--expenses--id-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="DELETEapi-v1-groups--group_id--expenses--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="DELETEapi-v1-groups--group_id--expenses--id-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="DELETEapi-v1-groups--group_id--expenses--id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="DELETEapi-v1-groups--group_id--expenses--id-"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">Add a correction</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p><code>changes</code>: member id =&gt; signed centavos (+ owes more, − owes less), and
+a <code>reason</code>. For an owner bill's line the changes must add up to ₱0. By
+the leader or a moderator.</p>
+
+<span id="example-requests-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/groups/16/expenses/16/corrections" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"changes\": [
+        -99999999
+    ],
+    \"reason\": \"n\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/expenses/16/corrections"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "changes": [
+        -99999999
+    ],
+    "reason": "n"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">
+</span>
+<span id="execution-results-POSTapi-v1-groups--group_id--expenses--expense_id--corrections" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-groups--group_id--expenses--expense_id--corrections"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-groups--group_id--expenses--expense_id--corrections" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-groups--group_id--expenses--expense_id--corrections">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-groups--group_id--expenses--expense_id--corrections" data-method="POST"
+      data-path="api/v1/groups/{group_id}/expenses/{expense_id}/corrections"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-groups--group_id--expenses--expense_id--corrections', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+                    onclick="tryItOut('POSTapi-v1-groups--group_id--expenses--expense_id--corrections');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+                    onclick="cancelTryOut('POSTapi-v1-groups--group_id--expenses--expense_id--corrections');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/groups/{group_id}/expenses/{expense_id}/corrections</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>expense_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="expense_id"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the expense. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>changes</code></b>&nbsp;&nbsp;
+<small>integer[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="changes[0]"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               data-component="body">
+        <input type="number" style="display: none"
+               name="changes[1]"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               data-component="body">
+    <br>
+<p>Must be between -100000000 and 100000000.</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>reason</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="reason"                data-endpoint="POSTapi-v1-groups--group_id--expenses--expense_id--corrections"
+               value="n"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>n</code></p>
+        </div>
+        </form>
+
+                    <h2 id="room-groups-GETapi-v1-groups--group_id--balances">Who owes whom</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Pair by pair, largest first. A member sees what they owe and are owed;
+the leader and moderators see every pair. <code>me</code> totals what I owe and
+what I am owed.</p>
+
+<span id="example-requests-GETapi-v1-groups--group_id--balances">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/groups/16/balances" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/balances"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-groups--group_id--balances">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-groups--group_id--balances" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-groups--group_id--balances"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-groups--group_id--balances"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-groups--group_id--balances" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-groups--group_id--balances">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-groups--group_id--balances" data-method="GET"
+      data-path="api/v1/groups/{group_id}/balances"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-groups--group_id--balances', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-groups--group_id--balances"
+                    onclick="tryItOut('GETapi-v1-groups--group_id--balances');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-groups--group_id--balances"
+                    onclick="cancelTryOut('GETapi-v1-groups--group_id--balances');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-groups--group_id--balances"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/groups/{group_id}/balances</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-groups--group_id--balances"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-groups--group_id--balances"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-groups--group_id--balances"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="GETapi-v1-groups--group_id--balances"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-GETapi-v1-groups--group_id--repayments">Repayments</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Newest first; <code>status</code> pending / confirmed / rejected. A member sees
+their own; the leader and moderators see all.</p>
+
+<span id="example-requests-GETapi-v1-groups--group_id--repayments">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost:8000/api/v1/groups/16/repayments" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/repayments"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-groups--group_id--repayments">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-groups--group_id--repayments" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-groups--group_id--repayments"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-groups--group_id--repayments"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-groups--group_id--repayments" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-groups--group_id--repayments">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-groups--group_id--repayments" data-method="GET"
+      data-path="api/v1/groups/{group_id}/repayments"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-groups--group_id--repayments', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-groups--group_id--repayments"
+                    onclick="tryItOut('GETapi-v1-groups--group_id--repayments');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-groups--group_id--repayments"
+                    onclick="cancelTryOut('GETapi-v1-groups--group_id--repayments');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-groups--group_id--repayments"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/groups/{group_id}/repayments</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-groups--group_id--repayments"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-groups--group_id--repayments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-groups--group_id--repayments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="GETapi-v1-groups--group_id--repayments"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>status</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="status"                data-endpoint="GETapi-v1-groups--group_id--repayments"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+        </form>
+
+                    <h2 id="room-groups-POSTapi-v1-groups--group_id--repayments">Mark a repayment</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>What I paid <code>to_member_id</code> (up to what I owe them): <code>method</code> cash or
+online, optional <code>reference</code>, <code>proof</code> and <code>note</code>. The leader or a
+moderator may mark one for another member with <code>from_member_id</code>. If I
+am the one paid, it is confirmed at once.</p>
+
+<span id="example-requests-POSTapi-v1-groups--group_id--repayments">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/groups/16/repayments" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"to_member_id\": 16,
+    \"from_member_id\": 16,
+    \"amount_centavos\": 22,
+    \"method\": \"online\",
+    \"reference\": \"g\",
+    \"note\": \"z\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/repayments"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "to_member_id": 16,
+    "from_member_id": 16,
+    "amount_centavos": 22,
+    "method": "online",
+    "reference": "g",
+    "note": "z"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-groups--group_id--repayments">
+</span>
+<span id="execution-results-POSTapi-v1-groups--group_id--repayments" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-groups--group_id--repayments"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-groups--group_id--repayments"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-groups--group_id--repayments" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-groups--group_id--repayments">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-groups--group_id--repayments" data-method="POST"
+      data-path="api/v1/groups/{group_id}/repayments"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-groups--group_id--repayments', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-groups--group_id--repayments"
+                    onclick="tryItOut('POSTapi-v1-groups--group_id--repayments');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-groups--group_id--repayments"
+                    onclick="cancelTryOut('POSTapi-v1-groups--group_id--repayments');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-groups--group_id--repayments"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/groups/{group_id}/repayments</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>to_member_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="to_member_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="16"
+               data-component="body">
+    <br>
+<p>Example: <code>16</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>from_member_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="from_member_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="16"
+               data-component="body">
+    <br>
+<p>Example: <code>16</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>amount_centavos</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="amount_centavos"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="22"
+               data-component="body">
+    <br>
+<p>Must be at least 1. Must not be greater than 100000000. Example: <code>22</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>method</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="method"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="online"
+               data-component="body">
+    <br>
+<p>Example: <code>online</code></p>
+Must be one of:
+<ul style="list-style-type: square;"><li><code>cash</code></li> <li><code>online</code></li></ul>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>reference</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="reference"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="g"
+               data-component="body">
+    <br>
+<p>Must not be greater than 100 characters. Example: <code>g</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>note</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="note"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value="z"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>z</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>proof</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="proof"                data-endpoint="POSTapi-v1-groups--group_id--repayments"
+               value=""
+               data-component="body">
+    <br>
+
+        </div>
+        </form>
+
+                    <h2 id="room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">Confirm a repayment</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>By the one paid, or the leader or a moderator (not the payer).</p>
+
+<span id="example-requests-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/groups/16/repayments/16/confirm" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/repayments/16/confirm"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">
+</span>
+<span id="execution-results-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm" data-method="POST"
+      data-path="api/v1/groups/{group_id}/repayments/{repayment_id}/confirm"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-groups--group_id--repayments--repayment_id--confirm', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+                    onclick="tryItOut('POSTapi-v1-groups--group_id--repayments--repayment_id--confirm');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+                    onclick="cancelTryOut('POSTapi-v1-groups--group_id--repayments--repayment_id--confirm');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/groups/{group_id}/repayments/{repayment_id}/confirm</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>repayment_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="repayment_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--confirm"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the repayment. Example: <code>16</code></p>
+            </div>
+                    </form>
+
+                    <h2 id="room-groups-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">Reject a repayment</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p><code>reason</code> is required and shown to the payer.</p>
+
+<span id="example-requests-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://localhost:8000/api/v1/groups/16/repayments/16/reject" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"reason\": \"b\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/groups/16/repayments/16/reject"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "reason": "b"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">
+</span>
+<span id="execution-results-POSTapi-v1-groups--group_id--repayments--repayment_id--reject" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-groups--group_id--repayments--repayment_id--reject"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-groups--group_id--repayments--repayment_id--reject" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-groups--group_id--repayments--repayment_id--reject">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-groups--group_id--repayments--repayment_id--reject" data-method="POST"
+      data-path="api/v1/groups/{group_id}/repayments/{repayment_id}/reject"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-groups--group_id--repayments--repayment_id--reject', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+                    onclick="tryItOut('POSTapi-v1-groups--group_id--repayments--repayment_id--reject');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+                    onclick="cancelTryOut('POSTapi-v1-groups--group_id--repayments--repayment_id--reject');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/groups/{group_id}/repayments/{repayment_id}/reject</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>group_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="group_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the group. Example: <code>16</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>repayment_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="repayment_id"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="16"
+               data-component="url">
+    <br>
+<p>The ID of the repayment. Example: <code>16</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>reason</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="reason"                data-endpoint="POSTapi-v1-groups--group_id--repayments--repayment_id--reject"
+               value="b"
+               data-component="body">
+    <br>
+<p>Must not be greater than 255 characters. Example: <code>b</code></p>
+        </div>
+        </form>
+
                 <h1 id="room-leaders">Room leaders</h1>
 
     
@@ -18137,7 +20891,7 @@ as its leader, so it cannot be replaced here.</p>
     --header "Accept: application/json" \
     --data "{
     \"user_id\": 16,
-    \"consent\": true,
+    \"consent\": false,
     \"reason\": \"n\"
 }"
 </code></pre></div>
@@ -18156,7 +20910,7 @@ const headers = {
 
 let body = {
     "user_id": 16,
-    "consent": true,
+    "consent": false,
     "reason": "n"
 };
 
@@ -18299,7 +21053,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>reason</code></b>&nbsp;&nbsp;
@@ -19184,7 +21938,7 @@ floor, door number (<code>door_no</code>, unique within the property) and
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"rental_mode\": \"whole\"
+    \"rental_mode\": \"bedspaces\"
 }"
 </code></pre></div>
 
@@ -19201,7 +21955,7 @@ const headers = {
 };
 
 let body = {
-    "rental_mode": "whole"
+    "rental_mode": "bedspaces"
 };
 
 fetch(url, {
@@ -19318,10 +22072,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="rental_mode"                data-endpoint="POSTapi-v1-properties--property_id--rooms"
-               value="whole"
+               value="bedspaces"
                data-component="body">
     <br>
-<p>Example: <code>whole</code></p>
+<p>Example: <code>bedspaces</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>whole</code></li> <li><code>bedspaces</code></li></ul>
         </div>
@@ -20210,7 +22964,7 @@ vary: Origin
         &quot;app&quot;: &quot;DormLink&quot;,
         &quot;api_version&quot;: &quot;v1&quot;,
         &quot;database&quot;: &quot;ok&quot;,
-        &quot;server_time&quot;: &quot;2026-10-17T01:52:17+08:00&quot;,
+        &quot;server_time&quot;: &quot;2026-10-17T18:21:47+08:00&quot;,
         &quot;timezone&quot;: &quot;Asia/Manila&quot;
     }
 }</code>
@@ -20893,13 +23647,13 @@ reservation.</p>
     },
     \"deposit\": {
         \"amount_centavos\": 8,
-        \"method\": \"bank_transfer\",
+        \"method\": \"e_wallet\",
         \"received_on\": \"2026-10-17\",
         \"reference\": \"l\"
     },
     \"first_rent\": {
         \"amount_centavos\": 20,
-        \"method\": \"e_wallet\",
+        \"method\": \"cash\",
         \"received_on\": \"2026-10-17\",
         \"reference\": \"q\"
     },
@@ -20945,13 +23699,13 @@ let body = {
     },
     "deposit": {
         "amount_centavos": 8,
-        "method": "bank_transfer",
+        "method": "e_wallet",
         "received_on": "2026-10-17",
         "reference": "l"
     },
     "first_rent": {
         "amount_centavos": 20,
-        "method": "e_wallet",
+        "method": "cash",
         "received_on": "2026-10-17",
         "reference": "q"
     },
@@ -21227,10 +23981,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="deposit.method"                data-endpoint="POSTapi-v1-properties--property_id--tenancies"
-               value="bank_transfer"
+               value="e_wallet"
                data-component="body">
     <br>
-<p>This field is required when <code>deposit</code> is present. Example: <code>bank_transfer</code></p>
+<p>This field is required when <code>deposit</code> is present. Example: <code>e_wallet</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>cash</code></li> <li><code>bank_transfer</code></li> <li><code>e_wallet</code></li> <li><code>deposit</code></li></ul>
                     </div>
@@ -21289,10 +24043,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="first_rent.method"                data-endpoint="POSTapi-v1-properties--property_id--tenancies"
-               value="e_wallet"
+               value="cash"
                data-component="body">
     <br>
-<p>This field is required when <code>first_rent</code> is present. Example: <code>e_wallet</code></p>
+<p>This field is required when <code>first_rent</code> is present. Example: <code>cash</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>cash</code></li> <li><code>bank_transfer</code></li> <li><code>e_wallet</code></li> <li><code>deposit</code></li></ul>
                     </div>
@@ -21473,7 +24227,7 @@ saying whether the deposit is settled.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"past\": true
+    \"past\": false
 }"
 </code></pre></div>
 
@@ -21490,7 +24244,7 @@ const headers = {
 };
 
 let body = {
-    "past": true
+    "past": false
 };
 
 fetch(url, {
@@ -21623,7 +24377,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
         </form>
 
@@ -23881,23 +26635,23 @@ the leader when the room has none.</p>
         \"phone\": \"-666-09\"
     },
     \"discount\": {
-        \"kind\": \"fixed\",
+        \"kind\": \"percent\",
         \"value\": 25
     },
     \"deposit\": {
         \"amount_centavos\": 8,
-        \"method\": \"deposit\",
+        \"method\": \"e_wallet\",
         \"received_on\": \"2026-10-17\",
         \"reference\": \"l\"
     },
     \"first_rent\": {
         \"amount_centavos\": 20,
-        \"method\": \"cash\",
+        \"method\": \"bank_transfer\",
         \"received_on\": \"2026-10-17\",
         \"reference\": \"q\"
     },
     \"override_reason\": \"w\",
-    \"leader_consent\": false,
+    \"leader_consent\": true,
     \"make_leader\": true,
     \"occupants\": [
         {
@@ -23931,23 +26685,23 @@ let body = {
         "phone": "-666-09"
     },
     "discount": {
-        "kind": "fixed",
+        "kind": "percent",
         "value": 25
     },
     "deposit": {
         "amount_centavos": 8,
-        "method": "deposit",
+        "method": "e_wallet",
         "received_on": "2026-10-17",
         "reference": "l"
     },
     "first_rent": {
         "amount_centavos": 20,
-        "method": "cash",
+        "method": "bank_transfer",
         "received_on": "2026-10-17",
         "reference": "q"
     },
     "override_reason": "w",
-    "leader_consent": false,
+    "leader_consent": true,
     "make_leader": true,
     "occupants": [
         {
@@ -24144,10 +26898,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="discount.kind"                data-endpoint="POSTapi-v1-applications--application_id--move-in"
-               value="fixed"
+               value="percent"
                data-component="body">
     <br>
-<p>This field is required when <code>discount</code> is present. Example: <code>fixed</code></p>
+<p>This field is required when <code>discount</code> is present. Example: <code>percent</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>fixed</code></li> <li><code>percent</code></li></ul>
                     </div>
@@ -24194,10 +26948,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="deposit.method"                data-endpoint="POSTapi-v1-applications--application_id--move-in"
-               value="deposit"
+               value="e_wallet"
                data-component="body">
     <br>
-<p>This field is required when <code>deposit</code> is present. Example: <code>deposit</code></p>
+<p>This field is required when <code>deposit</code> is present. Example: <code>e_wallet</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>cash</code></li> <li><code>bank_transfer</code></li> <li><code>e_wallet</code></li> <li><code>deposit</code></li></ul>
                     </div>
@@ -24256,10 +27010,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="first_rent.method"                data-endpoint="POSTapi-v1-applications--application_id--move-in"
-               value="cash"
+               value="bank_transfer"
                data-component="body">
     <br>
-<p>This field is required when <code>first_rent</code> is present. Example: <code>cash</code></p>
+<p>This field is required when <code>first_rent</code> is present. Example: <code>bank_transfer</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>cash</code></li> <li><code>bank_transfer</code></li> <li><code>e_wallet</code></li> <li><code>deposit</code></li></ul>
                     </div>
@@ -24321,7 +27075,7 @@ Must be one of:
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>make_leader</code></b>&nbsp;&nbsp;

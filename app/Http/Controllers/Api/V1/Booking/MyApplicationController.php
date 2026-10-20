@@ -14,6 +14,7 @@ use App\Models\Room;
 use App\Services\Booking\BookingService;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Listings\ListingSearch;
+use App\Services\Properties\HouseRuleAcceptances;
 use App\Support\ManilaDate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ use Illuminate\Validation\ValidationException;
  */
 class MyApplicationController extends Controller
 {
-    public function __construct(private readonly BookingService $bookings) {}
+    public function __construct(private readonly BookingService $bookings, private readonly HouseRuleAcceptances $houseRules) {}
 
     /**
      * Apply for a listing
@@ -55,17 +56,22 @@ class MyApplicationController extends Controller
             'room_id' => ['nullable', 'integer'],
             'whole' => ['sometimes', 'boolean'],
             'id_document' => ['nullable', ...array_slice($files->rules(FilePurpose::IdDocument), 1)],
+            'house_rules_version' => ['nullable', 'integer'],
         ], [
             'planned_move_in_on.after_or_equal' => 'Choose today or a later date.',
             'planned_move_in_on.before_or_equal' => 'Choose a date within the next 6 months.',
             'contact_phone.regex' => 'Enter a valid phone number.',
         ]);
 
+        $rules = $this->houseRules->requireForApplication($listing, isset($data['house_rules_version']) ? (int) $data['house_rules_version'] : null);
         $data['wants_whole'] = (bool) ($data['whole'] ?? false);
-        unset($data['whole']);
+        unset($data['whole'], $data['house_rules_version']);
         $data['room_id'] = $this->chosenRoom($listing, $data['room_id'] ?? null, $data['wants_whole'])->id;
 
         $application = $this->bookings->apply($request->user(), $listing, $data, $request->file('id_document'));
+        if ($rules) {
+            $this->houseRules->recordForApplication($rules, $application);
+        }
 
         return ApiResponse::created(new ApplicationResource($application->load('property')),
             'Application sent. We will let you know when the owner replies.');

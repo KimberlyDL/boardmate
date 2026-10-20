@@ -337,7 +337,7 @@ endpoints:
         name: kind
         description: ''
         required: false
-        example: charge
+        example: final
         type: string
         enumValues:
           - periodic
@@ -349,7 +349,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       payer_id: 16
-      kind: charge
+      kind: final
     fileParameters: []
     responses:
       -

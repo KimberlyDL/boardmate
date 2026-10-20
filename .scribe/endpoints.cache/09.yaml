@@ -427,7 +427,7 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: bank_transfer
+        example: e_wallet
         type: string
         enumValues:
           - cash
@@ -486,7 +486,7 @@ endpoints:
         name: first_rent.method
         description: 'This field is required when <code>first_rent</code> is present.'
         required: false
-        example: e_wallet
+        example: cash
         type: string
         enumValues:
           - cash
@@ -630,12 +630,12 @@ endpoints:
         value: 25
       deposit:
         amount_centavos: 8
-        method: bank_transfer
+        method: e_wallet
         received_on: '2026-10-17'
         reference: l
       first_rent:
         amount_centavos: 20
-        method: e_wallet
+        method: cash
         received_on: '2026-10-17'
         reference: q
       override_reason: w
@@ -690,14 +690,14 @@ endpoints:
         name: past
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      past: true
+      past: false
     fileParameters: []
     responses:
       -
@@ -1744,7 +1744,7 @@ endpoints:
         name: discount.kind
         description: 'This field is required when <code>discount</code> is present.'
         required: false
-        example: fixed
+        example: percent
         type: string
         enumValues:
           - fixed
@@ -1790,7 +1790,7 @@ endpoints:
         name: deposit.method
         description: 'This field is required when <code>deposit</code> is present.'
         required: false
-        example: deposit
+        example: e_wallet
         type: string
         enumValues:
           - cash
@@ -1849,7 +1849,7 @@ endpoints:
         name: first_rent.method
         description: 'This field is required when <code>first_rent</code> is present.'
         required: false
-        example: cash
+        example: bank_transfer
         type: string
         enumValues:
           - cash
@@ -1897,7 +1897,7 @@ endpoints:
         name: leader_consent
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1987,20 +1987,20 @@ endpoints:
         relationship: 'n'
         phone: '-666-09'
       discount:
-        kind: fixed
+        kind: percent
         value: 25
       deposit:
         amount_centavos: 8
-        method: deposit
+        method: e_wallet
         received_on: '2026-10-17'
         reference: l
       first_rent:
         amount_centavos: 20
-        method: cash
+        method: bank_transfer
         received_on: '2026-10-17'
         reference: q
       override_reason: w
-      leader_consent: false
+      leader_consent: true
       make_leader: true
       occupants:
         -

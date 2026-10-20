@@ -87,7 +87,7 @@ class ListingSearch
             ->when($bookable, fn (Builder $q) => $q->listable(), fn (Builder $q) => $q->onFinder())
             ->select('properties.*')
             ->selectSub(self::priceFromSubquery(), 'price_from_centavos')
-            ->with(['photos', 'rooms', 'units', 'utilityAccounts', 'settings', 'owner.ownerProfile'])
+            ->with(['photos', 'rooms', 'units', 'utilityAccounts', 'settings', 'owner.ownerProfile', 'currentHouseRules.rules'])
             ->find($id);
     }
 

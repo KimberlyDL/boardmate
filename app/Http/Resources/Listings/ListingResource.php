@@ -186,7 +186,17 @@ class ListingResource extends JsonResource
                 'fixed_centavos' => $settings?->deposit_fixed_centavos,
             ],
             'curfew_time' => $settings?->curfew_time ? substr((string) $settings->curfew_time, 0, 5) : null,
-            'house_rules_summary' => null, // F10
+            // D3: the rules in force, for anyone thinking of applying.
+            'house_rules' => $this->currentHouseRules ? [
+                'version' => $this->currentHouseRules->version,
+                'published_at' => $this->currentHouseRules->published_at?->toIso8601String(),
+                'rules' => $this->currentHouseRules->rules->map(fn ($r) => [
+                    'category' => $r->category->value,
+                    'category_label' => $r->category->label(),
+                    'body' => $r->body,
+                    'is_auto' => (bool) $r->is_auto,
+                ])->values(),
+            ] : null,
         ];
     }
 }

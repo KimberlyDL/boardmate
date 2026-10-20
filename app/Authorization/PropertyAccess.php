@@ -103,7 +103,7 @@ final class PropertyAccess
     /** @var list<A> */
     public const COLLECTOR = [
         A::View, A::RecordPayments, A::ConfirmPaymentProofs, A::SendReminders,
-        A::MarkLate, A::ApproveMoveOut, A::ViewArrears,
+        A::MarkLate, A::ApproveMoveOut, A::ViewArrears, A::HandleMaintenance, A::HandleHouseOperations,
     ];
 
     /** @var list<A> */

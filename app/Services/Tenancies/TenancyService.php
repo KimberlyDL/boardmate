@@ -27,6 +27,7 @@ use App\Services\BillingCalendar\BillingCalendar;
 use App\Services\Booking\BookingService;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Pricing\PriceBook;
+use App\Services\Properties\HouseRuleAcceptances;
 use App\Services\Properties\UnitStatusService;
 use App\Support\ManilaDate;
 use Carbon\CarbonImmutable;
@@ -65,6 +66,7 @@ class TenancyService
         private readonly BookingService $bookings,
         private readonly PriceBook $prices,
         private readonly NotificationService $notifications,
+        private readonly HouseRuleAcceptances $houseRules,
     ) {}
 
     /**
@@ -290,6 +292,7 @@ class TenancyService
             }
         }
 
+        $this->houseRules->recordAtMoveIn($tenancy, $application, (bool) ($data['house_rules_accepted_in_person'] ?? false), $actor);
         $this->unitStatus->move($unit, UnitStatus::Occupied);
 
         if ($becomesLeader) {

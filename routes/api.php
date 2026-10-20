@@ -23,11 +23,20 @@ use App\Http\Controllers\Api\V1\Booking\ApplicationController;
 use App\Http\Controllers\Api\V1\Booking\MyApplicationController;
 use App\Http\Controllers\Api\V1\Caretaker\EmployerController;
 use App\Http\Controllers\Api\V1\Caretaker\InvitationController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\FileController;
+use App\Http\Controllers\Api\V1\Groups\GroupController;
+use App\Http\Controllers\Api\V1\Groups\GroupExpenseController;
+use App\Http\Controllers\Api\V1\Groups\RepaymentController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\HouseOperations\CurfewController;
+use App\Http\Controllers\Api\V1\HouseOperations\LateEntryController;
+use App\Http\Controllers\Api\V1\HouseOperations\VisitorController;
+use App\Http\Controllers\Api\V1\Maintenance\MaintenanceController;
 use App\Http\Controllers\Api\V1\Owner\CaretakerController;
 use App\Http\Controllers\Api\V1\Owner\OwnerApplicationController;
 use App\Http\Controllers\Api\V1\Properties\CaretakerAssignmentController;
+use App\Http\Controllers\Api\V1\Properties\HouseRuleController;
 use App\Http\Controllers\Api\V1\Properties\PhotoController;
 use App\Http\Controllers\Api\V1\Properties\PropertyController;
 use App\Http\Controllers\Api\V1\Properties\RoomController;
@@ -36,6 +45,8 @@ use App\Http\Controllers\Api\V1\Properties\UnitController;
 use App\Http\Controllers\Api\V1\Properties\UtilityAccountController;
 use App\Http\Controllers\Api\V1\Public\CampusController;
 use App\Http\Controllers\Api\V1\Public\ListingController;
+use App\Http\Controllers\Api\V1\ReportController;
+use App\Http\Controllers\Api\V1\Tenancies\HouseRuleAcceptanceController;
 use App\Http\Controllers\Api\V1\Tenancies\MoveOutController;
 use App\Http\Controllers\Api\V1\Tenancies\NoticeController;
 use App\Http\Controllers\Api\V1\Tenancies\RoomLeaderController;
@@ -88,6 +99,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('settlements/{settlement}', [DocumentController::class, 'settlement'])->name('settlement');
     });
 
+    // CSV reports (A10): a signed, short-lived link from reports/{report}/link.
+    Route::get('reports/{report}/download', [ReportController::class, 'download'])
+        ->middleware(['signed', 'throttle:30,1'])->where('report', '[a-z_]+')->name('reports.download');
+
     Route::middleware(['auth:sanctum', EnsureAccountIsActive::class])->group(function () {
         Route::post('auth/logout', [SessionController::class, 'destroy'])->name('auth.logout');
 
@@ -105,7 +120,17 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             Route::get('notification-preferences', [NotificationController::class, 'preferences'])->name('notification-preferences.show');
             Route::put('notification-preferences', [NotificationController::class, 'updatePreferences'])->name('notification-preferences.update');
+
+            Route::get('maintenance-requests', [MaintenanceController::class, 'mine'])->name('maintenance-requests.index');
+            Route::get('maintenance-summary', [MaintenanceController::class, 'summary'])->name('maintenance-summary');
+            Route::get('house-operations-summary', [CurfewController::class, 'summary'])->name('house-operations-summary');
+            Route::get('dashboard', [DashboardController::class, 'mine'])->name('dashboard');
+            Route::get('home', [DashboardController::class, 'home'])->name('home');
+            Route::post('maintenance-requests', [MaintenanceController::class, 'report'])->middleware('throttle:20,1')->name('maintenance-requests.store');
         });
+
+        Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/{report}/link', [ReportController::class, 'link'])->where('report', '[a-z_]+')->name('reports.link');
 
         Route::prefix('notifications')->name('notifications.')->group(function () {
             Route::get('/', [NotificationController::class, 'index'])->name('index');
@@ -173,6 +198,22 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
             Route::post('settings/reset', [SettingsController::class, 'reset'])->name('settings.reset');
 
+            Route::get('maintenance-requests', [MaintenanceController::class, 'index'])->name('maintenance-requests.index');
+            Route::post('maintenance-requests', [MaintenanceController::class, 'log'])->name('maintenance-requests.store');
+
+            Route::get('dashboard', [DashboardController::class, 'property'])->name('dashboard');
+            Route::get('late-entries', [LateEntryController::class, 'index'])->name('late-entries.index');
+            Route::get('curfew-violations', [CurfewController::class, 'index'])->name('curfew-violations.index');
+            Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
+            Route::post('visitors', [VisitorController::class, 'walkIn'])->name('visitors.store');
+            Route::post('curfew-violations', [CurfewController::class, 'store'])->name('curfew-violations.store');
+
+            Route::get('house-rules', [HouseRuleController::class, 'show'])->name('house-rules.show');
+            Route::get('house-rules/versions/{version}', [HouseRuleController::class, 'version'])->whereNumber('version')->name('house-rules.version');
+            Route::put('house-rules/draft', [HouseRuleController::class, 'saveDraft'])->name('house-rules.draft.update');
+            Route::delete('house-rules/draft', [HouseRuleController::class, 'discardDraft'])->name('house-rules.draft.destroy');
+            Route::post('house-rules/publish', [HouseRuleController::class, 'publish'])->name('house-rules.publish');
+
             Route::post('photos', [PhotoController::class, 'store'])->name('photos.store');
             Route::patch('photos/order', [PhotoController::class, 'order'])->name('photos.order');
             Route::patch('photos/{photo}/cover', [PhotoController::class, 'cover'])->name('photos.cover');
@@ -191,12 +232,73 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('rental-mode', [RoomController::class, 'switchMode'])->name('rental-mode');
             Route::post('bedspaces', [RoomController::class, 'addBedspaces'])->name('bedspaces');
             Route::put('whole-option', [RoomController::class, 'offerWhole'])->name('whole-option');
+            Route::get('group', [GroupController::class, 'forRoom'])->name('group.show');
+        });
+
+        // Room groups (D5): members see everything; staff see members and their own bills.
+        Route::get('me/groups', [GroupController::class, 'mine'])->name('me.groups.index');
+        Route::prefix('groups/{group}')->name('groups.')->scopeBindings()->group(function () {
+            Route::get('/', [GroupController::class, 'show'])->name('show');
+            Route::put('default-split', [GroupController::class, 'setDefaultSplit'])->name('default-split');
+            Route::put('members/{member}/role', [GroupController::class, 'setRole'])->name('members.role');
+            Route::get('expenses', [GroupExpenseController::class, 'index'])->name('expenses.index');
+            Route::put('expenses/{expense}/split', [GroupExpenseController::class, 'split'])->name('expenses.split');
+            Route::post('expenses', [GroupExpenseController::class, 'store'])->middleware('throttle:30,1')->name('expenses.store');
+            Route::patch('expenses/{expense}', [GroupExpenseController::class, 'update'])->name('expenses.update');
+            Route::delete('expenses/{expense}', [GroupExpenseController::class, 'destroy'])->name('expenses.destroy');
+            Route::post('expenses/{expense}/corrections', [GroupExpenseController::class, 'correct'])->name('expenses.corrections.store');
+            Route::get('balances', [RepaymentController::class, 'balances'])->name('balances');
+            Route::get('repayments', [RepaymentController::class, 'index'])->name('repayments.index');
+            Route::post('repayments', [RepaymentController::class, 'store'])->middleware('throttle:30,1')->name('repayments.store');
+            Route::post('repayments/{repayment}/confirm', [RepaymentController::class, 'confirm'])->name('repayments.confirm');
+            Route::post('repayments/{repayment}/reject', [RepaymentController::class, 'reject'])->name('repayments.reject');
         });
 
         Route::get('me/tenancies', [TenancyController::class, 'mine'])->name('me.tenancies.index');
+        // Late-entry requests (D2): the tenant cancels; staff decide.
+        Route::prefix('late-entries/{lateEntry}')->name('late-entries.')->group(function () {
+            Route::post('cancel', [LateEntryController::class, 'cancel'])->name('cancel');
+            Route::post('approve', [LateEntryController::class, 'approve'])->name('approve');
+            Route::post('decline', [LateEntryController::class, 'decline'])->name('decline');
+        });
+
+        Route::delete('curfew-violations/{violation}', [CurfewController::class, 'destroy'])->name('curfew-violations.destroy');
+
+        // Visitors (D4): the tenant cancels; staff decide overnight stays and check visitors in and out.
+        Route::prefix('visitors/{visitor}')->name('visitors.')->group(function () {
+            Route::post('cancel', [VisitorController::class, 'cancel'])->name('cancel');
+            Route::post('approve', [VisitorController::class, 'approve'])->name('approve');
+            Route::post('decline', [VisitorController::class, 'decline'])->name('decline');
+            Route::post('check-in', [VisitorController::class, 'checkIn'])->name('check-in');
+            Route::post('check-out', [VisitorController::class, 'checkOut'])->name('check-out');
+        });
+
+        // Maintenance requests (D1): the reporter or the property's staff.
+        Route::prefix('maintenance-requests/{maintenanceRequest}')->name('maintenance-requests.')->group(function () {
+            Route::get('/', [MaintenanceController::class, 'show'])->name('show');
+            Route::post('start', [MaintenanceController::class, 'start'])->name('start');
+            Route::post('resolve', [MaintenanceController::class, 'resolve'])->name('resolve');
+            Route::post('cancel', [MaintenanceController::class, 'cancel'])->name('cancel');
+            Route::put('assignee', [MaintenanceController::class, 'assign'])->name('assignee.update');
+            Route::put('cost', [MaintenanceController::class, 'cost'])->name('cost.update');
+            Route::post('notes', [MaintenanceController::class, 'note'])->name('notes.store');
+            Route::post('confirm', [MaintenanceController::class, 'confirm'])->name('confirm');
+            Route::post('reopen', [MaintenanceController::class, 'reopen'])->name('reopen');
+            Route::post('charge', [MaintenanceController::class, 'charge'])->name('charge');
+            Route::put('not-ready', [MaintenanceController::class, 'notReady'])->name('not-ready.update');
+        });
+
         Route::prefix('tenancies/{tenancy}')->name('tenancies.')->group(function () {
             Route::get('/', [TenancyController::class, 'show'])->name('show');
             Route::put('emergency-contact', [TenancyController::class, 'updateEmergencyContact'])->name('emergency-contact.update');
+            Route::get('house-rules', [HouseRuleAcceptanceController::class, 'show'])->name('house-rules.show');
+            Route::get('late-entries', [LateEntryController::class, 'forStay'])->name('late-entries.index');
+            Route::post('late-entries', [LateEntryController::class, 'store'])->middleware('throttle:20,1')->name('late-entries.store');
+            Route::get('curfew-violations', [CurfewController::class, 'forStay'])->name('curfew-violations.index');
+            Route::put('curfew-reminders', [CurfewController::class, 'reminders'])->name('curfew-reminders.update');
+            Route::get('visitors', [VisitorController::class, 'forStay'])->name('visitors.index');
+            Route::post('visitors', [VisitorController::class, 'store'])->middleware('throttle:30,1')->name('visitors.store');
+            Route::post('house-rules/accept', [HouseRuleAcceptanceController::class, 'accept'])->name('house-rules.accept');
             Route::get('discounts', [TenancyDiscountController::class, 'index'])->name('discounts.index');
             Route::put('discount', [TenancyDiscountController::class, 'update'])->name('discount.update');
             Route::delete('discount', [TenancyDiscountController::class, 'destroy'])->name('discount.destroy');

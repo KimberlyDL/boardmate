@@ -51,6 +51,20 @@ enum NotificationEvent: string
     case MovedOut = 'moved_out';
     case TenancyOverstaying = 'tenancy_overstaying';
     case DepositSettled = 'deposit_settled';
+    case GroupLinePosted = 'group_line_posted';
+    case GroupRepayment = 'group_repayment';
+    case HouseRulesUpdated = 'house_rules_updated';
+    case MaintenanceReported = 'maintenance_reported';
+    case MaintenanceUrgent = 'maintenance_urgent';
+    case MaintenanceUpdated = 'maintenance_updated';
+    case MaintenanceForStaff = 'maintenance_for_staff';
+    case CurfewReminder = 'curfew_reminder';
+    case LateEntryRequested = 'late_entry_requested';
+    case LateEntryDecided = 'late_entry_decided';
+    case OvernightRequested = 'overnight_requested';
+    case VisitorDecided = 'visitor_decided';
+    case OvernightOverLimit = 'overnight_over_limit';
+    case CurfewViolationLogged = 'curfew_violation_logged';
 
     /** @return class-string<Templates\NotificationTemplate> */
     public function template(): string
@@ -96,6 +110,20 @@ enum NotificationEvent: string
             self::MovedOut => Templates\Tenancy\MovedOutTemplate::class,
             self::TenancyOverstaying => Templates\Tenancy\TenancyOverstayingTemplate::class,
             self::DepositSettled => Templates\Tenancy\DepositSettledTemplate::class,
+            self::GroupLinePosted => Templates\Groups\GroupLinePostedTemplate::class,
+            self::GroupRepayment => Templates\Groups\GroupRepaymentTemplate::class,
+            self::HouseRulesUpdated => Templates\Tenancy\HouseRulesUpdatedTemplate::class,
+            self::MaintenanceReported => Templates\Maintenance\MaintenanceReportedTemplate::class,
+            self::MaintenanceUrgent => Templates\Maintenance\MaintenanceUrgentTemplate::class,
+            self::MaintenanceUpdated => Templates\Maintenance\MaintenanceUpdatedTemplate::class,
+            self::MaintenanceForStaff => Templates\Maintenance\MaintenanceForStaffTemplate::class,
+            self::CurfewReminder => Templates\Tenancy\CurfewReminderTemplate::class,
+            self::LateEntryRequested => Templates\HouseOperations\LateEntryRequestedTemplate::class,
+            self::LateEntryDecided => Templates\HouseOperations\LateEntryDecidedTemplate::class,
+            self::OvernightRequested => Templates\HouseOperations\OvernightRequestedTemplate::class,
+            self::VisitorDecided => Templates\HouseOperations\VisitorDecidedTemplate::class,
+            self::OvernightOverLimit => Templates\HouseOperations\OvernightOverLimitTemplate::class,
+            self::CurfewViolationLogged => Templates\HouseOperations\CurfewViolationLoggedTemplate::class,
         };
     }
 
@@ -154,6 +182,20 @@ enum NotificationEvent: string
             self::MovedOut => 'Moved out',
             self::TenancyOverstaying => 'Stayed past the last day',
             self::DepositSettled => 'Deposit settled',
+            self::GroupLinePosted => 'New shared bill in your room',
+            self::GroupRepayment => 'Paying back in your room',
+            self::HouseRulesUpdated => 'New house rules',
+            self::MaintenanceReported => 'New repair request',
+            self::MaintenanceUrgent => 'Urgent repair request',
+            self::MaintenanceUpdated => 'Update on my repair request',
+            self::MaintenanceForStaff => 'Repair request needs you',
+            self::CurfewReminder => 'Curfew reminder',
+            self::LateEntryRequested => 'Late-entry request',
+            self::LateEntryDecided => 'Late-entry decision',
+            self::OvernightRequested => 'Overnight visitor to approve',
+            self::VisitorDecided => 'Overnight visitor decision',
+            self::OvernightOverLimit => 'Over the overnight limit',
+            self::CurfewViolationLogged => 'Late arrival recorded',
         };
     }
 

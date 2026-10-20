@@ -56,6 +56,7 @@ enum AuditEvent: string
     case UtilityAccountUpdated = 'utility.updated';
     case UtilityAccountRemoved = 'utility.removed';
     case SettingsChanged = 'property.settings_changed';
+    case HouseRulesPublished = 'property.house_rules_published';
     case PhotosChanged = 'property.photos_changed';
     case CaretakerAssigned = 'caretaker.assigned';
     case CaretakerUnassigned = 'caretaker.unassigned';
@@ -156,6 +157,7 @@ enum AuditEvent: string
             self::UtilityAccountUpdated => 'Changed a utility',
             self::UtilityAccountRemoved => 'Removed a utility',
             self::SettingsChanged => 'Changed property settings',
+            self::HouseRulesPublished => 'Published new house rules',
             self::PhotosChanged => 'Changed listing photos',
             self::CaretakerAssigned => 'Assigned a caretaker to a property',
             self::CaretakerUnassigned => 'Removed a caretaker from a property',

@@ -18,6 +18,10 @@ enum PropertyAbility: string
     case MarkLate = 'mark_late';
     case ApproveMoveOut = 'approve_move_out';
     case ViewArrears = 'view_arrears';
+    /** D1: see maintenance requests, move their status, assign them and add notes. */
+    case HandleMaintenance = 'handle_maintenance';
+    /** D2/D4: decide late-entry and overnight requests, log violations and walk-in visitors, check visitors in and out. */
+    case HandleHouseOperations = 'handle_house_operations';
 
     // Manager and owner
     case EditDetails = 'edit_details';
@@ -32,6 +36,8 @@ enum PropertyAbility: string
     case RefundDeposits = 'refund_deposits';
     case PublishListing = 'publish_listing';
     case ViewCollections = 'view_collections';
+    /** D1: record a repair's cost, cancel a request, charge the boarder, set Not ready. */
+    case ManageMaintenance = 'manage_maintenance';
 
     // Owner only (Billing guide: Manager "Cannot do")
     case ManageCaretakers = 'manage_caretakers';

@@ -27,7 +27,7 @@ class Property extends Model
     protected $attributes = ['is_published' => false];
 
     protected $fillable = [
-        'name', 'type', 'description', 'who_can_apply',
+        'name', 'type', 'description', 'who_can_apply', 'emergency_numbers',
         'street', 'barangay', 'city', 'province', 'latitude', 'longitude',
     ];
 
@@ -70,6 +70,24 @@ class Property extends Model
     public function settings(): HasOne
     {
         return $this->hasOne(PropertySettings::class);
+    }
+
+    /** House rules (D3): every published version and the draft, if any. */
+    public function houseRuleVersions(): HasMany
+    {
+        return $this->hasMany(HouseRuleVersion::class);
+    }
+
+    /** The house rules in force: the highest published version. */
+    public function currentHouseRules(): HasOne
+    {
+        return $this->hasOne(HouseRuleVersion::class)->ofMany(['version' => 'max'], fn ($q) => $q->whereNotNull('version'));
+    }
+
+    /** Maintenance requests (D1). */
+    public function maintenanceRequests(): HasMany
+    {
+        return $this->hasMany(MaintenanceRequest::class);
     }
 
     public function photos(): HasMany

@@ -14,6 +14,7 @@ use App\Models\Property;
 use App\Models\PropertySettings;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Properties\HouseRuleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class SettingsController extends Controller
 {
     use AuthorizesProperty;
 
-    public function __construct(private readonly AuditService $audit) {}
+    public function __construct(private readonly AuditService $audit, private readonly HouseRuleService $houseRules) {}
 
     /**
      * Get settings
@@ -62,8 +63,9 @@ class SettingsController extends Controller
         $settings->fill($data)->save();
 
         $this->record($property, $before, $settings);
+        $rules = $this->syncHouseRules($request, $property, $before, $settings);
 
-        return ApiResponse::ok(new PropertySettingsResource($settings), 'Settings saved.');
+        return ApiResponse::ok(new PropertySettingsResource($settings), 'Settings saved.'.$rules);
     }
 
     /**
@@ -84,8 +86,25 @@ class SettingsController extends Controller
         $settings->save();
 
         $this->record($property, $before, $settings, 'Reset to defaults: '.implode(', ', $data['sections']));
+        $rules = $this->syncHouseRules($request, $property, $before, $settings);
 
-        return ApiResponse::ok(new PropertySettingsResource($settings), 'Back to the default settings.');
+        return ApiResponse::ok(new PropertySettingsResource($settings), 'Back to the default settings.'.$rules);
+    }
+
+    /**
+     * Curfew or visitor settings changed: the house rules get a new version
+     * with the new lines (D2, D4 in D3). Returns a sentence for the message.
+     */
+    private function syncHouseRules(Request $request, Property $property, array $before, PropertySettings $settings): string
+    {
+        $keys = [...PropertySettings::SECTIONS['curfew'], ...PropertySettings::SECTIONS['visitors']];
+        $after = $this->plain($settings);
+        if (array_intersect_key($before, array_flip($keys)) == array_intersect_key($after, array_flip($keys))) {
+            return '';
+        }
+        $version = $this->houseRules->syncAutoLines($property->setRelation('settings', $settings), $request->user());
+
+        return $version ? " House rules version {$version->version} published; boarders are asked to accept it." : '';
     }
 
     private function settings(Property $property): PropertySettings
