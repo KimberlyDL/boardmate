@@ -62,6 +62,37 @@ return [
             'report' => false,
         ],
 
+        /*
+        | Uploads on S3-compatible storage (Supabase Storage now; R2 or S3 work
+        | the same). Used when FILES_PUBLIC_DISK / FILES_PRIVATE_DISK name them
+        | (config/dormlink.php). Access comes from each bucket's own public or
+        | private setting, so no per-file visibility is sent.
+        */
+        'uploads_public' => [
+            'driver' => 's3',
+            'key' => env('UPLOADS_ACCESS_KEY_ID'),
+            'secret' => env('UPLOADS_SECRET_ACCESS_KEY'),
+            'region' => env('UPLOADS_REGION'),
+            'endpoint' => env('UPLOADS_ENDPOINT'),
+            'bucket' => env('UPLOADS_PUBLIC_BUCKET'),
+            'url' => env('UPLOADS_PUBLIC_URL'),
+            'use_path_style_endpoint' => true,
+            'throw' => true,
+            'report' => false,
+        ],
+
+        'uploads_private' => [
+            'driver' => 's3',
+            'key' => env('UPLOADS_ACCESS_KEY_ID'),
+            'secret' => env('UPLOADS_SECRET_ACCESS_KEY'),
+            'region' => env('UPLOADS_REGION'),
+            'endpoint' => env('UPLOADS_ENDPOINT'),
+            'bucket' => env('UPLOADS_PRIVATE_BUCKET'),
+            'use_path_style_endpoint' => true,
+            'throw' => true,
+            'report' => false,
+        ],
+
     ],
 
     /*

@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Render (and most hosts) end HTTPS at a proxy in front of the app.
+        // Trusting its X-Forwarded-* headers keeps URLs and signed links on https.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'role' => RequireRole::class,
         ]);

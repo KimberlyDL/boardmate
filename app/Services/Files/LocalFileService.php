@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 /**
- * Stores files on the local disks: `public` (storage/app/public, served at
- * /storage) and `local` (storage/app/private, served only by the signed
- * api.v1.files.show route). Swap for an S3 implementation later.
+ * Stores files on two disks named in config('dormlink.files'): a public one
+ * (locally storage/app/public, served at /storage) and a private one (locally
+ * storage/app/private). Private files are served only by the signed
+ * api.v1.files.show route. On Render both disks are Supabase Storage buckets.
  */
 class LocalFileService implements FileService
 {
@@ -74,7 +75,7 @@ class LocalFileService implements FileService
         }
 
         if ($purpose->isPublic()) {
-            return Storage::disk('public')->url($path);
+            return Storage::disk(config('dormlink.files.public_disk'))->url($path);
         }
 
         return URL::temporarySignedRoute(
@@ -106,6 +107,6 @@ class LocalFileService implements FileService
 
     private function disk(FilePurpose $purpose): string
     {
-        return $purpose->isPublic() ? 'public' : 'local';
+        return config($purpose->isPublic() ? 'dormlink.files.public_disk' : 'dormlink.files.private_disk');
     }
 }

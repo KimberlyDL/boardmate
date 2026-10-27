@@ -24,7 +24,7 @@ class FileController extends Controller
     {
         abort_if(str_contains($path, '..'), 404);
 
-        $disk = Storage::disk('local');
+        $disk = Storage::disk(config('dormlink.files.private_disk'));
         abort_unless($disk->exists($path), 404);
 
         return $disk->response($path, headers: ['Cache-Control' => 'private, max-age=600']);

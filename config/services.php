@@ -14,6 +14,11 @@ return [
     |
     */
 
+    // Mail over Brevo's HTTP API (MAIL_MAILER=brevo), for hosts that block SMTP (Render free).
+    'brevo' => [
+        'key' => env('BREVO_API_KEY'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],

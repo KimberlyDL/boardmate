@@ -1,0 +1,8 @@
+#!/command/with-contenv sh
+# Queue worker next to Nginx and PHP-FPM in the same container (Render's free
+# plan has no separate worker service). Sends queued notifications when
+# NOTIFICATIONS_QUEUE=true; retries come from each job ($tries, $backoff).
+# s6 restarts it whenever it stops, including after --max-time, which keeps
+# memory from growing.
+cd "${APP_BASE_DIR:-/var/www/html}"
+exec php artisan queue:work --sleep=3 --max-time=3600 --memory=128

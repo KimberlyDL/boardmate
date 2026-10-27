@@ -8,10 +8,14 @@ use App\Models\UtilityAccount;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
+use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +45,14 @@ class AppServiceProvider extends ServiceProvider
             'rentable_unit' => RentableUnit::class,
             'utility_account' => UtilityAccount::class,
         ]);
+
+        // MAIL_MAILER=brevo: send through Brevo's HTTP API instead of SMTP.
+        // Tests bind a fake HttpClientInterface; otherwise Symfony makes a real client.
+        Mail::extend('brevo', fn () => (new BrevoTransportFactory(
+            client: $this->app->bound(HttpClientInterface::class) ? $this->app->make(HttpClientInterface::class) : null,
+        ))->create(
+            new Dsn('brevo+api', 'default', (string) config('services.brevo.key')),
+        ));
 
         // Sliding expiry: a token dies after N days WITHOUT use. Sanctum
         // updates last_used_at on every request, so active users stay in.

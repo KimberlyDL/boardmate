@@ -34,6 +34,16 @@ return [
     'private_file_url_minutes' => 30,
 
     /*
+    | Where uploads are stored (disks in config/filesystems.php). Locally the
+    | public and local disks; on Render uploads_public and uploads_private
+    | (Supabase Storage), because Render's own disk is wiped on every deploy.
+    */
+    'files' => [
+        'public_disk' => env('FILES_PUBLIC_DISK', 'public'),
+        'private_disk' => env('FILES_PRIVATE_DISK', 'local'),
+    ],
+
+    /*
     | A login (API token) expires after this many days WITHOUT use. Every
     | request extends it, so people who use the app stay signed in.
     */
@@ -66,5 +76,12 @@ return [
     | run `php artisan queue:work`.
     */
     'notifications_queue' => (bool) env('NOTIFICATIONS_QUEUE', false),
+
+    /*
+    | Secret for POST /api/v1/internal/tick, which an outside cron service
+    | (e.g. cron-job.org) calls every 5 minutes on hosts without cron. Sent in
+    | the X-Cron-Secret header. Empty = the endpoint is off (404).
+    */
+    'cron_secret' => env('CRON_SECRET'),
 
 ];

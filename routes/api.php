@@ -54,6 +54,7 @@ use App\Http\Controllers\Api\V1\Tenancies\RoomOccupantController;
 use App\Http\Controllers\Api\V1\Tenancies\SettlementController;
 use App\Http\Controllers\Api\V1\Tenancies\TenancyController;
 use App\Http\Controllers\Api\V1\Tenancies\TenancyDiscountController;
+use App\Http\Controllers\Api\V1\TickController;
 use App\Http\Middleware\EnsureAccountIsActive;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +64,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('health', HealthController::class)->name('health');
+
+    // Outside cron on hosts without one (Render); see TickController.
+    Route::post('internal/tick', TickController::class)
+        ->middleware('throttle:10,1')
+        ->name('internal.tick');
 
     // Public auth endpoints, rate limited (see AppServiceProvider).
     Route::prefix('auth')->name('auth.')->group(function () {

@@ -1,0 +1,123 @@
+# Render Blueprint for the DormLink API (Render → New → Blueprint → this repo).
+# Values marked "sync: false" are secrets: Render asks for them on the first
+# deploy and they are never stored in Git.
+#
+# Plan: free. Render's free plan blocks SMTP and wipes the disk on every
+# deploy and restart, so mail goes through Brevo's API and uploads go to
+# Supabase Storage (two buckets: public and private).
+#
+# Scheduled work: an outside cron (cron-job.org) calls
+# POST https://<service>.onrender.com/api/v1/internal/tick every 5 minutes
+# with the header X-Cron-Secret: <CRON_SECRET>.
+services:
+  - type: web
+    name: dormlink-api
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    envVars:
+      # App
+      - key: APP_NAME
+        value: DormLink
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false # php artisan key:generate --show
+      - key: APP_URL
+        sync: false # https://<service>.onrender.com
+      - key: APP_TIMEZONE
+        value: Asia/Manila
+      - key: FRONTEND_URL
+        sync: false # where the web app is hosted
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false # <web app url>,capacitor://localhost,https://localhost,http://localhost
+      - key: PRIVACY_POLICY_VERSION
+        value: "2026-10-03"
+      - key: SANCTUM_IDLE_DAYS
+        value: "30"
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+
+      # Seeded admin (used only by db:seed)
+      - key: ADMIN_NAME
+        value: DormLink Admin
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+      # Database (Neon)
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        sync: false # postgresql://user:password@host/dbname?sslmode=require
+      - key: DB_SSLMODE
+        value: require
+
+      # Logs go to Render's log view
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: warning
+
+      # Sessions, cache, queue
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: NOTIFICATIONS_QUEUE
+        value: "true" # sent by the queue worker that runs inside the container
+      - key: FILESYSTEM_DISK
+        value: local
+
+      # Uploads (Supabase Storage → Project Settings → Storage → S3 access)
+      - key: FILES_PUBLIC_DISK
+        value: uploads_public
+      - key: FILES_PRIVATE_DISK
+        value: uploads_private
+      - key: UPLOADS_ENDPOINT
+        sync: false # https://<project-ref>.storage.supabase.co/storage/v1/s3
+      - key: UPLOADS_REGION
+        sync: false # the project's region, e.g. ap-southeast-1
+      - key: UPLOADS_ACCESS_KEY_ID
+        sync: false
+      - key: UPLOADS_SECRET_ACCESS_KEY
+        sync: false
+      - key: UPLOADS_PUBLIC_BUCKET
+        value: dormlink-public # bucket set to Public in Supabase
+      - key: UPLOADS_PRIVATE_BUCKET
+        value: dormlink-private # bucket left private
+      - key: UPLOADS_PUBLIC_URL
+        sync: false # https://<project-ref>.supabase.co/storage/v1/object/public/dormlink-public
+
+      # Mail (Brevo HTTP API; works where SMTP is blocked)
+      - key: MAIL_MAILER
+        value: brevo
+      - key: BREVO_API_KEY
+        sync: false # Brevo → SMTP & API → API keys
+      - key: MAIL_FROM_ADDRESS
+        sync: false # must be a verified sender in Brevo
+      - key: MAIL_FROM_NAME
+        value: DormLink
+
+      # Outside cron
+      - key: CRON_SECRET
+        generateValue: true # Render makes a random value; copy it into cron-job.org
+
+      # Image settings (serversideup/php)
+      - key: AUTORUN_ENABLED
+        value: "true" # migrate --force, storage:link, caches on every start
+      - key: PHP_OPCACHE_ENABLE
+        value: "1"
+      - key: PHP_UPLOAD_MAX_FILE_SIZE
+        value: 6M
+      - key: PHP_POST_MAX_SIZE
+        value: 30M
+      - key: PHP_MEMORY_LIMIT
+        value: 256M

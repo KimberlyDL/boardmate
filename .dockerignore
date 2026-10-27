@@ -1,0 +1,35 @@
+# Secrets and local settings never go into the image; Render passes them as variables.
+.env
+.env.*
+!.env.example
+
+.git
+.github
+.idea
+.vscode
+.phpunit.cache
+.phpunit.result.cache
+.scribe
+node_modules
+vendor
+tests
+phpunit.xml
+
+# Scribe (API docs) is a dev-only package; its config would fail without it.
+config/scribe.php
+
+# Built on the server, not copied from this computer.
+bootstrap/cache/*.php
+public/storage
+public/hot
+public/build
+
+# Runtime files and local uploads (production files live on the Render disk).
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/fonts/*
+storage/app/public/*
+storage/app/private/*
+!storage/**/.gitignore
