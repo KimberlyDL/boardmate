@@ -225,6 +225,10 @@ it('moves bedspacers in separately, and names one the room\'s leader', function 
         ->and(Tenancy::count())->toBe(2)
         ->and(RoomOccupant::count())->toBe(0) // a bedspace room lists tenancies, not occupants
         ->and($this->bedProperty->units()->where('status', 'occupied')->count())->toBe(2);
+
+    // Their stay gives the room's size for the 3D room model: 3 bedspaces.
+    $this->actingAs($this->ben, 'sanctum')->getJson('/api/v1/me/tenancies')
+        ->assertOk()->assertJsonPath('data.0.room.total', 3)->assertJsonPath('data.0.room.capacity', 3);
 });
 
 it('moves a walk-in in by their account email', function () {
@@ -308,6 +312,7 @@ it('lists tenancies for staff and shows a tenant only their own', function () {
     // Kim sees her stay without the owner's bookkeeping; Ben cannot see it at all.
     $this->actingAs($this->kim, 'sanctum')->getJson('/api/v1/me/tenancies')
         ->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.room.id', $tenancy->room_id)->assertJsonPath('data.0.room.rental_mode', 'whole')
+        ->assertJsonPath('data.0.room.total', 1)->assertJsonPath('data.0.room.capacity', 3)
         ->assertJsonPath('data.0.is_leader', true)->assertJsonMissingPath('data.0.payments')->assertJsonMissingPath('data.0.tenant.email');
     $this->getJson("/api/v1/tenancies/{$tenancy->id}")->assertOk()->assertJsonMissingPath('data.payments');
     $this->actingAs($this->ben, 'sanctum')->getJson("/api/v1/tenancies/{$tenancy->id}")->assertNotFound();

@@ -2,11 +2,18 @@
 .DS_Store
 .env
 .env.backup
+.env.backup-*
+.env.testing
 .env.production
 .phpactor.json
 .phpunit.result.cache
 /CLAUDE.md
 /.claude/
+# AI setup (Laravel Boost) and project docs live in the parent www folder, not in this repo
+/AGENTS.md
+/.mcp.json
+/boost.json
+/docs/
 /.codex
 /.cursor/
 /.idea

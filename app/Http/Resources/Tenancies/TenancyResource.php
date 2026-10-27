@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Tenancies;
 
 use App\Enums\FilePurpose;
+use App\Enums\RentalMode;
 use App\Enums\TenancyPaymentKind;
 use App\Enums\TenancyStatus;
 use App\Enums\UnitKind;
@@ -91,6 +92,10 @@ class TenancyResource extends JsonResource
         if ($this->view === 'tenant') {
             // Leaders manage who stays; the app shows them that option.
             $data['is_leader'] = RoomLeader::current()->where('room_id', $this->room_id)->where('user_id', $this->tenant_id)->exists();
+            // The room's size, for the app's 3D room model; counted like the public listing does.
+            $roomUnits = $this->room->units()->where('is_whole_option', false)->get(['capacity']);
+            $data['room']['total'] = $roomUnits->count();
+            $data['room']['capacity'] = $this->room->rental_mode === RentalMode::Whole ? (int) $roomUnits->first()?->capacity : $roomUnits->count();
             // The place's notice rules, shown when giving notice (C1). Short notice is only flagged.
             $settings = $this->property->settings;
             $data['notice_rules'] = [

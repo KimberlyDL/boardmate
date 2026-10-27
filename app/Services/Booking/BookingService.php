@@ -5,7 +5,9 @@ namespace App\Services\Booking;
 use App\Enums\ApplicationStatus as Status;
 use App\Enums\AuditEvent;
 use App\Enums\FilePurpose;
+use App\Enums\NoticeStatus;
 use App\Enums\NotificationEvent;
+use App\Enums\TenancyStatus;
 use App\Enums\UnitKind;
 use App\Enums\UnitStatus;
 use App\Models\BookingApplication;
@@ -14,6 +16,7 @@ use App\Models\PropertyCaretaker;
 use App\Models\RentableUnit;
 use App\Models\Room;
 use App\Models\RoomLeader;
+use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Files\Contracts\FileService;
@@ -495,6 +498,14 @@ class BookingService
         }
         if (PropertyCaretaker::where('property_id', $property->id)->where('caretaker_id', $boarder->id)->exists()) {
             $fail('You help run this property, so you cannot book it.', 'caretaker_property');
+        }
+        // One account, one person, one stay: while staying somewhere, apply elsewhere only after giving notice
+        // (a notice sent and waiting for approval counts).
+        $stay = Tenancy::where('tenant_id', $boarder->id)->where('status', TenancyStatus::Active)
+            ->whereDoesntHave('notices', fn ($q) => $q->where('status', NoticeStatus::Pending))
+            ->with('property')->first();
+        if ($stay) {
+            $fail("You are staying at {$stay->property->name}. To book for someone else, they need their own DormLink account. To move yourself, give notice first.", 'has_stay');
         }
         if (BookingApplication::where('boarder_id', $boarder->id)->where('status', Status::Approved)->exists()) {
             $fail('You already have a reservation. Cancel it first to apply somewhere else.', 'has_reservation');

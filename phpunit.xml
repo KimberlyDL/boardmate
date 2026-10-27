@@ -27,7 +27,11 @@
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
         <env name="DB_CONNECTION" value="pgsql"/>
+        <!-- Tests always use the local database; its password comes from .env.testing -->
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="5432"/>
         <env name="DB_DATABASE" value="dormlink_test"/>
+        <env name="DB_SSLMODE" value="prefer"/>
         <env name="DB_URL" value=""/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>

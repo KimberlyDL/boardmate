@@ -4,6 +4,7 @@ use App\Enums\NotificationEvent;
 use App\Models\User;
 use App\Services\Notifications\Contracts\NotificationService;
 use Illuminate\Notifications\SendQueuedNotifications;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -63,6 +64,26 @@ it('queues notifications instead of sending them when NOTIFICATIONS_QUEUE is on'
 
     expect($this->user->notifications()->count())->toBe(0);
     Queue::assertPushed(SendQueuedNotifications::class);
+});
+
+it('queues notifications only once the save commits, and drops them when it rolls back', function () {
+    config()->set('queue.default', 'database');
+    config()->set('dormlink.notifications_queue', true);
+
+    DB::transaction(function () {
+        app(NotificationService::class)->send($this->user, NotificationEvent::Welcome);
+        expect(DB::table('jobs')->count())->toBe(0);
+    });
+    expect(DB::table('jobs')->count())->toBe(1);
+
+    try {
+        DB::transaction(function () {
+            app(NotificationService::class)->send($this->user, NotificationEvent::Welcome);
+            throw new RuntimeException('save failed');
+        });
+    } catch (RuntimeException) {
+    }
+    expect(DB::table('jobs')->count())->toBe(1);
 });
 
 it('only accepts mutable events as preferences', function () {

@@ -19,11 +19,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Ionic dev servers and the Capacitor Android/iOS shells. Override with a
-    // comma-separated CORS_ALLOWED_ORIGINS in .env.
+    // Ionic dev servers and the Capacitor shells (Android: https://localhost,
+    // iOS: capacitor://localhost). Override with a comma-separated
+    // CORS_ALLOWED_ORIGINS in .env.
     'allowed_origins' => array_values(array_filter(array_map('trim', explode(',', (string) env(
         'CORS_ALLOWED_ORIGINS',
-        'http://localhost:8100,http://localhost:5173,capacitor://localhost,http://localhost',
+        'http://localhost:8100,http://localhost:5173,capacitor://localhost,http://localhost,https://localhost',
     ))))),
 
     'allowed_origins_patterns' => [],

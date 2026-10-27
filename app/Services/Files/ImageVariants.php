@@ -26,18 +26,28 @@ class ImageVariants
         $this->ensureMemory();
         $manager = new ImageManager(Driver::class, autoOrientation: true, decodeAnimation: false, strip: true);
 
-        $variants = [];
-        foreach ($specs as $name => $spec) {
-            $image = $manager->decodeBinary($binary);
-            // 'inside': the longer side is at most `size` (portrait photos too); never enlarged.
-            $image = $spec['fit'] === 'square'
-                ? $image->cover($spec['size'], $spec['size'])
-                : $image->scaleDown(width: $spec['size'], height: $spec['size']);
+        // Resizing the full photo is the slow part, so make the biggest 'inside' size first and
+        // shrink that same image for the next one (e.g. 1600 px, then the 480 px thumb from it).
+        $ordered = $specs;
+        uasort($ordered, fn (array $a, array $b) => $b['size'] <=> $a['size']);
 
-            $variants[$name] = $image->encode(new WebpEncoder(quality: self::QUALITY, strip: true))->toString();
+        $variants = [];
+        $image = null;
+        foreach ($ordered as $name => $spec) {
+            // 'inside': the longer side is at most `size` (portrait photos too); never enlarged.
+            // A square crop always starts from the original, and nothing reuses a cropped image.
+            if ($spec['fit'] === 'square') {
+                $variant = $manager->decodeBinary($binary)->cover($spec['size'], $spec['size']);
+            } else {
+                $image = ($image ?? $manager->decodeBinary($binary))->scaleDown(width: $spec['size'], height: $spec['size']);
+                $variant = $image;
+            }
+
+            $variants[$name] = $variant->encode(new WebpEncoder(quality: self::QUALITY, strip: true))->toString();
         }
 
-        return $variants;
+        // Same order as the specs given
+        return array_replace(array_fill_keys(array_keys($specs), ''), $variants);
     }
 
     /** A full-size phone photo needs more than PHP's default 128 MB to decode. */

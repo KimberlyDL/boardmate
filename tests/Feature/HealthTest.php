@@ -20,6 +20,12 @@ it('allows the Ionic dev origin through CORS', function () {
         ->assertHeader('Access-Control-Allow-Origin', 'http://localhost:8100');
 });
 
+it('allows the Android app origin through CORS', function () {
+    $this->withHeaders(['Origin' => 'https://localhost'])
+        ->getJson('/api/v1/health')
+        ->assertHeader('Access-Control-Allow-Origin', 'https://localhost');
+});
+
 it('writes the TypeScript enum file', function () {
     $path = storage_path('framework/testing/enums.ts');
 
