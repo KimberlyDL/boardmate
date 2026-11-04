@@ -22,6 +22,7 @@ use App\Models\RentableUnit;
 use App\Models\User;
 use App\Models\Visitor;
 use App\Services\Billing\CollectionService;
+use App\Services\Finance\FinanceFigures;
 use App\Services\HouseOperations\CurfewService;
 use App\Support\ManilaDate;
 
@@ -29,13 +30,16 @@ use App\Support\ManilaDate;
  * The owner's and caretakers' dashboard for one property (A10). Every number
  * is computed from the same rows as the rest of the app on each request;
  * nothing is stored, so it can never differ from the ledger. A widget is
- * left out (null) when the viewer may not see it.
+ * left out (null) when the viewer may not see it. Collected this month is
+ * the finance screens' figure: real money in, including the first rent paid
+ * at move-in, not the deposit applied at settlement.
  */
 class PropertyDashboard
 {
     public function __construct(
         private readonly CollectionService $collections,
         private readonly CurfewService $curfew,
+        private readonly FinanceFigures $finance,
     ) {}
 
     /** @return array<string, mixed> */
@@ -49,10 +53,8 @@ class PropertyDashboard
             'occupancy' => $this->occupancy($property),
             'due_this_week' => $can(A::ViewArrears) ? $this->dueThisWeek($property) : null,
             'overdue' => $can(A::ViewArrears) ? $this->overdue($property) : null,
-            'collected_this_month' => $can(A::ViewCollections) ? (int) Payment::where('property_id', $property->id)
-                ->where('status', PaymentStatus::Confirmed)
-                ->whereBetween('paid_on', [$today->startOfMonth()->toDateString(), $today->endOfMonth()->toDateString()])
-                ->sum('amount_centavos') : null,
+            'collected_this_month' => $can(A::ViewCollections)
+                ? $this->finance->collected([$property->id], $today->startOfMonth(), $today->endOfMonth())[$property->id] : null,
             'applications_waiting' => $can(A::ApproveBookings)
                 ? BookingApplication::where('property_id', $property->id)->where('status', ApplicationStatus::Pending)->count() : null,
             'proofs_waiting' => $can(A::ConfirmPaymentProofs)

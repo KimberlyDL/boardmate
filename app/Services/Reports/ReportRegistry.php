@@ -4,8 +4,10 @@ namespace App\Services\Reports;
 
 use App\Services\Reports\Money\CollectionsReport;
 use App\Services\Reports\Money\DepositLedgerReport;
+use App\Services\Reports\Money\IncomeByMonthReport;
 use App\Services\Reports\Money\OutstandingReport;
 use App\Services\Reports\Money\PriceHistoryReport;
+use App\Services\Reports\Money\RoomFinanceReport;
 use App\Services\Reports\Money\UtilityHistoryReport;
 use App\Services\Reports\Operations\CurfewLogReport;
 use App\Services\Reports\Operations\MoveOutsReport;
@@ -20,6 +22,8 @@ final class ReportRegistry
     private const REPORTS = [
         CollectionsReport::class,
         OutstandingReport::class,
+        IncomeByMonthReport::class,
+        RoomFinanceReport::class,
         DepositLedgerReport::class,
         UtilityHistoryReport::class,
         PriceHistoryReport::class,

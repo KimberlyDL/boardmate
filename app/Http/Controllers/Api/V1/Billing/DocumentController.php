@@ -9,6 +9,7 @@ use App\Http\Responses\ApiResponse;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\Property;
+use App\Models\Room;
 use App\Models\Settlement;
 use App\Models\Tenancy;
 use App\Models\User;
@@ -128,6 +129,42 @@ class DocumentController extends Controller
     public function settlement(Settlement $settlement): Response
     {
         return $this->documents->settlementSummary($settlement);
+    }
+
+    /**
+     * Download a financial statement
+     *
+     * From the finance screens' PDF links: every property, or one by room.
+     *
+     * @unauthenticated
+     */
+    public function finance(Request $request): Response
+    {
+        $ids = array_filter(array_map('intval', explode(',', (string) $request->query('properties'))));
+        $properties = Property::withTrashed()->whereIn('id', $ids)->orderBy('name')->get();
+        abort_if($properties->isEmpty(), 404);
+
+        return $this->documents->financeStatement($properties, (string) $request->query('from'), (string) $request->query('to'));
+    }
+
+    /**
+     * Download a room's financial statement
+     *
+     * @unauthenticated
+     */
+    public function roomFinance(Request $request, int $room): Response
+    {
+        return $this->documents->roomFinanceStatement(Room::withTrashed()->findOrFail($room), (string) $request->query('from'), (string) $request->query('to'));
+    }
+
+    /**
+     * Download a stay's statement
+     *
+     * @unauthenticated
+     */
+    public function stayFinance(Tenancy $tenancy): Response
+    {
+        return $this->documents->stayFinanceStatement($tenancy);
     }
 
     private function allowPayerOrStaff(Request $request, int $payerId, Property $property, A $ability): void

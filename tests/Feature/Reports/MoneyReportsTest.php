@@ -42,7 +42,7 @@ function csvReport(User $user, string $report, array $query = []): array
 it('lists the reports each person may download', function () {
     $keys = fn (User $u) => collect($this->actingAs($u, 'sanctum')->getJson('/api/v1/reports')->assertOk()->json('data'))->pluck('key')->all();
 
-    expect($keys($this->owner))->toBe(['collections', 'outstanding', 'deposits', 'utilities', 'prices', 'occupancy', 'move_outs', 'repairs', 'visitors', 'curfew'])
+    expect($keys($this->owner))->toBe(['collections', 'outstanding', 'income_by_month', 'room_finance', 'deposits', 'utilities', 'prices', 'occupancy', 'move_outs', 'repairs', 'visitors', 'curfew'])
         ->and($keys($this->collector))->toBe(['collections', 'outstanding']) // their own work only
         ->and($keys(User::factory()->boarder()->create()))->toBe([]);
 

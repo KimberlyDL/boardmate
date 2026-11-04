@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\Caretaker\EmployerController;
 use App\Http\Controllers\Api\V1\Caretaker\InvitationController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\FileController;
+use App\Http\Controllers\Api\V1\FinanceController;
 use App\Http\Controllers\Api\V1\Groups\GroupController;
 use App\Http\Controllers\Api\V1\Groups\GroupExpenseController;
 use App\Http\Controllers\Api\V1\Groups\RepaymentController;
@@ -103,6 +104,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('notices/{bill}', [DocumentController::class, 'notice'])->name('notice');
         Route::get('statements/{property}/{payer}', [DocumentController::class, 'statement'])->whereNumber('property')->name('statement');
         Route::get('settlements/{settlement}', [DocumentController::class, 'settlement'])->name('settlement');
+        Route::get('finance', [DocumentController::class, 'finance'])->name('finance');
+        Route::get('finance/rooms/{room}', [DocumentController::class, 'roomFinance'])->whereNumber('room')->name('finance-room');
+        Route::get('finance/stays/{tenancy}', [DocumentController::class, 'stayFinance'])->name('finance-stay');
     });
 
     // CSV reports (A10): a signed, short-lived link from reports/{report}/link.
@@ -137,6 +141,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/{report}/link', [ReportController::class, 'link'])->where('report', '[a-z_]+')->name('reports.link');
+        Route::get('finance', [FinanceController::class, 'summary'])->name('finance.summary');
+        Route::get('finance/pdf-link', [FinanceController::class, 'summaryPdfLink'])->name('finance.pdf-link');
+        Route::get('rooms/{room}/finance', [FinanceController::class, 'room'])->name('rooms.finance');
+        Route::get('rooms/{room}/finance/pdf-link', [FinanceController::class, 'roomPdfLink'])->name('rooms.finance.pdf-link');
+        Route::get('tenancies/{tenancy}/finance', [FinanceController::class, 'stay'])->name('tenancies.finance');
+        Route::get('tenancies/{tenancy}/finance/pdf-link', [FinanceController::class, 'stayPdfLink'])->name('tenancies.finance.pdf-link');
 
         Route::prefix('notifications')->name('notifications.')->group(function () {
             Route::get('/', [NotificationController::class, 'index'])->name('index');
@@ -208,6 +218,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('maintenance-requests', [MaintenanceController::class, 'log'])->name('maintenance-requests.store');
 
             Route::get('dashboard', [DashboardController::class, 'property'])->name('dashboard');
+            Route::get('finance', [FinanceController::class, 'property'])->name('finance');
+            Route::get('finance/pdf-link', [FinanceController::class, 'propertyPdfLink'])->name('finance.pdf-link');
             Route::get('late-entries', [LateEntryController::class, 'index'])->name('late-entries.index');
             Route::get('curfew-violations', [CurfewController::class, 'index'])->name('curfew-violations.index');
             Route::get('visitors', [VisitorController::class, 'index'])->name('visitors.index');
