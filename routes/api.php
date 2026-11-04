@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Account\NotificationController;
 use App\Http\Controllers\Api\V1\Account\ProfileController;
 use App\Http\Controllers\Api\V1\Admin\CampusController as AdminCampusController;
 use App\Http\Controllers\Api\V1\Admin\OwnerReviewController;
+use App\Http\Controllers\Api\V1\Admin\PlatformStatsController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\V1\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\EmailVerificationController;
@@ -135,7 +136,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('maintenance-summary', [MaintenanceController::class, 'summary'])->name('maintenance-summary');
             Route::get('house-operations-summary', [CurfewController::class, 'summary'])->name('house-operations-summary');
             Route::get('dashboard', [DashboardController::class, 'mine'])->name('dashboard');
+            Route::get('collections', [CollectionController::class, 'mine'])->name('collections');
             Route::get('home', [DashboardController::class, 'home'])->name('home');
+            Route::get('spending', [DashboardController::class, 'spending'])->name('spending');
             Route::post('maintenance-requests', [MaintenanceController::class, 'report'])->middleware('throttle:20,1')->name('maintenance-requests.store');
         });
 
@@ -403,6 +406,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('owners/{user}/reinstate', [OwnerReviewController::class, 'reinstate'])->name('owners.reinstate');
 
             Route::get('audit-log', [AuditLogController::class, 'admin'])->name('audit-log');
+            Route::get('stats', [PlatformStatsController::class, 'index'])->name('stats');
             Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
             Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
             Route::post('users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');

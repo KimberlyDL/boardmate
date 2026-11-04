@@ -12,9 +12,11 @@ use App\Models\CollectionNote;
 use App\Models\Property;
 use App\Models\User;
 use App\Services\Billing\CollectionService;
+use App\Services\Billing\CollectionsSummary;
 use App\Support\ManilaDate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 /**
  * The overdue list and follow-up (C7): owner and caretakers (Collectors
@@ -27,7 +29,36 @@ class CollectionController extends Controller
 {
     use AuthorizesProperty;
 
-    public function __construct(private readonly CollectionService $collections) {}
+    public function __construct(
+        private readonly CollectionService $collections,
+        private readonly CollectionsSummary $summary,
+    ) {}
+
+    /**
+     * My collections
+     *
+     * For everyone who follows up payments (owner and caretakers, Collectors
+     * included): bills due in the next 7 days, who is overdue and for how long
+     * (by their oldest overdue bill), payments received over the last 7 days
+     * day by day, payment proofs waiting, and the five payers most behind.
+     * `property_id` narrows it to one property; `properties` lists every
+     * property I may pick. No income totals, costs or deposits.
+     */
+    public function mine(Request $request): JsonResponse
+    {
+        $data = $request->validate(['property_id' => ['nullable', 'integer']]);
+        $allowed = $this->summary->properties($request->user());
+        abort_if($allowed->isEmpty(), 403, 'Only the owner and caretakers follow up payments.');
+
+        $properties = isset($data['property_id']) ? $allowed->where('id', (int) $data['property_id'])->values() : $allowed;
+        if ($properties->isEmpty()) {
+            throw ValidationException::withMessages(['property_id' => 'You do not follow up payments at that property.']);
+        }
+
+        return ApiResponse::ok([
+            'properties' => $allowed->map(fn (Property $p) => ['id' => $p->id, 'name' => $p->name])->values(),
+        ] + $this->summary->for($properties, $request->user()));
+    }
 
     /**
      * Overdue list

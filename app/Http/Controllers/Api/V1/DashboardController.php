@@ -11,6 +11,7 @@ use App\Http\Responses\ApiResponse;
 use App\Models\Property;
 use App\Services\Dashboard\PropertyDashboard;
 use App\Services\Dashboard\TenantDashboard;
+use App\Services\Dashboard\TenantSpending;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
@@ -26,7 +27,26 @@ class DashboardController extends Controller
 {
     use AuthorizesProperty;
 
-    public function __construct(private readonly PropertyDashboard $dashboard, private readonly TenantDashboard $tenant) {}
+    public function __construct(
+        private readonly PropertyDashboard $dashboard,
+        private readonly TenantDashboard $tenant,
+        private readonly TenantSpending $spending,
+    ) {}
+
+    /**
+     * My spending (tenant)
+     *
+     * The 12 months ending this month, across every place I stayed: what I
+     * was billed (rent with the first rent paid at move-in, utilities, other
+     * charges and corrections), what I paid (not the deposit used at
+     * settlement), and my shares of the room group's costs (not the bills
+     * billed to me, which are already in my bills); totals; and my deposits
+     * (paid, held, refunded, kept). Amounts in centavos.
+     */
+    public function spending(Request $request): JsonResponse
+    {
+        return ApiResponse::ok($this->spending->for($request->user()));
+    }
 
     /**
      * My home (tenant)
