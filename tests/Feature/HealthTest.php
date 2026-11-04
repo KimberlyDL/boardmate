@@ -26,6 +26,20 @@ it('allows the Android app origin through CORS', function () {
         ->assertHeader('Access-Control-Allow-Origin', 'https://localhost');
 });
 
+it('allows the website and, when set, preview addresses, but not other sites (W1)', function () {
+    config([
+        'cors.allowed_origins' => ['https://dormlink.vercel.app', 'https://localhost'],
+        'cors.allowed_origins_patterns' => ['#^https://dormlink-[a-z0-9-]+\.vercel\.app$#'],
+    ]);
+
+    $this->withHeaders(['Origin' => 'https://dormlink.vercel.app'])->getJson('/api/v1/health')
+        ->assertHeader('Access-Control-Allow-Origin', 'https://dormlink.vercel.app');
+    $this->withHeaders(['Origin' => 'https://dormlink-git-main-leynard.vercel.app'])->getJson('/api/v1/health')
+        ->assertHeader('Access-Control-Allow-Origin', 'https://dormlink-git-main-leynard.vercel.app');
+    $this->withHeaders(['Origin' => 'https://evil.vercel.app'])->getJson('/api/v1/health')
+        ->assertHeaderMissing('Access-Control-Allow-Origin');
+});
+
 it('writes the TypeScript enum file', function () {
     $path = storage_path('framework/testing/enums.ts');
 

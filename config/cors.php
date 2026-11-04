@@ -27,7 +27,10 @@ return [
         'http://localhost:8100,http://localhost:5173,capacitor://localhost,http://localhost,https://localhost',
     ))))),
 
-    'allowed_origins_patterns' => [],
+    // Optional regular expressions, comma-separated in CORS_ALLOWED_ORIGIN_PATTERNS, for addresses
+    // that change with each deploy, e.g. Vercel previews: #^https://dormlink-[a-z0-9-]+\.vercel\.app$#
+    // Empty by default: only the exact addresses above are allowed.
+    'allowed_origins_patterns' => array_values(array_filter(array_map('trim', explode(',', (string) env('CORS_ALLOWED_ORIGIN_PATTERNS', ''))))),
 
     'allowed_headers' => ['*'],
 
