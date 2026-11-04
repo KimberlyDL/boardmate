@@ -119,12 +119,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->password !== null;
     }
 
-    /** @return list<UserRole> */
+    /**
+     * The account's roles in a fixed order (boarder first, as every account starts as one; then
+     * owner, caretaker, admin). The database returns them in any order, which made the list
+     * change between requests.
+     *
+     * @return list<UserRole>
+     */
     public function accountRoles(): array
     {
+        $order = [UserRole::Boarder, UserRole::Owner, UserRole::Caretaker, UserRole::PlatformAdmin];
+
         return $this->getRoleNames()
             ->map(fn (string $name) => UserRole::tryFrom($name))
             ->filter()
+            ->sortBy(fn (UserRole $role) => array_search($role, $order, true))
             ->values()
             ->all();
     }

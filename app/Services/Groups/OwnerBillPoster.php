@@ -148,7 +148,8 @@ class OwnerBillPoster
     private function sharesFor(GroupExpense $line, SplitMethod $method, array $params, ?GroupExpense $datesFrom = null): array
     {
         [$from, $to] = $this->dates($datesFrom ?? $line);
-        $members = GroupMember::where('group_id', $line->group_id)->get();
+        // Same order as the group's members (joined, then id), so shares are always stored in that order.
+        $members = GroupMember::where('group_id', $line->group_id)->orderBy('joined_on')->orderBy('id')->get();
 
         return $this->splitter->split($line->amount_centavos, $method, $from, $to, $members, $line->paid_by_member_id, $params);
     }
