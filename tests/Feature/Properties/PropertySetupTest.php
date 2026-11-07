@@ -13,7 +13,8 @@ it('creates a bedspace property with numbered beds, rents and default settings',
         'name' => 'Santos Boarding House',
         'type' => 'boarding_house',
         'rental_mode' => 'bedspaces',
-        'city' => 'Manila',
+        'province' => 'Metro Manila',
+        'city' => 'Manila City',
         'units' => ['count' => 6, 'label_pattern' => 'Room A – Bed {n}', 'rent_centavos' => 180000],
     ])->assertCreated();
 

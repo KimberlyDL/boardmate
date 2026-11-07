@@ -47,6 +47,7 @@ use App\Http\Controllers\Api\V1\Properties\UnitController;
 use App\Http\Controllers\Api\V1\Properties\UtilityAccountController;
 use App\Http\Controllers\Api\V1\Public\CampusController;
 use App\Http\Controllers\Api\V1\Public\ListingController;
+use App\Http\Controllers\Api\V1\Public\PlaceController;
 use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\Tenancies\HouseRuleAcceptanceController;
 use App\Http\Controllers\Api\V1\Tenancies\MoveOutController;
@@ -421,7 +422,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // Dorm Finder (F1): public.
     Route::middleware('throttle:60,1')->group(function () {
         Route::get('listings', [ListingController::class, 'index'])->name('listings.index');
+        Route::get('listings/places', [ListingController::class, 'places'])->name('listings.places');
         Route::get('campuses', [CampusController::class, 'index'])->name('campuses.index');
+        Route::get('places', [PlaceController::class, 'index'])->name('places.index');
         Route::get('listings/{property}', [ListingController::class, 'show'])->whereNumber('property')->name('listings.show');
     });
 

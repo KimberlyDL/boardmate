@@ -120,6 +120,24 @@ it('filters by text, price, mode, inclusions, who-can-apply and map area, and so
         ->and($ids('sort=price'))->toBe([$cheap->id, $whole->id]);
 });
 
+it('filters by province and city, and lists only the places that have listings', function () {
+    $calapan = listed(fill: ['province' => 'Oriental Mindoro', 'city' => 'Calapan City']);
+    $naujan = listed(fill: ['province' => 'Oriental Mindoro', 'city' => 'Naujan']);
+    $cebu = listed(fill: ['province' => 'Cebu', 'city' => 'Cebu City']);
+    $hidden = listed(fill: ['province' => 'Cebu', 'city' => 'Mandaue City', 'is_published' => false]);
+
+    $ids = fn (string $query) => collect($this->getJson('/api/v1/listings?'.$query)->assertOk()->json('data'))->pluck('id')->sort()->values()->all();
+
+    expect($ids('province=oriental%20mindoro'))->toBe([$calapan->id, $naujan->id])
+        ->and($ids('province=Oriental%20Mindoro&city=Calapan%20City'))->toBe([$calapan->id])
+        ->and($ids('city=Mandaue%20City'))->toBe([]);
+
+    $this->getJson('/api/v1/listings/places')->assertOk()->assertExactJson(['data' => [
+        ['name' => 'Cebu', 'count' => 1, 'cities' => [['name' => 'Cebu City', 'count' => 1]]],
+        ['name' => 'Oriental Mindoro', 'count' => 2, 'cities' => [['name' => 'Calapan City', 'count' => 1], ['name' => 'Naujan', 'count' => 1]]],
+    ]]);
+});
+
 it('ignores scheduled future prices in "price from"', function () {
     $property = listed(overrides: ['units' => ['count' => 1, 'rent_centavos' => 200000]]);
     app(PriceBook::class)->set($property->units()->first(), 100000, '2026-12-01', $property->owner);

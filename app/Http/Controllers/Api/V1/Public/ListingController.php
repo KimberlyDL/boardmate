@@ -31,7 +31,8 @@ class ListingController extends Controller
      * places with a free unit come first. Prices in centavos. `bbox` =
      * south,west,north,east (map view). `near` = lat,lng adds `distance_m`
      * (straight line) and allows `sort=nearest`. `available=1` hides full
-     * places; `who_can_stay` = female or male. `per_page` up to 200 (map).
+     * places; `who_can_stay` = female or male. `province` and `city` match
+     * exactly (see `listings/places`). `per_page` up to 200 (map).
      *
      * @unauthenticated
      */
@@ -45,6 +46,8 @@ class ListingController extends Controller
             'includes' => ['nullable', 'array'],
             'includes.*' => [Rule::in(ListingSearch::INCLUDABLE)],
             'who' => ['nullable', 'string', 'max:60'],
+            'province' => ['nullable', 'string', 'max:80'],
+            'city' => ['nullable', 'string', 'max:80'],
             'who_can_stay' => ['nullable', Rule::in([WhoCanStay::Female->value, WhoCanStay::Male->value])],
             'available' => ['nullable', 'boolean'],
             'near' => ['nullable', 'required_if:sort,nearest', 'string', 'regex:/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/'],
@@ -70,6 +73,19 @@ class ListingController extends Controller
             collect($page->items())->map(fn ($p) => new ListingResource($p)),
             meta: ['current_page' => $page->currentPage(), 'last_page' => $page->lastPage(), 'total' => $page->total()],
         );
+    }
+
+    /**
+     * Places with listings
+     *
+     * The provinces and cities that have places on the Finder, with how many,
+     * for the location filters (`province` and `city` on the search).
+     *
+     * @unauthenticated
+     */
+    public function places(): JsonResponse
+    {
+        return ApiResponse::ok($this->search->places());
     }
 
     /**

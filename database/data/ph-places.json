@@ -1,0 +1,11778 @@
+{
+"source": "PSGC (Philippine Statistics Authority) via psgc.cloud",
+"fetched": "2026-11-07",
+"provinces": [
+{
+"code": "1400100000",
+"name": "Abra"
+},
+{
+"code": "1600200000",
+"name": "Agusan del Norte"
+},
+{
+"code": "1600300000",
+"name": "Agusan del Sur"
+},
+{
+"code": "0600400000",
+"name": "Aklan"
+},
+{
+"code": "0500500000",
+"name": "Albay"
+},
+{
+"code": "0600600000",
+"name": "Antique"
+},
+{
+"code": "1408100000",
+"name": "Apayao"
+},
+{
+"code": "0307700000",
+"name": "Aurora"
+},
+{
+"code": "1900700000",
+"name": "Basilan"
+},
+{
+"code": "0300800000",
+"name": "Bataan"
+},
+{
+"code": "0200900000",
+"name": "Batanes"
+},
+{
+"code": "0401000000",
+"name": "Batangas"
+},
+{
+"code": "1401100000",
+"name": "Benguet"
+},
+{
+"code": "0807800000",
+"name": "Biliran"
+},
+{
+"code": "0701200000",
+"name": "Bohol"
+},
+{
+"code": "1001300000",
+"name": "Bukidnon"
+},
+{
+"code": "0301400000",
+"name": "Bulacan"
+},
+{
+"code": "0201500000",
+"name": "Cagayan"
+},
+{
+"code": "0501600000",
+"name": "Camarines Norte"
+},
+{
+"code": "0501700000",
+"name": "Camarines Sur"
+},
+{
+"code": "1001800000",
+"name": "Camiguin"
+},
+{
+"code": "0601900000",
+"name": "Capiz"
+},
+{
+"code": "0502000000",
+"name": "Catanduanes"
+},
+{
+"code": "0402100000",
+"name": "Cavite"
+},
+{
+"code": "0702200000",
+"name": "Cebu"
+},
+{
+"code": "1204700000",
+"name": "Cotabato"
+},
+{
+"code": "1108600000",
+"name": "Davao Occidental"
+},
+{
+"code": "1102500000",
+"name": "Davao Oriental"
+},
+{
+"code": "1108200000",
+"name": "Davao de Oro"
+},
+{
+"code": "1102300000",
+"name": "Davao del Norte"
+},
+{
+"code": "1102400000",
+"name": "Davao del Sur"
+},
+{
+"code": "1608500000",
+"name": "Dinagat Islands"
+},
+{
+"code": "0802600000",
+"name": "Eastern Samar"
+},
+{
+"code": "0607900000",
+"name": "Guimaras"
+},
+{
+"code": "1402700000",
+"name": "Ifugao"
+},
+{
+"code": "0102800000",
+"name": "Ilocos Norte"
+},
+{
+"code": "0102900000",
+"name": "Ilocos Sur"
+},
+{
+"code": "0603000000",
+"name": "Iloilo"
+},
+{
+"code": "0203100000",
+"name": "Isabela"
+},
+{
+"code": "1403200000",
+"name": "Kalinga"
+},
+{
+"code": "0103300000",
+"name": "La Union"
+},
+{
+"code": "0403400000",
+"name": "Laguna"
+},
+{
+"code": "1003500000",
+"name": "Lanao del Norte"
+},
+{
+"code": "1903600000",
+"name": "Lanao del Sur"
+},
+{
+"code": "0803700000",
+"name": "Leyte"
+},
+{
+"code": "1908700000",
+"name": "Maguindanao del Norte"
+},
+{
+"code": "1908800000",
+"name": "Maguindanao del Sur"
+},
+{
+"code": "1704000000",
+"name": "Marinduque"
+},
+{
+"code": "0504100000",
+"name": "Masbate"
+},
+{
+"code": "1300000000",
+"name": "Metro Manila"
+},
+{
+"code": "1004200000",
+"name": "Misamis Occidental"
+},
+{
+"code": "1004300000",
+"name": "Misamis Oriental"
+},
+{
+"code": "1404400000",
+"name": "Mountain Province"
+},
+{
+"code": "0604500000",
+"name": "Negros Occidental"
+},
+{
+"code": "0704600000",
+"name": "Negros Oriental"
+},
+{
+"code": "0804800000",
+"name": "Northern Samar"
+},
+{
+"code": "0304900000",
+"name": "Nueva Ecija"
+},
+{
+"code": "0205000000",
+"name": "Nueva Vizcaya"
+},
+{
+"code": "1705100000",
+"name": "Occidental Mindoro"
+},
+{
+"code": "1705200000",
+"name": "Oriental Mindoro"
+},
+{
+"code": "1705300000",
+"name": "Palawan"
+},
+{
+"code": "0305400000",
+"name": "Pampanga"
+},
+{
+"code": "0105500000",
+"name": "Pangasinan"
+},
+{
+"code": "0405600000",
+"name": "Quezon"
+},
+{
+"code": "0205700000",
+"name": "Quirino"
+},
+{
+"code": "0405800000",
+"name": "Rizal"
+},
+{
+"code": "1705900000",
+"name": "Romblon"
+},
+{
+"code": "0806000000",
+"name": "Samar"
+},
+{
+"code": "1208000000",
+"name": "Sarangani"
+},
+{
+"code": "0706100000",
+"name": "Siquijor"
+},
+{
+"code": "0506200000",
+"name": "Sorsogon"
+},
+{
+"code": "1206300000",
+"name": "South Cotabato"
+},
+{
+"code": "0806400000",
+"name": "Southern Leyte"
+},
+{
+"code": "1206500000",
+"name": "Sultan Kudarat"
+},
+{
+"code": "1906600000",
+"name": "Sulu"
+},
+{
+"code": "1606700000",
+"name": "Surigao del Norte"
+},
+{
+"code": "1606800000",
+"name": "Surigao del Sur"
+},
+{
+"code": "0306900000",
+"name": "Tarlac"
+},
+{
+"code": "1907000000",
+"name": "Tawi-Tawi"
+},
+{
+"code": "0307100000",
+"name": "Zambales"
+},
+{
+"code": "0908300000",
+"name": "Zamboanga Sibugay"
+},
+{
+"code": "0907200000",
+"name": "Zamboanga del Norte"
+},
+{
+"code": "0907300000",
+"name": "Zamboanga del Sur"
+}
+],
+"cities": [
+{
+"code": "0102801000",
+"name": "Adams",
+"official": "Adams",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102802000",
+"name": "Bacarra",
+"official": "Bacarra",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102803000",
+"name": "Badoc",
+"official": "Badoc",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102804000",
+"name": "Bangui",
+"official": "Bangui",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102811000",
+"name": "Banna",
+"official": "Banna",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102805000",
+"name": "Batac City",
+"official": "City of Batac",
+"city": true,
+"province": "0102800000"
+},
+{
+"code": "0102806000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102807000",
+"name": "Carasi",
+"official": "Carasi",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102808000",
+"name": "Currimao",
+"official": "Currimao",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102809000",
+"name": "Dingras",
+"official": "Dingras",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102810000",
+"name": "Dumalneg",
+"official": "Dumalneg",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102812000",
+"name": "Laoag City",
+"official": "City of Laoag",
+"city": true,
+"province": "0102800000"
+},
+{
+"code": "0102813000",
+"name": "Marcos",
+"official": "Marcos",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102814000",
+"name": "Nueva Era",
+"official": "Nueva Era",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102815000",
+"name": "Pagudpud",
+"official": "Pagudpud",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102816000",
+"name": "Paoay",
+"official": "Paoay",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102817000",
+"name": "Pasuquin",
+"official": "Pasuquin",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102818000",
+"name": "Piddig",
+"official": "Piddig",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102819000",
+"name": "Pinili",
+"official": "Pinili",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102820000",
+"name": "San Nicolas",
+"official": "San Nicolas",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102821000",
+"name": "Sarrat",
+"official": "Sarrat",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102822000",
+"name": "Solsona",
+"official": "Solsona",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102823000",
+"name": "Vintar",
+"official": "Vintar",
+"city": false,
+"province": "0102800000"
+},
+{
+"code": "0102901000",
+"name": "Alilem",
+"official": "Alilem",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102902000",
+"name": "Banayoyo",
+"official": "Banayoyo",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102903000",
+"name": "Bantay",
+"official": "Bantay",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102904000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102905000",
+"name": "Cabugao",
+"official": "Cabugao",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102906000",
+"name": "Candon City",
+"official": "City of Candon",
+"city": true,
+"province": "0102900000"
+},
+{
+"code": "0102907000",
+"name": "Caoayan",
+"official": "Caoayan",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102908000",
+"name": "Cervantes",
+"official": "Cervantes",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102909000",
+"name": "Galimuyod",
+"official": "Galimuyod",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102910000",
+"name": "Gregorio del Pilar",
+"official": "Gregorio del Pilar",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102911000",
+"name": "Lidlidda",
+"official": "Lidlidda",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102912000",
+"name": "Magsingal",
+"official": "Magsingal",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102913000",
+"name": "Nagbukel",
+"official": "Nagbukel",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102914000",
+"name": "Narvacan",
+"official": "Narvacan",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102915000",
+"name": "Quirino",
+"official": "Quirino",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102916000",
+"name": "Salcedo",
+"official": "Salcedo",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102917000",
+"name": "San Emilio",
+"official": "San Emilio",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102918000",
+"name": "San Esteban",
+"official": "San Esteban",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102919000",
+"name": "San Ildefonso",
+"official": "San Ildefonso",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102920000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102921000",
+"name": "San Vicente",
+"official": "San Vicente",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102922000",
+"name": "Santa",
+"official": "Santa",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102923000",
+"name": "Santa Catalina",
+"official": "Santa Catalina",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102924000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102925000",
+"name": "Santa Lucia",
+"official": "Santa Lucia",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102926000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102927000",
+"name": "Santiago",
+"official": "Santiago",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102928000",
+"name": "Santo Domingo",
+"official": "Santo Domingo",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102929000",
+"name": "Sigay",
+"official": "Sigay",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102930000",
+"name": "Sinait",
+"official": "Sinait",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102931000",
+"name": "Sugpon",
+"official": "Sugpon",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102932000",
+"name": "Suyo",
+"official": "Suyo",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102933000",
+"name": "Tagudin",
+"official": "Tagudin",
+"city": false,
+"province": "0102900000"
+},
+{
+"code": "0102934000",
+"name": "Vigan City",
+"official": "City of Vigan",
+"city": true,
+"province": "0102900000"
+},
+{
+"code": "0103301000",
+"name": "Agoo",
+"official": "Agoo",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103302000",
+"name": "Aringay",
+"official": "Aringay",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103303000",
+"name": "Bacnotan",
+"official": "Bacnotan",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103304000",
+"name": "Bagulin",
+"official": "Bagulin",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103305000",
+"name": "Balaoan",
+"official": "Balaoan",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103306000",
+"name": "Bangar",
+"official": "Bangar",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103307000",
+"name": "Bauang",
+"official": "Bauang",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103308000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103309000",
+"name": "Caba",
+"official": "Caba",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103310000",
+"name": "Luna",
+"official": "Luna",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103311000",
+"name": "Naguilian",
+"official": "Naguilian",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103312000",
+"name": "Pugo",
+"official": "Pugo",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103313000",
+"name": "Rosario",
+"official": "Rosario",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103314000",
+"name": "San Fernando City",
+"official": "City of San Fernando",
+"city": true,
+"province": "0103300000"
+},
+{
+"code": "0103315000",
+"name": "San Gabriel",
+"official": "San Gabriel",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103316000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103317000",
+"name": "Santo Tomas",
+"official": "Santo Tomas",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103318000",
+"name": "Santol",
+"official": "Santol",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103319000",
+"name": "Sudipen",
+"official": "Sudipen",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0103320000",
+"name": "Tubao",
+"official": "Tubao",
+"city": false,
+"province": "0103300000"
+},
+{
+"code": "0105501000",
+"name": "Agno",
+"official": "Agno",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105502000",
+"name": "Aguilar",
+"official": "Aguilar",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105503000",
+"name": "Alaminos City",
+"official": "City of Alaminos",
+"city": true,
+"province": "0105500000"
+},
+{
+"code": "0105504000",
+"name": "Alcala",
+"official": "Alcala",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105505000",
+"name": "Anda",
+"official": "Anda",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105506000",
+"name": "Asingan",
+"official": "Asingan",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105507000",
+"name": "Balungao",
+"official": "Balungao",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105508000",
+"name": "Bani",
+"official": "Bani",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105509000",
+"name": "Basista",
+"official": "Basista",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105510000",
+"name": "Bautista",
+"official": "Bautista",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105511000",
+"name": "Bayambang",
+"official": "Bayambang",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105512000",
+"name": "Binalonan",
+"official": "Binalonan",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105513000",
+"name": "Binmaley",
+"official": "Binmaley",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105514000",
+"name": "Bolinao",
+"official": "Bolinao",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105515000",
+"name": "Bugallon",
+"official": "Bugallon",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105516000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105517000",
+"name": "Calasiao",
+"official": "Calasiao",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105518000",
+"name": "Dagupan City",
+"official": "City of Dagupan",
+"city": true,
+"province": "0105500000"
+},
+{
+"code": "0105519000",
+"name": "Dasol",
+"official": "Dasol",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105520000",
+"name": "Infanta",
+"official": "Infanta",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105521000",
+"name": "Labrador",
+"official": "Labrador",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105548000",
+"name": "Laoac",
+"official": "Laoac",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105522000",
+"name": "Lingayen",
+"official": "Lingayen",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105523000",
+"name": "Mabini",
+"official": "Mabini",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105524000",
+"name": "Malasiqui",
+"official": "Malasiqui",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105525000",
+"name": "Manaoag",
+"official": "Manaoag",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105526000",
+"name": "Mangaldan",
+"official": "Mangaldan",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105527000",
+"name": "Mangatarem",
+"official": "Mangatarem",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105528000",
+"name": "Mapandan",
+"official": "Mapandan",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105529000",
+"name": "Natividad",
+"official": "Natividad",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105530000",
+"name": "Pozorrubio",
+"official": "Pozorrubio",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105531000",
+"name": "Rosales",
+"official": "Rosales",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105532000",
+"name": "San Carlos City",
+"official": "City of San Carlos",
+"city": true,
+"province": "0105500000"
+},
+{
+"code": "0105533000",
+"name": "San Fabian",
+"official": "San Fabian",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105534000",
+"name": "San Jacinto",
+"official": "San Jacinto",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105535000",
+"name": "San Manuel",
+"official": "San Manuel",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105536000",
+"name": "San Nicolas",
+"official": "San Nicolas",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105537000",
+"name": "San Quintin",
+"official": "San Quintin",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105538000",
+"name": "Santa Barbara",
+"official": "Santa Barbara",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105539000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105540000",
+"name": "Santo Tomas",
+"official": "Santo Tomas",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105541000",
+"name": "Sison",
+"official": "Sison",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105542000",
+"name": "Sual",
+"official": "Sual",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105543000",
+"name": "Tayug",
+"official": "Tayug",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105544000",
+"name": "Umingan",
+"official": "Umingan",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105545000",
+"name": "Urbiztondo",
+"official": "Urbiztondo",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0105546000",
+"name": "Urdaneta City",
+"official": "City of Urdaneta",
+"city": true,
+"province": "0105500000"
+},
+{
+"code": "0105547000",
+"name": "Villasis",
+"official": "Villasis",
+"city": false,
+"province": "0105500000"
+},
+{
+"code": "0200901000",
+"name": "Basco",
+"official": "Basco",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0200902000",
+"name": "Itbayat",
+"official": "Itbayat",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0200903000",
+"name": "Ivana",
+"official": "Ivana",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0200904000",
+"name": "Mahatao",
+"official": "Mahatao",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0200905000",
+"name": "Sabtang",
+"official": "Sabtang",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0200906000",
+"name": "Uyugan",
+"official": "Uyugan",
+"city": false,
+"province": "0200900000"
+},
+{
+"code": "0201501000",
+"name": "Abulug",
+"official": "Abulug",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201502000",
+"name": "Alcala",
+"official": "Alcala",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201503000",
+"name": "Allacapan",
+"official": "Allacapan",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201504000",
+"name": "Amulung",
+"official": "Amulung",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201505000",
+"name": "Aparri",
+"official": "Aparri",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201506000",
+"name": "Baggao",
+"official": "Baggao",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201507000",
+"name": "Ballesteros",
+"official": "Ballesteros",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201508000",
+"name": "Buguey",
+"official": "Buguey",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201509000",
+"name": "Calayan",
+"official": "Calayan",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201510000",
+"name": "Camalaniugan",
+"official": "Camalaniugan",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201511000",
+"name": "Claveria",
+"official": "Claveria",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201512000",
+"name": "Enrile",
+"official": "Enrile",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201513000",
+"name": "Gattaran",
+"official": "Gattaran",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201514000",
+"name": "Gonzaga",
+"official": "Gonzaga",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201515000",
+"name": "Iguig",
+"official": "Iguig",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201516000",
+"name": "Lal-Lo",
+"official": "Lal-Lo",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201517000",
+"name": "Lasam",
+"official": "Lasam",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201518000",
+"name": "Pamplona",
+"official": "Pamplona",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201519000",
+"name": "Peñablanca",
+"official": "Peñablanca",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201520000",
+"name": "Piat",
+"official": "Piat",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201521000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201522000",
+"name": "Sanchez-Mira",
+"official": "Sanchez-Mira",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201523000",
+"name": "Santa Ana",
+"official": "Santa Ana",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201524000",
+"name": "Santa Praxedes",
+"official": "Santa Praxedes",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201525000",
+"name": "Santa Teresita",
+"official": "Santa Teresita",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201526000",
+"name": "Santo Niño",
+"official": "Santo Niño",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201527000",
+"name": "Solana",
+"official": "Solana",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201528000",
+"name": "Tuao",
+"official": "Tuao",
+"city": false,
+"province": "0201500000"
+},
+{
+"code": "0201529000",
+"name": "Tuguegarao City",
+"official": "Tuguegarao City",
+"city": true,
+"province": "0201500000"
+},
+{
+"code": "0203101000",
+"name": "Alicia",
+"official": "Alicia",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203102000",
+"name": "Angadanan",
+"official": "Angadanan",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203103000",
+"name": "Aurora",
+"official": "Aurora",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203104000",
+"name": "Benito Soliven",
+"official": "Benito Soliven",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203105000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203106000",
+"name": "Cabagan",
+"official": "Cabagan",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203107000",
+"name": "Cabatuan",
+"official": "Cabatuan",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203108000",
+"name": "Cauayan City",
+"official": "City of Cauayan",
+"city": true,
+"province": "0203100000"
+},
+{
+"code": "0203109000",
+"name": "Cordon",
+"official": "Cordon",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203118000",
+"name": "Delfin Albano",
+"official": "Delfin Albano",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203110000",
+"name": "Dinapigue",
+"official": "Dinapigue",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203111000",
+"name": "Divilacan",
+"official": "Divilacan",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203112000",
+"name": "Echague",
+"official": "Echague",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203113000",
+"name": "Gamu",
+"official": "Gamu",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203114000",
+"name": "Ilagan City",
+"official": "City of Ilagan",
+"city": true,
+"province": "0203100000"
+},
+{
+"code": "0203115000",
+"name": "Jones",
+"official": "Jones",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203116000",
+"name": "Luna",
+"official": "Luna",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203117000",
+"name": "Maconacon",
+"official": "Maconacon",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203119000",
+"name": "Mallig",
+"official": "Mallig",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203120000",
+"name": "Naguilian",
+"official": "Naguilian",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203121000",
+"name": "Palanan",
+"official": "Palanan",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203122000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203123000",
+"name": "Quirino",
+"official": "Quirino",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203124000",
+"name": "Ramon",
+"official": "Ramon",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203125000",
+"name": "Reina Mercedes",
+"official": "Reina Mercedes",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203126000",
+"name": "Roxas",
+"official": "Roxas",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203127000",
+"name": "San Agustin",
+"official": "San Agustin",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203128000",
+"name": "San Guillermo",
+"official": "San Guillermo",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203129000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203130000",
+"name": "San Manuel",
+"official": "San Manuel",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203131000",
+"name": "San Mariano",
+"official": "San Mariano",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203132000",
+"name": "San Mateo",
+"official": "San Mateo",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203133000",
+"name": "San Pablo",
+"official": "San Pablo",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203134000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203135000",
+"name": "Santiago City",
+"official": "City of Santiago",
+"city": true,
+"province": "0203100000"
+},
+{
+"code": "0203136000",
+"name": "Santo Tomas",
+"official": "Santo Tomas",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0203137000",
+"name": "Tumauini",
+"official": "Tumauini",
+"city": false,
+"province": "0203100000"
+},
+{
+"code": "0205015000",
+"name": "Alfonso Castaneda",
+"official": "Alfonso Castaneda",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205001000",
+"name": "Ambaguio",
+"official": "Ambaguio",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205002000",
+"name": "Aritao",
+"official": "Aritao",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205003000",
+"name": "Bagabag",
+"official": "Bagabag",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205004000",
+"name": "Bambang",
+"official": "Bambang",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205005000",
+"name": "Bayombong",
+"official": "Bayombong",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205006000",
+"name": "Diadi",
+"official": "Diadi",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205007000",
+"name": "Dupax del Norte",
+"official": "Dupax del Norte",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205008000",
+"name": "Dupax del Sur",
+"official": "Dupax del Sur",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205009000",
+"name": "Kasibu",
+"official": "Kasibu",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205010000",
+"name": "Kayapa",
+"official": "Kayapa",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205011000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205012000",
+"name": "Santa Fe",
+"official": "Santa Fe",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205013000",
+"name": "Solano",
+"official": "Solano",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205014000",
+"name": "Villaverde",
+"official": "Villaverde",
+"city": false,
+"province": "0205000000"
+},
+{
+"code": "0205701000",
+"name": "Aglipay",
+"official": "Aglipay",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0205702000",
+"name": "Cabarroguis",
+"official": "Cabarroguis",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0205703000",
+"name": "Diffun",
+"official": "Diffun",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0205704000",
+"name": "Maddela",
+"official": "Maddela",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0205706000",
+"name": "Nagtipunan",
+"official": "Nagtipunan",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0205705000",
+"name": "Saguday",
+"official": "Saguday",
+"city": false,
+"province": "0205700000"
+},
+{
+"code": "0300801000",
+"name": "Abucay",
+"official": "Abucay",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300802000",
+"name": "Bagac",
+"official": "Bagac",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300803000",
+"name": "Balanga City",
+"official": "City of Balanga",
+"city": true,
+"province": "0300800000"
+},
+{
+"code": "0300804000",
+"name": "Dinalupihan",
+"official": "Dinalupihan",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300805000",
+"name": "Hermosa",
+"official": "Hermosa",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300806000",
+"name": "Limay",
+"official": "Limay",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300807000",
+"name": "Mariveles",
+"official": "Mariveles",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300808000",
+"name": "Morong",
+"official": "Morong",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300809000",
+"name": "Orani",
+"official": "Orani",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300810000",
+"name": "Orion",
+"official": "Orion",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300811000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0300812000",
+"name": "Samal",
+"official": "Samal",
+"city": false,
+"province": "0300800000"
+},
+{
+"code": "0301401000",
+"name": "Angat",
+"official": "Angat",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301402000",
+"name": "Balagtas",
+"official": "Balagtas",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301403000",
+"name": "Baliwag City",
+"official": "City of Baliwag",
+"city": true,
+"province": "0301400000"
+},
+{
+"code": "0301404000",
+"name": "Bocaue",
+"official": "Bocaue",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301405000",
+"name": "Bulacan",
+"official": "Bulacan",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301406000",
+"name": "Bustos",
+"official": "Bustos",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301407000",
+"name": "Calumpit",
+"official": "Calumpit",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301424000",
+"name": "Doña Remedios Trinidad",
+"official": "Doña Remedios Trinidad",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301408000",
+"name": "Guiguinto",
+"official": "Guiguinto",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301409000",
+"name": "Hagonoy",
+"official": "Hagonoy",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301410000",
+"name": "Malolos City",
+"official": "City of Malolos",
+"city": true,
+"province": "0301400000"
+},
+{
+"code": "0301411000",
+"name": "Marilao",
+"official": "Marilao",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301412000",
+"name": "Meycauayan City",
+"official": "City of Meycauayan",
+"city": true,
+"province": "0301400000"
+},
+{
+"code": "0301413000",
+"name": "Norzagaray",
+"official": "Norzagaray",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301414000",
+"name": "Obando",
+"official": "Obando",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301415000",
+"name": "Pandi",
+"official": "Pandi",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301416000",
+"name": "Paombong",
+"official": "Paombong",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301417000",
+"name": "Plaridel",
+"official": "Plaridel",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301418000",
+"name": "Pulilan",
+"official": "Pulilan",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301419000",
+"name": "San Ildefonso",
+"official": "San Ildefonso",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301420000",
+"name": "San Jose del Monte City",
+"official": "City of San Jose del Monte",
+"city": true,
+"province": "0301400000"
+},
+{
+"code": "0301421000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301422000",
+"name": "San Rafael",
+"official": "San Rafael",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0301423000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "0301400000"
+},
+{
+"code": "0304901000",
+"name": "Aliaga",
+"official": "Aliaga",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304902000",
+"name": "Bongabon",
+"official": "Bongabon",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304903000",
+"name": "Cabanatuan City",
+"official": "City of Cabanatuan",
+"city": true,
+"province": "0304900000"
+},
+{
+"code": "0304904000",
+"name": "Cabiao",
+"official": "Cabiao",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304905000",
+"name": "Carranglan",
+"official": "Carranglan",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304906000",
+"name": "Cuyapo",
+"official": "Cuyapo",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304907000",
+"name": "Gabaldon",
+"official": "Gabaldon",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304908000",
+"name": "Gapan City",
+"official": "City of Gapan",
+"city": true,
+"province": "0304900000"
+},
+{
+"code": "0304909000",
+"name": "General Mamerto Natividad",
+"official": "General Mamerto Natividad",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304910000",
+"name": "General Tinio",
+"official": "General Tinio",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304911000",
+"name": "Guimba",
+"official": "Guimba",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304912000",
+"name": "Jaen",
+"official": "Jaen",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304913000",
+"name": "Laur",
+"official": "Laur",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304914000",
+"name": "Licab",
+"official": "Licab",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304915000",
+"name": "Llanera",
+"official": "Llanera",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304916000",
+"name": "Lupao",
+"official": "Lupao",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304917000",
+"name": "Muñoz City",
+"official": "Science City of Muñoz",
+"city": true,
+"province": "0304900000"
+},
+{
+"code": "0304918000",
+"name": "Nampicuan",
+"official": "Nampicuan",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304919000",
+"name": "Palayan City",
+"official": "City of Palayan",
+"city": true,
+"province": "0304900000"
+},
+{
+"code": "0304920000",
+"name": "Pantabangan",
+"official": "Pantabangan",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304921000",
+"name": "Peñaranda",
+"official": "Peñaranda",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304922000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304923000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304924000",
+"name": "San Antonio",
+"official": "San Antonio",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304925000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304926000",
+"name": "San Jose City",
+"official": "San Jose City",
+"city": true,
+"province": "0304900000"
+},
+{
+"code": "0304927000",
+"name": "San Leonardo",
+"official": "San Leonardo",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304928000",
+"name": "Santa Rosa",
+"official": "Santa Rosa",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304929000",
+"name": "Santo Domingo",
+"official": "Santo Domingo",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304930000",
+"name": "Talavera",
+"official": "Talavera",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304931000",
+"name": "Talugtug",
+"official": "Talugtug",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0304932000",
+"name": "Zaragoza",
+"official": "Zaragoza",
+"city": false,
+"province": "0304900000"
+},
+{
+"code": "0330100000",
+"name": "Angeles City",
+"official": "City of Angeles",
+"city": true,
+"province": "0305400000"
+},
+{
+"code": "0305402000",
+"name": "Apalit",
+"official": "Apalit",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305403000",
+"name": "Arayat",
+"official": "Arayat",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305404000",
+"name": "Bacolor",
+"official": "Bacolor",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305405000",
+"name": "Candaba",
+"official": "Candaba",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305406000",
+"name": "Floridablanca",
+"official": "Floridablanca",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305407000",
+"name": "Guagua",
+"official": "Guagua",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305408000",
+"name": "Lubao",
+"official": "Lubao",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305409000",
+"name": "Mabalacat City",
+"official": "Mabalacat City",
+"city": true,
+"province": "0305400000"
+},
+{
+"code": "0305410000",
+"name": "Macabebe",
+"official": "Macabebe",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305411000",
+"name": "Magalang",
+"official": "Magalang",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305412000",
+"name": "Masantol",
+"official": "Masantol",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305413000",
+"name": "Mexico",
+"official": "Mexico",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305414000",
+"name": "Minalin",
+"official": "Minalin",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305415000",
+"name": "Porac",
+"official": "Porac",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305416000",
+"name": "San Fernando City",
+"official": "City of San Fernando",
+"city": true,
+"province": "0305400000"
+},
+{
+"code": "0305417000",
+"name": "San Luis",
+"official": "San Luis",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305418000",
+"name": "San Simon",
+"official": "San Simon",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305419000",
+"name": "Santa Ana",
+"official": "Santa Ana",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305420000",
+"name": "Santa Rita",
+"official": "Santa Rita",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305422000",
+"name": "Sasmuan",
+"official": "Sasmuan",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0305421000",
+"name": "Sto. Tomas",
+"official": "Sto. Tomas",
+"city": false,
+"province": "0305400000"
+},
+{
+"code": "0306901000",
+"name": "Anao",
+"official": "Anao",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306902000",
+"name": "Bamban",
+"official": "Bamban",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306903000",
+"name": "Camiling",
+"official": "Camiling",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306904000",
+"name": "Capas",
+"official": "Capas",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306905000",
+"name": "Concepcion",
+"official": "Concepcion",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306906000",
+"name": "Gerona",
+"official": "Gerona",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306907000",
+"name": "La Paz",
+"official": "La Paz",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306908000",
+"name": "Mayantoc",
+"official": "Mayantoc",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306909000",
+"name": "Moncada",
+"official": "Moncada",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306910000",
+"name": "Paniqui",
+"official": "Paniqui",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306911000",
+"name": "Pura",
+"official": "Pura",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306912000",
+"name": "Ramos",
+"official": "Ramos",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306913000",
+"name": "San Clemente",
+"official": "San Clemente",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306918000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306914000",
+"name": "San Manuel",
+"official": "San Manuel",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306915000",
+"name": "Santa Ignacia",
+"official": "Santa Ignacia",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0306916000",
+"name": "Tarlac City",
+"official": "City of Tarlac",
+"city": true,
+"province": "0306900000"
+},
+{
+"code": "0306917000",
+"name": "Victoria",
+"official": "Victoria",
+"city": false,
+"province": "0306900000"
+},
+{
+"code": "0307101000",
+"name": "Botolan",
+"official": "Botolan",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307102000",
+"name": "Cabangan",
+"official": "Cabangan",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307103000",
+"name": "Candelaria",
+"official": "Candelaria",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307104000",
+"name": "Castillejos",
+"official": "Castillejos",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307105000",
+"name": "Iba",
+"official": "Iba",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307106000",
+"name": "Masinloc",
+"official": "Masinloc",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0331400000",
+"name": "Olongapo City",
+"official": "City of Olongapo",
+"city": true,
+"province": "0307100000"
+},
+{
+"code": "0307108000",
+"name": "Palauig",
+"official": "Palauig",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307109000",
+"name": "San Antonio",
+"official": "San Antonio",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307110000",
+"name": "San Felipe",
+"official": "San Felipe",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307111000",
+"name": "San Marcelino",
+"official": "San Marcelino",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307112000",
+"name": "San Narciso",
+"official": "San Narciso",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307113000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307114000",
+"name": "Subic",
+"official": "Subic",
+"city": false,
+"province": "0307100000"
+},
+{
+"code": "0307701000",
+"name": "Baler",
+"official": "Baler",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307702000",
+"name": "Casiguran",
+"official": "Casiguran",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307703000",
+"name": "Dilasag",
+"official": "Dilasag",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307704000",
+"name": "Dinalungan",
+"official": "Dinalungan",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307705000",
+"name": "Dingalan",
+"official": "Dingalan",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307706000",
+"name": "Dipaculao",
+"official": "Dipaculao",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307707000",
+"name": "Maria Aurora",
+"official": "Maria Aurora",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0307708000",
+"name": "San Luis",
+"official": "San Luis",
+"city": false,
+"province": "0307700000"
+},
+{
+"code": "0401001000",
+"name": "Agoncillo",
+"official": "Agoncillo",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401002000",
+"name": "Alitagtag",
+"official": "Alitagtag",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401003000",
+"name": "Balayan",
+"official": "Balayan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401004000",
+"name": "Balete",
+"official": "Balete",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401005000",
+"name": "Batangas City",
+"official": "Batangas City",
+"city": true,
+"province": "0401000000"
+},
+{
+"code": "0401006000",
+"name": "Bauan",
+"official": "Bauan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401007000",
+"name": "Calaca City",
+"official": "City of Calaca",
+"city": true,
+"province": "0401000000"
+},
+{
+"code": "0401008000",
+"name": "Calatagan",
+"official": "Calatagan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401009000",
+"name": "Cuenca",
+"official": "Cuenca",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401010000",
+"name": "Ibaan",
+"official": "Ibaan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401011000",
+"name": "Laurel",
+"official": "Laurel",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401012000",
+"name": "Lemery",
+"official": "Lemery",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401013000",
+"name": "Lian",
+"official": "Lian",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401014000",
+"name": "Lipa City",
+"official": "City of Lipa",
+"city": true,
+"province": "0401000000"
+},
+{
+"code": "0401015000",
+"name": "Lobo",
+"official": "Lobo",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401016000",
+"name": "Mabini",
+"official": "Mabini",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401017000",
+"name": "Malvar",
+"official": "Malvar",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401018000",
+"name": "Mataasnakahoy",
+"official": "Mataasnakahoy",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401019000",
+"name": "Nasugbu",
+"official": "Nasugbu",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401020000",
+"name": "Padre Garcia",
+"official": "Padre Garcia",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401021000",
+"name": "Rosario",
+"official": "Rosario",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401022000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401023000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401024000",
+"name": "San Luis",
+"official": "San Luis",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401025000",
+"name": "San Nicolas",
+"official": "San Nicolas",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401026000",
+"name": "San Pascual",
+"official": "San Pascual",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401027000",
+"name": "Santa Teresita",
+"official": "Santa Teresita",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401028000",
+"name": "Sto. Tomas City",
+"official": "City of Sto. Tomas",
+"city": true,
+"province": "0401000000"
+},
+{
+"code": "0401029000",
+"name": "Taal",
+"official": "Taal",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401030000",
+"name": "Talisay",
+"official": "Talisay",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401031000",
+"name": "Tanauan City",
+"official": "City of Tanauan",
+"city": true,
+"province": "0401000000"
+},
+{
+"code": "0401032000",
+"name": "Taysan",
+"official": "Taysan",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401033000",
+"name": "Tingloy",
+"official": "Tingloy",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0401034000",
+"name": "Tuy",
+"official": "Tuy",
+"city": false,
+"province": "0401000000"
+},
+{
+"code": "0402101000",
+"name": "Alfonso",
+"official": "Alfonso",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402102000",
+"name": "Amadeo",
+"official": "Amadeo",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402103000",
+"name": "Bacoor City",
+"official": "City of Bacoor",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402104000",
+"name": "Carmona",
+"official": "Carmona",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402105000",
+"name": "Cavite City",
+"official": "City of Cavite",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402106000",
+"name": "Dasmariñas City",
+"official": "City of Dasmariñas",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402123000",
+"name": "Gen. Mariano Alvarez",
+"official": "Gen. Mariano Alvarez",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402107000",
+"name": "General Emilio Aguinaldo",
+"official": "General Emilio Aguinaldo",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402108000",
+"name": "General Trias City",
+"official": "City of General Trias",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402109000",
+"name": "Imus City",
+"official": "City of Imus",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402110000",
+"name": "Indang",
+"official": "Indang",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402111000",
+"name": "Kawit",
+"official": "Kawit",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402112000",
+"name": "Magallanes",
+"official": "Magallanes",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402113000",
+"name": "Maragondon",
+"official": "Maragondon",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402114000",
+"name": "Mendez",
+"official": "Mendez",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402115000",
+"name": "Naic",
+"official": "Naic",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402116000",
+"name": "Noveleta",
+"official": "Noveleta",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402117000",
+"name": "Rosario",
+"official": "Rosario",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402118000",
+"name": "Silang",
+"official": "Silang",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402119000",
+"name": "Tagaytay City",
+"official": "City of Tagaytay",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0402120000",
+"name": "Tanza",
+"official": "Tanza",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402121000",
+"name": "Ternate",
+"official": "Ternate",
+"city": false,
+"province": "0402100000"
+},
+{
+"code": "0402122000",
+"name": "Trece Martires City",
+"official": "City of Trece Martires",
+"city": true,
+"province": "0402100000"
+},
+{
+"code": "0403401000",
+"name": "Alaminos",
+"official": "Alaminos",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403402000",
+"name": "Bay",
+"official": "Bay",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403403000",
+"name": "Biñan City",
+"official": "City of Biñan",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403404000",
+"name": "Cabuyao City",
+"official": "City of Cabuyao",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403405000",
+"name": "Calamba City",
+"official": "City of Calamba",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403406000",
+"name": "Calauan",
+"official": "Calauan",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403407000",
+"name": "Cavinti",
+"official": "Cavinti",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403408000",
+"name": "Famy",
+"official": "Famy",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403409000",
+"name": "Kalayaan",
+"official": "Kalayaan",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403410000",
+"name": "Liliw",
+"official": "Liliw",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403411000",
+"name": "Los Baños",
+"official": "Los Baños",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403412000",
+"name": "Luisiana",
+"official": "Luisiana",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403413000",
+"name": "Lumban",
+"official": "Lumban",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403414000",
+"name": "Mabitac",
+"official": "Mabitac",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403415000",
+"name": "Magdalena",
+"official": "Magdalena",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403416000",
+"name": "Majayjay",
+"official": "Majayjay",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403417000",
+"name": "Nagcarlan",
+"official": "Nagcarlan",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403418000",
+"name": "Paete",
+"official": "Paete",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403419000",
+"name": "Pagsanjan",
+"official": "Pagsanjan",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403420000",
+"name": "Pakil",
+"official": "Pakil",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403421000",
+"name": "Pangil",
+"official": "Pangil",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403422000",
+"name": "Pila",
+"official": "Pila",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403423000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403424000",
+"name": "San Pablo City",
+"official": "City of San Pablo",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403425000",
+"name": "San Pedro City",
+"official": "City of San Pedro",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403426000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403427000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403428000",
+"name": "Santa Rosa City",
+"official": "City of Santa Rosa",
+"city": true,
+"province": "0403400000"
+},
+{
+"code": "0403429000",
+"name": "Siniloan",
+"official": "Siniloan",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0403430000",
+"name": "Victoria",
+"official": "Victoria",
+"city": false,
+"province": "0403400000"
+},
+{
+"code": "0405601000",
+"name": "Agdangan",
+"official": "Agdangan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405602000",
+"name": "Alabat",
+"official": "Alabat",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405603000",
+"name": "Atimonan",
+"official": "Atimonan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405605000",
+"name": "Buenavista",
+"official": "Buenavista",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405606000",
+"name": "Burdeos",
+"official": "Burdeos",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405607000",
+"name": "Calauag",
+"official": "Calauag",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405608000",
+"name": "Candelaria",
+"official": "Candelaria",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405610000",
+"name": "Catanauan",
+"official": "Catanauan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405615000",
+"name": "Dolores",
+"official": "Dolores",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405616000",
+"name": "General Luna",
+"official": "General Luna",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405617000",
+"name": "General Nakar",
+"official": "General Nakar",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405618000",
+"name": "Guinayangan",
+"official": "Guinayangan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405619000",
+"name": "Gumaca",
+"official": "Gumaca",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405620000",
+"name": "Infanta",
+"official": "Infanta",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405621000",
+"name": "Jomalig",
+"official": "Jomalig",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405622000",
+"name": "Lopez",
+"official": "Lopez",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405623000",
+"name": "Lucban",
+"official": "Lucban",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0431200000",
+"name": "Lucena City",
+"official": "City of Lucena",
+"city": true,
+"province": "0405600000"
+},
+{
+"code": "0405625000",
+"name": "Macalelon",
+"official": "Macalelon",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405627000",
+"name": "Mauban",
+"official": "Mauban",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405628000",
+"name": "Mulanay",
+"official": "Mulanay",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405629000",
+"name": "Padre Burgos",
+"official": "Padre Burgos",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405630000",
+"name": "Pagbilao",
+"official": "Pagbilao",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405631000",
+"name": "Panukulan",
+"official": "Panukulan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405632000",
+"name": "Patnanungan",
+"official": "Patnanungan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405633000",
+"name": "Perez",
+"official": "Perez",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405634000",
+"name": "Pitogo",
+"official": "Pitogo",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405635000",
+"name": "Plaridel",
+"official": "Plaridel",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405636000",
+"name": "Polillo",
+"official": "Polillo",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405637000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405638000",
+"name": "Real",
+"official": "Real",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405639000",
+"name": "Sampaloc",
+"official": "Sampaloc",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405640000",
+"name": "San Andres",
+"official": "San Andres",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405641000",
+"name": "San Antonio",
+"official": "San Antonio",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405642000",
+"name": "San Francisco",
+"official": "San Francisco",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405644000",
+"name": "San Narciso",
+"official": "San Narciso",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405645000",
+"name": "Sariaya",
+"official": "Sariaya",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405646000",
+"name": "Tagkawayan",
+"official": "Tagkawayan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405647000",
+"name": "Tayabas City",
+"official": "City of Tayabas",
+"city": true,
+"province": "0405600000"
+},
+{
+"code": "0405648000",
+"name": "Tiaong",
+"official": "Tiaong",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405649000",
+"name": "Unisan",
+"official": "Unisan",
+"city": false,
+"province": "0405600000"
+},
+{
+"code": "0405801000",
+"name": "Angono",
+"official": "Angono",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405802000",
+"name": "Antipolo City",
+"official": "City of Antipolo",
+"city": true,
+"province": "0405800000"
+},
+{
+"code": "0405803000",
+"name": "Baras",
+"official": "Baras",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405804000",
+"name": "Binangonan",
+"official": "Binangonan",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405805000",
+"name": "Cainta",
+"official": "Cainta",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405806000",
+"name": "Cardona",
+"official": "Cardona",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405807000",
+"name": "Jala-Jala",
+"official": "Jala-Jala",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405809000",
+"name": "Morong",
+"official": "Morong",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405810000",
+"name": "Pililla",
+"official": "Pililla",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405808000",
+"name": "Rodriguez",
+"official": "Rodriguez",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405811000",
+"name": "San Mateo",
+"official": "San Mateo",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405812000",
+"name": "Tanay",
+"official": "Tanay",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405813000",
+"name": "Taytay",
+"official": "Taytay",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0405814000",
+"name": "Teresa",
+"official": "Teresa",
+"city": false,
+"province": "0405800000"
+},
+{
+"code": "0500501000",
+"name": "Bacacay",
+"official": "Bacacay",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500502000",
+"name": "Camalig",
+"official": "Camalig",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500503000",
+"name": "Daraga",
+"official": "Daraga",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500504000",
+"name": "Guinobatan",
+"official": "Guinobatan",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500505000",
+"name": "Jovellar",
+"official": "Jovellar",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500506000",
+"name": "Legazpi City",
+"official": "City of Legazpi",
+"city": true,
+"province": "0500500000"
+},
+{
+"code": "0500507000",
+"name": "Libon",
+"official": "Libon",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500508000",
+"name": "Ligao City",
+"official": "City of Ligao",
+"city": true,
+"province": "0500500000"
+},
+{
+"code": "0500509000",
+"name": "Malilipot",
+"official": "Malilipot",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500510000",
+"name": "Malinao",
+"official": "Malinao",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500511000",
+"name": "Manito",
+"official": "Manito",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500512000",
+"name": "Oas",
+"official": "Oas",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500513000",
+"name": "Pio Duran",
+"official": "Pio Duran",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500514000",
+"name": "Polangui",
+"official": "Polangui",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500515000",
+"name": "Rapu-Rapu",
+"official": "Rapu-Rapu",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500516000",
+"name": "Santo Domingo",
+"official": "Santo Domingo",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0500517000",
+"name": "Tabaco City",
+"official": "City of Tabaco",
+"city": true,
+"province": "0500500000"
+},
+{
+"code": "0500518000",
+"name": "Tiwi",
+"official": "Tiwi",
+"city": false,
+"province": "0500500000"
+},
+{
+"code": "0501601000",
+"name": "Basud",
+"official": "Basud",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501602000",
+"name": "Capalonga",
+"official": "Capalonga",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501603000",
+"name": "Daet",
+"official": "Daet",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501605000",
+"name": "Jose Panganiban",
+"official": "Jose Panganiban",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501606000",
+"name": "Labo",
+"official": "Labo",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501607000",
+"name": "Mercedes",
+"official": "Mercedes",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501608000",
+"name": "Paracale",
+"official": "Paracale",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501604000",
+"name": "San Lorenzo Ruiz",
+"official": "San Lorenzo Ruiz",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501609000",
+"name": "San Vicente",
+"official": "San Vicente",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501610000",
+"name": "Santa Elena",
+"official": "Santa Elena",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501611000",
+"name": "Talisay",
+"official": "Talisay",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501612000",
+"name": "Vinzons",
+"official": "Vinzons",
+"city": false,
+"province": "0501600000"
+},
+{
+"code": "0501701000",
+"name": "Baao",
+"official": "Baao",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501702000",
+"name": "Balatan",
+"official": "Balatan",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501703000",
+"name": "Bato",
+"official": "Bato",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501704000",
+"name": "Bombon",
+"official": "Bombon",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501705000",
+"name": "Buhi",
+"official": "Buhi",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501706000",
+"name": "Bula",
+"official": "Bula",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501707000",
+"name": "Cabusao",
+"official": "Cabusao",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501708000",
+"name": "Calabanga",
+"official": "Calabanga",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501709000",
+"name": "Camaligan",
+"official": "Camaligan",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501710000",
+"name": "Canaman",
+"official": "Canaman",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501711000",
+"name": "Caramoan",
+"official": "Caramoan",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501712000",
+"name": "Del Gallego",
+"official": "Del Gallego",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501713000",
+"name": "Gainza",
+"official": "Gainza",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501714000",
+"name": "Garchitorena",
+"official": "Garchitorena",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501715000",
+"name": "Goa",
+"official": "Goa",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501716000",
+"name": "Iriga City",
+"official": "City of Iriga",
+"city": true,
+"province": "0501700000"
+},
+{
+"code": "0501717000",
+"name": "Lagonoy",
+"official": "Lagonoy",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501718000",
+"name": "Libmanan",
+"official": "Libmanan",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501719000",
+"name": "Lupi",
+"official": "Lupi",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501720000",
+"name": "Magarao",
+"official": "Magarao",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501721000",
+"name": "Milaor",
+"official": "Milaor",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501722000",
+"name": "Minalabac",
+"official": "Minalabac",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501723000",
+"name": "Nabua",
+"official": "Nabua",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501724000",
+"name": "Naga City",
+"official": "City of Naga",
+"city": true,
+"province": "0501700000"
+},
+{
+"code": "0501725000",
+"name": "Ocampo",
+"official": "Ocampo",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501726000",
+"name": "Pamplona",
+"official": "Pamplona",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501727000",
+"name": "Pasacao",
+"official": "Pasacao",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501728000",
+"name": "Pili",
+"official": "Pili",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501729000",
+"name": "Presentacion",
+"official": "Presentacion",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501730000",
+"name": "Ragay",
+"official": "Ragay",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501731000",
+"name": "Sagñay",
+"official": "Sagñay",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501732000",
+"name": "San Fernando",
+"official": "San Fernando",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501733000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501734000",
+"name": "Sipocot",
+"official": "Sipocot",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501735000",
+"name": "Siruma",
+"official": "Siruma",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501736000",
+"name": "Tigaon",
+"official": "Tigaon",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0501737000",
+"name": "Tinambac",
+"official": "Tinambac",
+"city": false,
+"province": "0501700000"
+},
+{
+"code": "0502001000",
+"name": "Bagamanoc",
+"official": "Bagamanoc",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502002000",
+"name": "Baras",
+"official": "Baras",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502003000",
+"name": "Bato",
+"official": "Bato",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502004000",
+"name": "Caramoran",
+"official": "Caramoran",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502005000",
+"name": "Gigmoto",
+"official": "Gigmoto",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502006000",
+"name": "Pandan",
+"official": "Pandan",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502007000",
+"name": "Panganiban",
+"official": "Panganiban",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502008000",
+"name": "San Andres",
+"official": "San Andres",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502009000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502010000",
+"name": "Viga",
+"official": "Viga",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0502011000",
+"name": "Virac",
+"official": "Virac",
+"city": false,
+"province": "0502000000"
+},
+{
+"code": "0504101000",
+"name": "Aroroy",
+"official": "Aroroy",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504102000",
+"name": "Baleno",
+"official": "Baleno",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504103000",
+"name": "Balud",
+"official": "Balud",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504104000",
+"name": "Batuan",
+"official": "Batuan",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504105000",
+"name": "Cataingan",
+"official": "Cataingan",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504106000",
+"name": "Cawayan",
+"official": "Cawayan",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504107000",
+"name": "Claveria",
+"official": "Claveria",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504108000",
+"name": "Dimasalang",
+"official": "Dimasalang",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504109000",
+"name": "Esperanza",
+"official": "Esperanza",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504110000",
+"name": "Mandaon",
+"official": "Mandaon",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504111000",
+"name": "Masbate City",
+"official": "City of Masbate",
+"city": true,
+"province": "0504100000"
+},
+{
+"code": "0504112000",
+"name": "Milagros",
+"official": "Milagros",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504113000",
+"name": "Mobo",
+"official": "Mobo",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504114000",
+"name": "Monreal",
+"official": "Monreal",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504115000",
+"name": "Palanas",
+"official": "Palanas",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504116000",
+"name": "Pio V. Corpus",
+"official": "Pio V. Corpus",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504117000",
+"name": "Placer",
+"official": "Placer",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504118000",
+"name": "San Fernando",
+"official": "San Fernando",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504119000",
+"name": "San Jacinto",
+"official": "San Jacinto",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504120000",
+"name": "San Pascual",
+"official": "San Pascual",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0504121000",
+"name": "Uson",
+"official": "Uson",
+"city": false,
+"province": "0504100000"
+},
+{
+"code": "0506202000",
+"name": "Barcelona",
+"official": "Barcelona",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506203000",
+"name": "Bulan",
+"official": "Bulan",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506204000",
+"name": "Bulusan",
+"official": "Bulusan",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506205000",
+"name": "Casiguran",
+"official": "Casiguran",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506206000",
+"name": "Castilla",
+"official": "Castilla",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506207000",
+"name": "Donsol",
+"official": "Donsol",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506208000",
+"name": "Gubat",
+"official": "Gubat",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506209000",
+"name": "Irosin",
+"official": "Irosin",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506210000",
+"name": "Juban",
+"official": "Juban",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506211000",
+"name": "Magallanes",
+"official": "Magallanes",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506212000",
+"name": "Matnog",
+"official": "Matnog",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506213000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506214000",
+"name": "Prieto Diaz",
+"official": "Prieto Diaz",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506215000",
+"name": "Santa Magdalena",
+"official": "Santa Magdalena",
+"city": false,
+"province": "0506200000"
+},
+{
+"code": "0506216000",
+"name": "Sorsogon City",
+"official": "City of Sorsogon",
+"city": true,
+"province": "0506200000"
+},
+{
+"code": "0600401000",
+"name": "Altavas",
+"official": "Altavas",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600402000",
+"name": "Balete",
+"official": "Balete",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600403000",
+"name": "Banga",
+"official": "Banga",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600404000",
+"name": "Batan",
+"official": "Batan",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600405000",
+"name": "Buruanga",
+"official": "Buruanga",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600406000",
+"name": "Ibajay",
+"official": "Ibajay",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600407000",
+"name": "Kalibo",
+"official": "Kalibo",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600408000",
+"name": "Lezo",
+"official": "Lezo",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600409000",
+"name": "Libacao",
+"official": "Libacao",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600410000",
+"name": "Madalag",
+"official": "Madalag",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600411000",
+"name": "Makato",
+"official": "Makato",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600412000",
+"name": "Malay",
+"official": "Malay",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600413000",
+"name": "Malinao",
+"official": "Malinao",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600414000",
+"name": "Nabas",
+"official": "Nabas",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600415000",
+"name": "New Washington",
+"official": "New Washington",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600416000",
+"name": "Numancia",
+"official": "Numancia",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600417000",
+"name": "Tangalan",
+"official": "Tangalan",
+"city": false,
+"province": "0600400000"
+},
+{
+"code": "0600601000",
+"name": "Anini-Y",
+"official": "Anini-Y",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600602000",
+"name": "Barbaza",
+"official": "Barbaza",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600603000",
+"name": "Belison",
+"official": "Belison",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600604000",
+"name": "Bugasong",
+"official": "Bugasong",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600605000",
+"name": "Caluya",
+"official": "Caluya",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600606000",
+"name": "Culasi",
+"official": "Culasi",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600608000",
+"name": "Hamtic",
+"official": "Hamtic",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600609000",
+"name": "Laua-An",
+"official": "Laua-An",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600610000",
+"name": "Libertad",
+"official": "Libertad",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600611000",
+"name": "Pandan",
+"official": "Pandan",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600612000",
+"name": "Patnongon",
+"official": "Patnongon",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600613000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600614000",
+"name": "San Remigio",
+"official": "San Remigio",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600615000",
+"name": "Sebaste",
+"official": "Sebaste",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600616000",
+"name": "Sibalom",
+"official": "Sibalom",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600617000",
+"name": "Tibiao",
+"official": "Tibiao",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600607000",
+"name": "Tobias Fornier",
+"official": "Tobias Fornier",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0600618000",
+"name": "Valderrama",
+"official": "Valderrama",
+"city": false,
+"province": "0600600000"
+},
+{
+"code": "0601901000",
+"name": "Cuartero",
+"official": "Cuartero",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601902000",
+"name": "Dao",
+"official": "Dao",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601903000",
+"name": "Dumalag",
+"official": "Dumalag",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601904000",
+"name": "Dumarao",
+"official": "Dumarao",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601905000",
+"name": "Ivisan",
+"official": "Ivisan",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601906000",
+"name": "Jamindan",
+"official": "Jamindan",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601907000",
+"name": "Ma-Ayon",
+"official": "Ma-Ayon",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601908000",
+"name": "Mambusao",
+"official": "Mambusao",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601909000",
+"name": "Panay",
+"official": "Panay",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601910000",
+"name": "Panitan",
+"official": "Panitan",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601911000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601912000",
+"name": "Pontevedra",
+"official": "Pontevedra",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601913000",
+"name": "President Roxas",
+"official": "President Roxas",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601914000",
+"name": "Roxas City",
+"official": "City of Roxas",
+"city": true,
+"province": "0601900000"
+},
+{
+"code": "0601915000",
+"name": "Sapi-An",
+"official": "Sapi-An",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601916000",
+"name": "Sigma",
+"official": "Sigma",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0601917000",
+"name": "Tapaz",
+"official": "Tapaz",
+"city": false,
+"province": "0601900000"
+},
+{
+"code": "0603001000",
+"name": "Ajuy",
+"official": "Ajuy",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603002000",
+"name": "Alimodian",
+"official": "Alimodian",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603003000",
+"name": "Anilao",
+"official": "Anilao",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603004000",
+"name": "Badiangan",
+"official": "Badiangan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603005000",
+"name": "Balasan",
+"official": "Balasan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603006000",
+"name": "Banate",
+"official": "Banate",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603007000",
+"name": "Barotac Nuevo",
+"official": "Barotac Nuevo",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603008000",
+"name": "Barotac Viejo",
+"official": "Barotac Viejo",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603009000",
+"name": "Batad",
+"official": "Batad",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603010000",
+"name": "Bingawan",
+"official": "Bingawan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603012000",
+"name": "Cabatuan",
+"official": "Cabatuan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603013000",
+"name": "Calinog",
+"official": "Calinog",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603014000",
+"name": "Carles",
+"official": "Carles",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603015000",
+"name": "Concepcion",
+"official": "Concepcion",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603016000",
+"name": "Dingle",
+"official": "Dingle",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603017000",
+"name": "Dueñas",
+"official": "Dueñas",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603018000",
+"name": "Dumangas",
+"official": "Dumangas",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603019000",
+"name": "Estancia",
+"official": "Estancia",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603020000",
+"name": "Guimbal",
+"official": "Guimbal",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603021000",
+"name": "Igbaras",
+"official": "Igbaras",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0631000000",
+"name": "Iloilo City",
+"official": "City of Iloilo",
+"city": true,
+"province": "0603000000"
+},
+{
+"code": "0603023000",
+"name": "Janiuay",
+"official": "Janiuay",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603025000",
+"name": "Lambunao",
+"official": "Lambunao",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603026000",
+"name": "Leganes",
+"official": "Leganes",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603027000",
+"name": "Lemery",
+"official": "Lemery",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603028000",
+"name": "Leon",
+"official": "Leon",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603029000",
+"name": "Maasin",
+"official": "Maasin",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603030000",
+"name": "Miagao",
+"official": "Miagao",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603031000",
+"name": "Mina",
+"official": "Mina",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603032000",
+"name": "New Lucena",
+"official": "New Lucena",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603034000",
+"name": "Oton",
+"official": "Oton",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603035000",
+"name": "Passi City",
+"official": "City of Passi",
+"city": true,
+"province": "0603000000"
+},
+{
+"code": "0603036000",
+"name": "Pavia",
+"official": "Pavia",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603037000",
+"name": "Pototan",
+"official": "Pototan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603038000",
+"name": "San Dionisio",
+"official": "San Dionisio",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603039000",
+"name": "San Enrique",
+"official": "San Enrique",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603040000",
+"name": "San Joaquin",
+"official": "San Joaquin",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603041000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603042000",
+"name": "San Rafael",
+"official": "San Rafael",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603043000",
+"name": "Santa Barbara",
+"official": "Santa Barbara",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603044000",
+"name": "Sara",
+"official": "Sara",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603045000",
+"name": "Tigbauan",
+"official": "Tigbauan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603046000",
+"name": "Tubungan",
+"official": "Tubungan",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0603047000",
+"name": "Zarraga",
+"official": "Zarraga",
+"city": false,
+"province": "0603000000"
+},
+{
+"code": "0630200000",
+"name": "Bacolod City",
+"official": "City of Bacolod",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604502000",
+"name": "Bago City",
+"official": "City of Bago",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604503000",
+"name": "Binalbagan",
+"official": "Binalbagan",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604504000",
+"name": "Cadiz City",
+"official": "City of Cadiz",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604505000",
+"name": "Calatrava",
+"official": "Calatrava",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604506000",
+"name": "Candoni",
+"official": "Candoni",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604507000",
+"name": "Cauayan",
+"official": "Cauayan",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604508000",
+"name": "Enrique B. Magalona",
+"official": "Enrique B. Magalona",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604509000",
+"name": "Escalante City",
+"official": "City of Escalante",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604510000",
+"name": "Himamaylan City",
+"official": "City of Himamaylan",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604511000",
+"name": "Hinigaran",
+"official": "Hinigaran",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604512000",
+"name": "Hinoba-an",
+"official": "Hinoba-an",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604513000",
+"name": "Ilog",
+"official": "Ilog",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604514000",
+"name": "Isabela",
+"official": "Isabela",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604515000",
+"name": "Kabankalan City",
+"official": "City of Kabankalan",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604516000",
+"name": "La Carlota City",
+"official": "City of La Carlota",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604517000",
+"name": "La Castellana",
+"official": "La Castellana",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604518000",
+"name": "Manapla",
+"official": "Manapla",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604519000",
+"name": "Moises Padilla",
+"official": "Moises Padilla",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604520000",
+"name": "Murcia",
+"official": "Murcia",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604521000",
+"name": "Pontevedra",
+"official": "Pontevedra",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604522000",
+"name": "Pulupandan",
+"official": "Pulupandan",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604523000",
+"name": "Sagay City",
+"official": "City of Sagay",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604532000",
+"name": "Salvador Benedicto",
+"official": "Salvador Benedicto",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604524000",
+"name": "San Carlos City",
+"official": "City of San Carlos",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604525000",
+"name": "San Enrique",
+"official": "San Enrique",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604526000",
+"name": "Silay City",
+"official": "City of Silay",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604527000",
+"name": "Sipalay City",
+"official": "City of Sipalay",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604528000",
+"name": "Talisay City",
+"official": "City of Talisay",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0604529000",
+"name": "Toboso",
+"official": "Toboso",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604530000",
+"name": "Valladolid",
+"official": "Valladolid",
+"city": false,
+"province": "0604500000"
+},
+{
+"code": "0604531000",
+"name": "Victorias City",
+"official": "City of Victorias",
+"city": true,
+"province": "0604500000"
+},
+{
+"code": "0607901000",
+"name": "Buenavista",
+"official": "Buenavista",
+"city": false,
+"province": "0607900000"
+},
+{
+"code": "0607902000",
+"name": "Jordan",
+"official": "Jordan",
+"city": false,
+"province": "0607900000"
+},
+{
+"code": "0607903000",
+"name": "Nueva Valencia",
+"official": "Nueva Valencia",
+"city": false,
+"province": "0607900000"
+},
+{
+"code": "0607904000",
+"name": "San Lorenzo",
+"official": "San Lorenzo",
+"city": false,
+"province": "0607900000"
+},
+{
+"code": "0607905000",
+"name": "Sibunag",
+"official": "Sibunag",
+"city": false,
+"province": "0607900000"
+},
+{
+"code": "0701201000",
+"name": "Alburquerque",
+"official": "Alburquerque",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701202000",
+"name": "Alicia",
+"official": "Alicia",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701203000",
+"name": "Anda",
+"official": "Anda",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701204000",
+"name": "Antequera",
+"official": "Antequera",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701205000",
+"name": "Baclayon",
+"official": "Baclayon",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701206000",
+"name": "Balilihan",
+"official": "Balilihan",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701207000",
+"name": "Batuan",
+"official": "Batuan",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701248000",
+"name": "Bien Unido",
+"official": "Bien Unido",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701208000",
+"name": "Bilar",
+"official": "Bilar",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701209000",
+"name": "Buenavista",
+"official": "Buenavista",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701210000",
+"name": "Calape",
+"official": "Calape",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701211000",
+"name": "Candijay",
+"official": "Candijay",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701212000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701213000",
+"name": "Catigbian",
+"official": "Catigbian",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701214000",
+"name": "Clarin",
+"official": "Clarin",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701215000",
+"name": "Corella",
+"official": "Corella",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701216000",
+"name": "Cortes",
+"official": "Cortes",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701217000",
+"name": "Dagohoy",
+"official": "Dagohoy",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701218000",
+"name": "Danao",
+"official": "Danao",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701219000",
+"name": "Dauis",
+"official": "Dauis",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701220000",
+"name": "Dimiao",
+"official": "Dimiao",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701221000",
+"name": "Duero",
+"official": "Duero",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701222000",
+"name": "Garcia Hernandez",
+"official": "Garcia Hernandez",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701226000",
+"name": "Getafe",
+"official": "Getafe",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701223000",
+"name": "Guindulman",
+"official": "Guindulman",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701224000",
+"name": "Inabanga",
+"official": "Inabanga",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701225000",
+"name": "Jagna",
+"official": "Jagna",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701227000",
+"name": "Lila",
+"official": "Lila",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701228000",
+"name": "Loay",
+"official": "Loay",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701229000",
+"name": "Loboc",
+"official": "Loboc",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701230000",
+"name": "Loon",
+"official": "Loon",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701231000",
+"name": "Mabini",
+"official": "Mabini",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701232000",
+"name": "Maribojoc",
+"official": "Maribojoc",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701233000",
+"name": "Panglao",
+"official": "Panglao",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701234000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701235000",
+"name": "President Carlos P. Garcia",
+"official": "President Carlos P. Garcia",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701236000",
+"name": "Sagbayan",
+"official": "Sagbayan",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701237000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701238000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701239000",
+"name": "Sevilla",
+"official": "Sevilla",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701240000",
+"name": "Sierra Bullones",
+"official": "Sierra Bullones",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701241000",
+"name": "Sikatuna",
+"official": "Sikatuna",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701242000",
+"name": "Tagbilaran City",
+"official": "City of Tagbilaran",
+"city": true,
+"province": "0701200000"
+},
+{
+"code": "0701243000",
+"name": "Talibon",
+"official": "Talibon",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701244000",
+"name": "Trinidad",
+"official": "Trinidad",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701245000",
+"name": "Tubigon",
+"official": "Tubigon",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701246000",
+"name": "Ubay",
+"official": "Ubay",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0701247000",
+"name": "Valencia",
+"official": "Valencia",
+"city": false,
+"province": "0701200000"
+},
+{
+"code": "0702201000",
+"name": "Alcantara",
+"official": "Alcantara",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702202000",
+"name": "Alcoy",
+"official": "Alcoy",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702203000",
+"name": "Alegria",
+"official": "Alegria",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702204000",
+"name": "Aloguinsan",
+"official": "Aloguinsan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702205000",
+"name": "Argao",
+"official": "Argao",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702206000",
+"name": "Asturias",
+"official": "Asturias",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702207000",
+"name": "Badian",
+"official": "Badian",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702208000",
+"name": "Balamban",
+"official": "Balamban",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702209000",
+"name": "Bantayan",
+"official": "Bantayan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702210000",
+"name": "Barili",
+"official": "Barili",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702211000",
+"name": "Bogo City",
+"official": "City of Bogo",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702212000",
+"name": "Boljoon",
+"official": "Boljoon",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702213000",
+"name": "Borbon",
+"official": "Borbon",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702214000",
+"name": "Carcar City",
+"official": "City of Carcar",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702215000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702216000",
+"name": "Catmon",
+"official": "Catmon",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0730600000",
+"name": "Cebu City",
+"official": "City of Cebu",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702218000",
+"name": "Compostela",
+"official": "Compostela",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702219000",
+"name": "Consolacion",
+"official": "Consolacion",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702220000",
+"name": "Cordova",
+"official": "Cordova",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702221000",
+"name": "Daanbantayan",
+"official": "Daanbantayan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702222000",
+"name": "Dalaguete",
+"official": "Dalaguete",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702223000",
+"name": "Danao City",
+"official": "Danao City",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702224000",
+"name": "Dumanjug",
+"official": "Dumanjug",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702225000",
+"name": "Ginatilan",
+"official": "Ginatilan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0731100000",
+"name": "Lapu-Lapu City",
+"official": "City of Lapu-Lapu",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702227000",
+"name": "Liloan",
+"official": "Liloan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702228000",
+"name": "Madridejos",
+"official": "Madridejos",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702229000",
+"name": "Malabuyoc",
+"official": "Malabuyoc",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0731300000",
+"name": "Mandaue City",
+"official": "City of Mandaue",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702231000",
+"name": "Medellin",
+"official": "Medellin",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702232000",
+"name": "Minglanilla",
+"official": "Minglanilla",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702233000",
+"name": "Moalboal",
+"official": "Moalboal",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702234000",
+"name": "Naga City",
+"official": "City of Naga",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702235000",
+"name": "Oslob",
+"official": "Oslob",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702236000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702237000",
+"name": "Pinamungajan",
+"official": "Pinamungajan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702238000",
+"name": "Poro",
+"official": "Poro",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702239000",
+"name": "Ronda",
+"official": "Ronda",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702240000",
+"name": "Samboan",
+"official": "Samboan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702241000",
+"name": "San Fernando",
+"official": "San Fernando",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702242000",
+"name": "San Francisco",
+"official": "San Francisco",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702243000",
+"name": "San Remigio",
+"official": "San Remigio",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702244000",
+"name": "Santa Fe",
+"official": "Santa Fe",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702245000",
+"name": "Santander",
+"official": "Santander",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702246000",
+"name": "Sibonga",
+"official": "Sibonga",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702247000",
+"name": "Sogod",
+"official": "Sogod",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702248000",
+"name": "Tabogon",
+"official": "Tabogon",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702249000",
+"name": "Tabuelan",
+"official": "Tabuelan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702250000",
+"name": "Talisay City",
+"official": "City of Talisay",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702251000",
+"name": "Toledo City",
+"official": "City of Toledo",
+"city": true,
+"province": "0702200000"
+},
+{
+"code": "0702252000",
+"name": "Tuburan",
+"official": "Tuburan",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0702253000",
+"name": "Tudela",
+"official": "Tudela",
+"city": false,
+"province": "0702200000"
+},
+{
+"code": "0704601000",
+"name": "Amlan",
+"official": "Amlan",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704602000",
+"name": "Ayungon",
+"official": "Ayungon",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704603000",
+"name": "Bacong",
+"official": "Bacong",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704604000",
+"name": "Bais City",
+"official": "City of Bais",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704605000",
+"name": "Basay",
+"official": "Basay",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704606000",
+"name": "Bayawan City",
+"official": "City of Bayawan",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704607000",
+"name": "Bindoy",
+"official": "Bindoy",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704608000",
+"name": "Canlaon City",
+"official": "City of Canlaon",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704609000",
+"name": "Dauin",
+"official": "Dauin",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704610000",
+"name": "Dumaguete City",
+"official": "City of Dumaguete",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704611000",
+"name": "Guihulngan City",
+"official": "City of Guihulngan",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704612000",
+"name": "Jimalalud",
+"official": "Jimalalud",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704613000",
+"name": "La Libertad",
+"official": "La Libertad",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704614000",
+"name": "Mabinay",
+"official": "Mabinay",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704615000",
+"name": "Manjuyod",
+"official": "Manjuyod",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704616000",
+"name": "Pamplona",
+"official": "Pamplona",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704617000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704618000",
+"name": "Santa Catalina",
+"official": "Santa Catalina",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704619000",
+"name": "Siaton",
+"official": "Siaton",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704620000",
+"name": "Sibulan",
+"official": "Sibulan",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704621000",
+"name": "Tanjay City",
+"official": "City of Tanjay",
+"city": true,
+"province": "0704600000"
+},
+{
+"code": "0704622000",
+"name": "Tayasan",
+"official": "Tayasan",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704623000",
+"name": "Valencia",
+"official": "Valencia",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704624000",
+"name": "Vallehermoso",
+"official": "Vallehermoso",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0704625000",
+"name": "Zamboanguita",
+"official": "Zamboanguita",
+"city": false,
+"province": "0704600000"
+},
+{
+"code": "0706101000",
+"name": "Enrique Villanueva",
+"official": "Enrique Villanueva",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0706102000",
+"name": "Larena",
+"official": "Larena",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0706103000",
+"name": "Lazi",
+"official": "Lazi",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0706104000",
+"name": "Maria",
+"official": "Maria",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0706105000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0706106000",
+"name": "Siquijor",
+"official": "Siquijor",
+"city": false,
+"province": "0706100000"
+},
+{
+"code": "0802601000",
+"name": "Arteche",
+"official": "Arteche",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802602000",
+"name": "Balangiga",
+"official": "Balangiga",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802603000",
+"name": "Balangkayan",
+"official": "Balangkayan",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802604000",
+"name": "Borongan City",
+"official": "City of Borongan",
+"city": true,
+"province": "0802600000"
+},
+{
+"code": "0802605000",
+"name": "Can-Avid",
+"official": "Can-Avid",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802606000",
+"name": "Dolores",
+"official": "Dolores",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802607000",
+"name": "General Macarthur",
+"official": "General Macarthur",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802608000",
+"name": "Giporlos",
+"official": "Giporlos",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802609000",
+"name": "Guiuan",
+"official": "Guiuan",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802610000",
+"name": "Hernani",
+"official": "Hernani",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802611000",
+"name": "Jipapad",
+"official": "Jipapad",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802612000",
+"name": "Lawaan",
+"official": "Lawaan",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802613000",
+"name": "Llorente",
+"official": "Llorente",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802614000",
+"name": "Maslog",
+"official": "Maslog",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802615000",
+"name": "Maydolong",
+"official": "Maydolong",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802616000",
+"name": "Mercedes",
+"official": "Mercedes",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802617000",
+"name": "Oras",
+"official": "Oras",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802618000",
+"name": "Quinapondan",
+"official": "Quinapondan",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802619000",
+"name": "Salcedo",
+"official": "Salcedo",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802620000",
+"name": "San Julian",
+"official": "San Julian",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802621000",
+"name": "San Policarpo",
+"official": "San Policarpo",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802622000",
+"name": "Sulat",
+"official": "Sulat",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0802623000",
+"name": "Taft",
+"official": "Taft",
+"city": false,
+"province": "0802600000"
+},
+{
+"code": "0803701000",
+"name": "Abuyog",
+"official": "Abuyog",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803702000",
+"name": "Alangalang",
+"official": "Alangalang",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803703000",
+"name": "Albuera",
+"official": "Albuera",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803705000",
+"name": "Babatngon",
+"official": "Babatngon",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803706000",
+"name": "Barugo",
+"official": "Barugo",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803707000",
+"name": "Bato",
+"official": "Bato",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803708000",
+"name": "Baybay City",
+"official": "City of Baybay",
+"city": true,
+"province": "0803700000"
+},
+{
+"code": "0803710000",
+"name": "Burauen",
+"official": "Burauen",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803713000",
+"name": "Calubian",
+"official": "Calubian",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803714000",
+"name": "Capoocan",
+"official": "Capoocan",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803715000",
+"name": "Carigara",
+"official": "Carigara",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803717000",
+"name": "Dagami",
+"official": "Dagami",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803718000",
+"name": "Dulag",
+"official": "Dulag",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803719000",
+"name": "Hilongos",
+"official": "Hilongos",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803720000",
+"name": "Hindang",
+"official": "Hindang",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803721000",
+"name": "Inopacan",
+"official": "Inopacan",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803722000",
+"name": "Isabel",
+"official": "Isabel",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803723000",
+"name": "Jaro",
+"official": "Jaro",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803724000",
+"name": "Javier",
+"official": "Javier",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803725000",
+"name": "Julita",
+"official": "Julita",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803726000",
+"name": "Kananga",
+"official": "Kananga",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803728000",
+"name": "La Paz",
+"official": "La Paz",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803729000",
+"name": "Leyte",
+"official": "Leyte",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803730000",
+"name": "Macarthur",
+"official": "Macarthur",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803731000",
+"name": "Mahaplag",
+"official": "Mahaplag",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803733000",
+"name": "Matag-Ob",
+"official": "Matag-Ob",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803734000",
+"name": "Matalom",
+"official": "Matalom",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803735000",
+"name": "Mayorga",
+"official": "Mayorga",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803736000",
+"name": "Merida",
+"official": "Merida",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803738000",
+"name": "Ormoc City",
+"official": "Ormoc City",
+"city": true,
+"province": "0803700000"
+},
+{
+"code": "0803739000",
+"name": "Palo",
+"official": "Palo",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803740000",
+"name": "Palompon",
+"official": "Palompon",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803741000",
+"name": "Pastrana",
+"official": "Pastrana",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803742000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803743000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803744000",
+"name": "Santa Fe",
+"official": "Santa Fe",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803745000",
+"name": "Tabango",
+"official": "Tabango",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803746000",
+"name": "Tabontabon",
+"official": "Tabontabon",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0831600000",
+"name": "Tacloban City",
+"official": "City of Tacloban",
+"city": true,
+"province": "0803700000"
+},
+{
+"code": "0803748000",
+"name": "Tanauan",
+"official": "Tanauan",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803749000",
+"name": "Tolosa",
+"official": "Tolosa",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803750000",
+"name": "Tunga",
+"official": "Tunga",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0803751000",
+"name": "Villaba",
+"official": "Villaba",
+"city": false,
+"province": "0803700000"
+},
+{
+"code": "0804801000",
+"name": "Allen",
+"official": "Allen",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804802000",
+"name": "Biri",
+"official": "Biri",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804803000",
+"name": "Bobon",
+"official": "Bobon",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804804000",
+"name": "Capul",
+"official": "Capul",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804805000",
+"name": "Catarman",
+"official": "Catarman",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804806000",
+"name": "Catubig",
+"official": "Catubig",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804807000",
+"name": "Gamay",
+"official": "Gamay",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804808000",
+"name": "Laoang",
+"official": "Laoang",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804809000",
+"name": "Lapinig",
+"official": "Lapinig",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804810000",
+"name": "Las Navas",
+"official": "Las Navas",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804811000",
+"name": "Lavezares",
+"official": "Lavezares",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804824000",
+"name": "Lope de Vega",
+"official": "Lope de Vega",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804812000",
+"name": "Mapanas",
+"official": "Mapanas",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804813000",
+"name": "Mondragon",
+"official": "Mondragon",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804814000",
+"name": "Palapag",
+"official": "Palapag",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804815000",
+"name": "Pambujan",
+"official": "Pambujan",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804816000",
+"name": "Rosario",
+"official": "Rosario",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804817000",
+"name": "San Antonio",
+"official": "San Antonio",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804818000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804819000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804820000",
+"name": "San Roque",
+"official": "San Roque",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804821000",
+"name": "San Vicente",
+"official": "San Vicente",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804822000",
+"name": "Silvino Lobos",
+"official": "Silvino Lobos",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0804823000",
+"name": "Victoria",
+"official": "Victoria",
+"city": false,
+"province": "0804800000"
+},
+{
+"code": "0806001000",
+"name": "Almagro",
+"official": "Almagro",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806002000",
+"name": "Basey",
+"official": "Basey",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806003000",
+"name": "Calbayog City",
+"official": "City of Calbayog",
+"city": true,
+"province": "0806000000"
+},
+{
+"code": "0806004000",
+"name": "Calbiga",
+"official": "Calbiga",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806005000",
+"name": "Catbalogan City",
+"official": "City of Catbalogan",
+"city": true,
+"province": "0806000000"
+},
+{
+"code": "0806006000",
+"name": "Daram",
+"official": "Daram",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806007000",
+"name": "Gandara",
+"official": "Gandara",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806008000",
+"name": "Hinabangan",
+"official": "Hinabangan",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806009000",
+"name": "Jiabong",
+"official": "Jiabong",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806010000",
+"name": "Marabut",
+"official": "Marabut",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806011000",
+"name": "Matuguinao",
+"official": "Matuguinao",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806012000",
+"name": "Motiong",
+"official": "Motiong",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806026000",
+"name": "Pagsanghan",
+"official": "Pagsanghan",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806022000",
+"name": "Paranas",
+"official": "Paranas",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806013000",
+"name": "Pinabacdao",
+"official": "Pinabacdao",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806025000",
+"name": "San Jorge",
+"official": "San Jorge",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806014000",
+"name": "San Jose de Buan",
+"official": "San Jose de Buan",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806015000",
+"name": "San Sebastian",
+"official": "San Sebastian",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806016000",
+"name": "Santa Margarita",
+"official": "Santa Margarita",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806017000",
+"name": "Santa Rita",
+"official": "Santa Rita",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806018000",
+"name": "Santo Niño",
+"official": "Santo Niño",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806024000",
+"name": "Tagapul-An",
+"official": "Tagapul-An",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806019000",
+"name": "Talalora",
+"official": "Talalora",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806020000",
+"name": "Tarangnan",
+"official": "Tarangnan",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806021000",
+"name": "Villareal",
+"official": "Villareal",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806023000",
+"name": "Zumarraga",
+"official": "Zumarraga",
+"city": false,
+"province": "0806000000"
+},
+{
+"code": "0806401000",
+"name": "Anahawan",
+"official": "Anahawan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806402000",
+"name": "Bontoc",
+"official": "Bontoc",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806403000",
+"name": "Hinunangan",
+"official": "Hinunangan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806404000",
+"name": "Hinundayan",
+"official": "Hinundayan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806405000",
+"name": "Libagon",
+"official": "Libagon",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806406000",
+"name": "Liloan",
+"official": "Liloan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806419000",
+"name": "Limasawa",
+"official": "Limasawa",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806407000",
+"name": "Maasin City",
+"official": "City of Maasin",
+"city": true,
+"province": "0806400000"
+},
+{
+"code": "0806408000",
+"name": "Macrohon",
+"official": "Macrohon",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806409000",
+"name": "Malitbog",
+"official": "Malitbog",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806410000",
+"name": "Padre Burgos",
+"official": "Padre Burgos",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806411000",
+"name": "Pintuyan",
+"official": "Pintuyan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806412000",
+"name": "Saint Bernard",
+"official": "Saint Bernard",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806413000",
+"name": "San Francisco",
+"official": "San Francisco",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806414000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806415000",
+"name": "San Ricardo",
+"official": "San Ricardo",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806416000",
+"name": "Silago",
+"official": "Silago",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806417000",
+"name": "Sogod",
+"official": "Sogod",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0806418000",
+"name": "Tomas Oppus",
+"official": "Tomas Oppus",
+"city": false,
+"province": "0806400000"
+},
+{
+"code": "0807801000",
+"name": "Almeria",
+"official": "Almeria",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807802000",
+"name": "Biliran",
+"official": "Biliran",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807803000",
+"name": "Cabucgayan",
+"official": "Cabucgayan",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807804000",
+"name": "Caibiran",
+"official": "Caibiran",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807805000",
+"name": "Culaba",
+"official": "Culaba",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807806000",
+"name": "Kawayan",
+"official": "Kawayan",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807807000",
+"name": "Maripipi",
+"official": "Maripipi",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0807808000",
+"name": "Naval",
+"official": "Naval",
+"city": false,
+"province": "0807800000"
+},
+{
+"code": "0907226000",
+"name": "Bacungan",
+"official": "Bacungan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907224000",
+"name": "Baliguian",
+"official": "Baliguian",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907201000",
+"name": "Dapitan City",
+"official": "City of Dapitan",
+"city": true,
+"province": "0907200000"
+},
+{
+"code": "0907202000",
+"name": "Dipolog City",
+"official": "City of Dipolog",
+"city": true,
+"province": "0907200000"
+},
+{
+"code": "0907225000",
+"name": "Godod",
+"official": "Godod",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907223000",
+"name": "Gutalac",
+"official": "Gutalac",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907222000",
+"name": "Jose Dalman",
+"official": "Jose Dalman",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907227000",
+"name": "Kalawit",
+"official": "Kalawit",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907203000",
+"name": "Katipunan",
+"official": "Katipunan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907204000",
+"name": "La Libertad",
+"official": "La Libertad",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907205000",
+"name": "Labason",
+"official": "Labason",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907206000",
+"name": "Liloy",
+"official": "Liloy",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907207000",
+"name": "Manukan",
+"official": "Manukan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907208000",
+"name": "Mutia",
+"official": "Mutia",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907209000",
+"name": "Piñan",
+"official": "Piñan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907210000",
+"name": "Polanco",
+"official": "Polanco",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907211000",
+"name": "Pres. Manuel A. Roxas",
+"official": "Pres. Manuel A. Roxas",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907212000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907213000",
+"name": "Salug",
+"official": "Salug",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907214000",
+"name": "Sergio Osmeña Sr.",
+"official": "Sergio Osmeña Sr.",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907215000",
+"name": "Siayan",
+"official": "Siayan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907216000",
+"name": "Sibuco",
+"official": "Sibuco",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907217000",
+"name": "Sibutad",
+"official": "Sibutad",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907218000",
+"name": "Sindangan",
+"official": "Sindangan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907219000",
+"name": "Siocon",
+"official": "Siocon",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907220000",
+"name": "Sirawai",
+"official": "Sirawai",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907221000",
+"name": "Tampilisan",
+"official": "Tampilisan",
+"city": false,
+"province": "0907200000"
+},
+{
+"code": "0907302000",
+"name": "Aurora",
+"official": "Aurora",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907303000",
+"name": "Bayog",
+"official": "Bayog",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907305000",
+"name": "Dimataling",
+"official": "Dimataling",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907306000",
+"name": "Dinas",
+"official": "Dinas",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907307000",
+"name": "Dumalinao",
+"official": "Dumalinao",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907308000",
+"name": "Dumingag",
+"official": "Dumingag",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907343000",
+"name": "Guipos",
+"official": "Guipos",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907337000",
+"name": "Josefina",
+"official": "Josefina",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907311000",
+"name": "Kumalarang",
+"official": "Kumalarang",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907312000",
+"name": "Labangan",
+"official": "Labangan",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907333000",
+"name": "Lakewood",
+"official": "Lakewood",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907313000",
+"name": "Lapuyan",
+"official": "Lapuyan",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907315000",
+"name": "Mahayag",
+"official": "Mahayag",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907317000",
+"name": "Margosatubig",
+"official": "Margosatubig",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907318000",
+"name": "Midsalip",
+"official": "Midsalip",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907319000",
+"name": "Molave",
+"official": "Molave",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907322000",
+"name": "Pagadian City",
+"official": "City of Pagadian",
+"city": true,
+"province": "0907300000"
+},
+{
+"code": "0907338000",
+"name": "Pitogo",
+"official": "Pitogo",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907323000",
+"name": "Ramon Magsaysay",
+"official": "Ramon Magsaysay",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907324000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907325000",
+"name": "San Pablo",
+"official": "San Pablo",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907340000",
+"name": "Sominot",
+"official": "Sominot",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907327000",
+"name": "Tabina",
+"official": "Tabina",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907328000",
+"name": "Tambulig",
+"official": "Tambulig",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907344000",
+"name": "Tigbao",
+"official": "Tigbao",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907330000",
+"name": "Tukuran",
+"official": "Tukuran",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0907341000",
+"name": "Vincenzo A. Sagun",
+"official": "Vincenzo A. Sagun",
+"city": false,
+"province": "0907300000"
+},
+{
+"code": "0931700000",
+"name": "Zamboanga City",
+"official": "City of Zamboanga",
+"city": true,
+"province": "0907300000"
+},
+{
+"code": "0908301000",
+"name": "Alicia",
+"official": "Alicia",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908302000",
+"name": "Buug",
+"official": "Buug",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908303000",
+"name": "Diplahan",
+"official": "Diplahan",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908304000",
+"name": "Imelda",
+"official": "Imelda",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908305000",
+"name": "Ipil",
+"official": "Ipil",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908306000",
+"name": "Kabasalan",
+"official": "Kabasalan",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908307000",
+"name": "Mabuhay",
+"official": "Mabuhay",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908308000",
+"name": "Malangas",
+"official": "Malangas",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908309000",
+"name": "Naga",
+"official": "Naga",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908310000",
+"name": "Olutanga",
+"official": "Olutanga",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908311000",
+"name": "Payao",
+"official": "Payao",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908312000",
+"name": "Roseller Lim",
+"official": "Roseller Lim",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908313000",
+"name": "Siay",
+"official": "Siay",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908314000",
+"name": "Talusan",
+"official": "Talusan",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908315000",
+"name": "Titay",
+"official": "Titay",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "0908316000",
+"name": "Tungawan",
+"official": "Tungawan",
+"city": false,
+"province": "0908300000"
+},
+{
+"code": "1001301000",
+"name": "Baungon",
+"official": "Baungon",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001322000",
+"name": "Cabanglasan",
+"official": "Cabanglasan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001302000",
+"name": "Damulog",
+"official": "Damulog",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001303000",
+"name": "Dangcagan",
+"official": "Dangcagan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001304000",
+"name": "Don Carlos",
+"official": "Don Carlos",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001305000",
+"name": "Impasug-ong",
+"official": "Impasug-ong",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001306000",
+"name": "Kadingilan",
+"official": "Kadingilan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001307000",
+"name": "Kalilangan",
+"official": "Kalilangan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001308000",
+"name": "Kibawe",
+"official": "Kibawe",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001309000",
+"name": "Kitaotao",
+"official": "Kitaotao",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001310000",
+"name": "Lantapan",
+"official": "Lantapan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001311000",
+"name": "Libona",
+"official": "Libona",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001312000",
+"name": "Malaybalay City",
+"official": "City of Malaybalay",
+"city": true,
+"province": "1001300000"
+},
+{
+"code": "1001313000",
+"name": "Malitbog",
+"official": "Malitbog",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001314000",
+"name": "Manolo Fortich",
+"official": "Manolo Fortich",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001315000",
+"name": "Maramag",
+"official": "Maramag",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001316000",
+"name": "Pangantucan",
+"official": "Pangantucan",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001317000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001318000",
+"name": "San Fernando",
+"official": "San Fernando",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001319000",
+"name": "Sumilao",
+"official": "Sumilao",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001320000",
+"name": "Talakag",
+"official": "Talakag",
+"city": false,
+"province": "1001300000"
+},
+{
+"code": "1001321000",
+"name": "Valencia City",
+"official": "City of Valencia",
+"city": true,
+"province": "1001300000"
+},
+{
+"code": "1001801000",
+"name": "Catarman",
+"official": "Catarman",
+"city": false,
+"province": "1001800000"
+},
+{
+"code": "1001802000",
+"name": "Guinsiliban",
+"official": "Guinsiliban",
+"city": false,
+"province": "1001800000"
+},
+{
+"code": "1001803000",
+"name": "Mahinog",
+"official": "Mahinog",
+"city": false,
+"province": "1001800000"
+},
+{
+"code": "1001804000",
+"name": "Mambajao",
+"official": "Mambajao",
+"city": false,
+"province": "1001800000"
+},
+{
+"code": "1001805000",
+"name": "Sagay",
+"official": "Sagay",
+"city": false,
+"province": "1001800000"
+},
+{
+"code": "1003501000",
+"name": "Bacolod",
+"official": "Bacolod",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003502000",
+"name": "Baloi",
+"official": "Baloi",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003503000",
+"name": "Baroy",
+"official": "Baroy",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1030900000",
+"name": "Iligan City",
+"official": "City of Iligan",
+"city": true,
+"province": "1003500000"
+},
+{
+"code": "1003505000",
+"name": "Kapatagan",
+"official": "Kapatagan",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003507000",
+"name": "Kauswagan",
+"official": "Kauswagan",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003508000",
+"name": "Kolambugan",
+"official": "Kolambugan",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003509000",
+"name": "Lala",
+"official": "Lala",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003510000",
+"name": "Linamon",
+"official": "Linamon",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003511000",
+"name": "Magsaysay",
+"official": "Magsaysay",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003512000",
+"name": "Maigo",
+"official": "Maigo",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003513000",
+"name": "Matungao",
+"official": "Matungao",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003514000",
+"name": "Munai",
+"official": "Munai",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003515000",
+"name": "Nunungan",
+"official": "Nunungan",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003516000",
+"name": "Pantao Ragat",
+"official": "Pantao Ragat",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003523000",
+"name": "Pantar",
+"official": "Pantar",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003517000",
+"name": "Poona Piagapo",
+"official": "Poona Piagapo",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003518000",
+"name": "Salvador",
+"official": "Salvador",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003519000",
+"name": "Sapad",
+"official": "Sapad",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003506000",
+"name": "Sultan Naga Dimaporo",
+"official": "Sultan Naga Dimaporo",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003520000",
+"name": "Tagoloan",
+"official": "Tagoloan",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003521000",
+"name": "Tangcal",
+"official": "Tangcal",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1003522000",
+"name": "Tubod",
+"official": "Tubod",
+"city": false,
+"province": "1003500000"
+},
+{
+"code": "1004201000",
+"name": "Aloran",
+"official": "Aloran",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004202000",
+"name": "Baliangao",
+"official": "Baliangao",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004203000",
+"name": "Bonifacio",
+"official": "Bonifacio",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004204000",
+"name": "Calamba",
+"official": "Calamba",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004205000",
+"name": "Clarin",
+"official": "Clarin",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004206000",
+"name": "Concepcion",
+"official": "Concepcion",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004217000",
+"name": "Don Victoriano Chiongbian",
+"official": "Don Victoriano Chiongbian",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004207000",
+"name": "Jimenez",
+"official": "Jimenez",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004208000",
+"name": "Lopez Jaena",
+"official": "Lopez Jaena",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004209000",
+"name": "Oroquieta City",
+"official": "City of Oroquieta",
+"city": true,
+"province": "1004200000"
+},
+{
+"code": "1004210000",
+"name": "Ozamiz City",
+"official": "City of Ozamiz",
+"city": true,
+"province": "1004200000"
+},
+{
+"code": "1004211000",
+"name": "Panaon",
+"official": "Panaon",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004212000",
+"name": "Plaridel",
+"official": "Plaridel",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004213000",
+"name": "Sapang Dalaga",
+"official": "Sapang Dalaga",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004214000",
+"name": "Sinacaban",
+"official": "Sinacaban",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004215000",
+"name": "Tangub City",
+"official": "City of Tangub",
+"city": true,
+"province": "1004200000"
+},
+{
+"code": "1004216000",
+"name": "Tudela",
+"official": "Tudela",
+"city": false,
+"province": "1004200000"
+},
+{
+"code": "1004301000",
+"name": "Alubijid",
+"official": "Alubijid",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004302000",
+"name": "Balingasag",
+"official": "Balingasag",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004303000",
+"name": "Balingoan",
+"official": "Balingoan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004304000",
+"name": "Binuangan",
+"official": "Binuangan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1030500000",
+"name": "Cagayan de Oro City",
+"official": "City of Cagayan de Oro",
+"city": true,
+"province": "1004300000"
+},
+{
+"code": "1004306000",
+"name": "Claveria",
+"official": "Claveria",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004307000",
+"name": "El Salvador City",
+"official": "City of El Salvador",
+"city": true,
+"province": "1004300000"
+},
+{
+"code": "1004308000",
+"name": "Gingoog City",
+"official": "City of Gingoog",
+"city": true,
+"province": "1004300000"
+},
+{
+"code": "1004309000",
+"name": "Gitagum",
+"official": "Gitagum",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004310000",
+"name": "Initao",
+"official": "Initao",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004311000",
+"name": "Jasaan",
+"official": "Jasaan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004312000",
+"name": "Kinoguitan",
+"official": "Kinoguitan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004313000",
+"name": "Lagonglong",
+"official": "Lagonglong",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004314000",
+"name": "Laguindingan",
+"official": "Laguindingan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004315000",
+"name": "Libertad",
+"official": "Libertad",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004316000",
+"name": "Lugait",
+"official": "Lugait",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004317000",
+"name": "Magsaysay",
+"official": "Magsaysay",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004318000",
+"name": "Manticao",
+"official": "Manticao",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004319000",
+"name": "Medina",
+"official": "Medina",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004320000",
+"name": "Naawan",
+"official": "Naawan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004321000",
+"name": "Opol",
+"official": "Opol",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004322000",
+"name": "Salay",
+"official": "Salay",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004323000",
+"name": "Sugbongcogon",
+"official": "Sugbongcogon",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004324000",
+"name": "Tagoloan",
+"official": "Tagoloan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004325000",
+"name": "Talisayan",
+"official": "Talisayan",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1004326000",
+"name": "Villanueva",
+"official": "Villanueva",
+"city": false,
+"province": "1004300000"
+},
+{
+"code": "1102301000",
+"name": "Asuncion",
+"official": "Asuncion",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102323000",
+"name": "Braulio E. Dujali",
+"official": "Braulio E. Dujali",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102303000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102305000",
+"name": "Kapalong",
+"official": "Kapalong",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102314000",
+"name": "New Corella",
+"official": "New Corella",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102315000",
+"name": "Panabo City",
+"official": "City of Panabo",
+"city": true,
+"province": "1102300000"
+},
+{
+"code": "1102317000",
+"name": "Samal City",
+"official": "Island Garden City of Samal",
+"city": true,
+"province": "1102300000"
+},
+{
+"code": "1102324000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102318000",
+"name": "Santo Tomas",
+"official": "Santo Tomas",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102319000",
+"name": "Tagum City",
+"official": "City of Tagum",
+"city": true,
+"province": "1102300000"
+},
+{
+"code": "1102322000",
+"name": "Talaingod",
+"official": "Talaingod",
+"city": false,
+"province": "1102300000"
+},
+{
+"code": "1102401000",
+"name": "Bansalan",
+"official": "Bansalan",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1130700000",
+"name": "Davao City",
+"official": "City of Davao",
+"city": true,
+"province": "1102400000"
+},
+{
+"code": "1102403000",
+"name": "Digos City",
+"official": "City of Digos",
+"city": true,
+"province": "1102400000"
+},
+{
+"code": "1102404000",
+"name": "Hagonoy",
+"official": "Hagonoy",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102406000",
+"name": "Kiblawan",
+"official": "Kiblawan",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102407000",
+"name": "Magsaysay",
+"official": "Magsaysay",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102408000",
+"name": "Malalag",
+"official": "Malalag",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102410000",
+"name": "Matanao",
+"official": "Matanao",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102411000",
+"name": "Padada",
+"official": "Padada",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102412000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102414000",
+"name": "Sulop",
+"official": "Sulop",
+"city": false,
+"province": "1102400000"
+},
+{
+"code": "1102501000",
+"name": "Baganga",
+"official": "Baganga",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102502000",
+"name": "Banaybanay",
+"official": "Banaybanay",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102503000",
+"name": "Boston",
+"official": "Boston",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102504000",
+"name": "Caraga",
+"official": "Caraga",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102505000",
+"name": "Cateel",
+"official": "Cateel",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102506000",
+"name": "Governor Generoso",
+"official": "Governor Generoso",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102507000",
+"name": "Lupon",
+"official": "Lupon",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102508000",
+"name": "Manay",
+"official": "Manay",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102509000",
+"name": "Mati City",
+"official": "City of Mati",
+"city": true,
+"province": "1102500000"
+},
+{
+"code": "1102510000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1102511000",
+"name": "Tarragona",
+"official": "Tarragona",
+"city": false,
+"province": "1102500000"
+},
+{
+"code": "1108201000",
+"name": "Compostela",
+"official": "Compostela",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108202000",
+"name": "Laak",
+"official": "Laak",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108203000",
+"name": "Mabini",
+"official": "Mabini",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108204000",
+"name": "Maco",
+"official": "Maco",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108205000",
+"name": "Maragusan",
+"official": "Maragusan",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108206000",
+"name": "Mawab",
+"official": "Mawab",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108207000",
+"name": "Monkayo",
+"official": "Monkayo",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108208000",
+"name": "Montevista",
+"official": "Montevista",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108209000",
+"name": "Nabunturan",
+"official": "Nabunturan",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108210000",
+"name": "New Bataan",
+"official": "New Bataan",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108211000",
+"name": "Pantukan",
+"official": "Pantukan",
+"city": false,
+"province": "1108200000"
+},
+{
+"code": "1108601000",
+"name": "Don Marcelino",
+"official": "Don Marcelino",
+"city": false,
+"province": "1108600000"
+},
+{
+"code": "1108602000",
+"name": "Jose Abad Santos",
+"official": "Jose Abad Santos",
+"city": false,
+"province": "1108600000"
+},
+{
+"code": "1108603000",
+"name": "Malita",
+"official": "Malita",
+"city": false,
+"province": "1108600000"
+},
+{
+"code": "1108604000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "1108600000"
+},
+{
+"code": "1108605000",
+"name": "Sarangani",
+"official": "Sarangani",
+"city": false,
+"province": "1108600000"
+},
+{
+"code": "1204701000",
+"name": "Alamada",
+"official": "Alamada",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204717000",
+"name": "Aleosan",
+"official": "Aleosan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204715000",
+"name": "Antipas",
+"official": "Antipas",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204718000",
+"name": "Arakan",
+"official": "Arakan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204716000",
+"name": "Banisilan",
+"official": "Banisilan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204702000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204703000",
+"name": "Kabacan",
+"official": "Kabacan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204704000",
+"name": "Kidapawan City",
+"official": "City of Kidapawan",
+"city": true,
+"province": "1204700000"
+},
+{
+"code": "1204705000",
+"name": "Libungan",
+"official": "Libungan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204710000",
+"name": "M'Lang",
+"official": "M'Lang",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204706000",
+"name": "Magpet",
+"official": "Magpet",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204707000",
+"name": "Makilala",
+"official": "Makilala",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204708000",
+"name": "Matalam",
+"official": "Matalam",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204709000",
+"name": "Midsayap",
+"official": "Midsayap",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204711000",
+"name": "Pigkawayan",
+"official": "Pigkawayan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204712000",
+"name": "Pikit",
+"official": "Pikit",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204713000",
+"name": "President Roxas",
+"official": "President Roxas",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1204714000",
+"name": "Tulunan",
+"official": "Tulunan",
+"city": false,
+"province": "1204700000"
+},
+{
+"code": "1206302000",
+"name": "Banga",
+"official": "Banga",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1230800000",
+"name": "General Santos City",
+"official": "City of General Santos",
+"city": true,
+"province": "1206300000"
+},
+{
+"code": "1206306000",
+"name": "Koronadal City",
+"official": "City of Koronadal",
+"city": true,
+"province": "1206300000"
+},
+{
+"code": "1206319000",
+"name": "Lake Sebu",
+"official": "Lake Sebu",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206311000",
+"name": "Norala",
+"official": "Norala",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206312000",
+"name": "Polomolok",
+"official": "Polomolok",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206318000",
+"name": "Santo Niño",
+"official": "Santo Niño",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206313000",
+"name": "Surallah",
+"official": "Surallah",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206316000",
+"name": "T'Boli",
+"official": "T'Boli",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206314000",
+"name": "Tampakan",
+"official": "Tampakan",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206315000",
+"name": "Tantangan",
+"official": "Tantangan",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206317000",
+"name": "Tupi",
+"official": "Tupi",
+"city": false,
+"province": "1206300000"
+},
+{
+"code": "1206501000",
+"name": "Bagumbayan",
+"official": "Bagumbayan",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206502000",
+"name": "Columbio",
+"official": "Columbio",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206503000",
+"name": "Esperanza",
+"official": "Esperanza",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206504000",
+"name": "Isulan",
+"official": "Isulan",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206505000",
+"name": "Kalamansig",
+"official": "Kalamansig",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206508000",
+"name": "Lambayong",
+"official": "Lambayong",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206506000",
+"name": "Lebak",
+"official": "Lebak",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206507000",
+"name": "Lutayan",
+"official": "Lutayan",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206509000",
+"name": "Palimbang",
+"official": "Palimbang",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206510000",
+"name": "President Quirino",
+"official": "President Quirino",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206512000",
+"name": "Sen. Ninoy Aquino",
+"official": "Sen. Ninoy Aquino",
+"city": false,
+"province": "1206500000"
+},
+{
+"code": "1206511000",
+"name": "Tacurong City",
+"official": "City of Tacurong",
+"city": true,
+"province": "1206500000"
+},
+{
+"code": "1208001000",
+"name": "Alabel",
+"official": "Alabel",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208002000",
+"name": "Glan",
+"official": "Glan",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208003000",
+"name": "Kiamba",
+"official": "Kiamba",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208004000",
+"name": "Maasim",
+"official": "Maasim",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208005000",
+"name": "Maitum",
+"official": "Maitum",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208006000",
+"name": "Malapatan",
+"official": "Malapatan",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1208007000",
+"name": "Malungon",
+"official": "Malungon",
+"city": false,
+"province": "1208000000"
+},
+{
+"code": "1380100000",
+"name": "Caloocan City",
+"official": "City of Caloocan",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380200000",
+"name": "Las Piñas City",
+"official": "City of Las Piñas",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380300000",
+"name": "Makati City",
+"official": "City of Makati",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380400000",
+"name": "Malabon City",
+"official": "City of Malabon",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380500000",
+"name": "Mandaluyong City",
+"official": "City of Mandaluyong",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380600000",
+"name": "Manila City",
+"official": "City of Manila",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380700000",
+"name": "Marikina City",
+"official": "City of Marikina",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380800000",
+"name": "Muntinlupa City",
+"official": "City of Muntinlupa",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1380900000",
+"name": "Navotas City",
+"official": "City of Navotas",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381000000",
+"name": "Parañaque City",
+"official": "City of Parañaque",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381100000",
+"name": "Pasay City",
+"official": "Pasay City",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381200000",
+"name": "Pasig City",
+"official": "City of Pasig",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381701000",
+"name": "Pateros",
+"official": "Pateros",
+"city": false,
+"province": "1300000000"
+},
+{
+"code": "1381300000",
+"name": "Quezon City",
+"official": "Quezon City",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381400000",
+"name": "San Juan City",
+"official": "City of San Juan",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381500000",
+"name": "Taguig City",
+"official": "City of Taguig",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1381600000",
+"name": "Valenzuela City",
+"official": "City of Valenzuela",
+"city": true,
+"province": "1300000000"
+},
+{
+"code": "1400101000",
+"name": "Bangued",
+"official": "Bangued",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400102000",
+"name": "Boliney",
+"official": "Boliney",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400103000",
+"name": "Bucay",
+"official": "Bucay",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400104000",
+"name": "Bucloc",
+"official": "Bucloc",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400105000",
+"name": "Daguioman",
+"official": "Daguioman",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400106000",
+"name": "Danglas",
+"official": "Danglas",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400107000",
+"name": "Dolores",
+"official": "Dolores",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400108000",
+"name": "La Paz",
+"official": "La Paz",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400109000",
+"name": "Lacub",
+"official": "Lacub",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400110000",
+"name": "Lagangilang",
+"official": "Lagangilang",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400111000",
+"name": "Lagayan",
+"official": "Lagayan",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400112000",
+"name": "Langiden",
+"official": "Langiden",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400113000",
+"name": "Licuan-Baay",
+"official": "Licuan-Baay",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400114000",
+"name": "Luba",
+"official": "Luba",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400115000",
+"name": "Malibcong",
+"official": "Malibcong",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400116000",
+"name": "Manabo",
+"official": "Manabo",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400117000",
+"name": "Peñarrubia",
+"official": "Peñarrubia",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400118000",
+"name": "Pidigan",
+"official": "Pidigan",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400119000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400120000",
+"name": "Sallapadan",
+"official": "Sallapadan",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400121000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400122000",
+"name": "San Juan",
+"official": "San Juan",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400123000",
+"name": "San Quintin",
+"official": "San Quintin",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400124000",
+"name": "Tayum",
+"official": "Tayum",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400125000",
+"name": "Tineg",
+"official": "Tineg",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400126000",
+"name": "Tubo",
+"official": "Tubo",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1400127000",
+"name": "Villaviciosa",
+"official": "Villaviciosa",
+"city": false,
+"province": "1400100000"
+},
+{
+"code": "1401101000",
+"name": "Atok",
+"official": "Atok",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1430300000",
+"name": "Baguio City",
+"official": "City of Baguio",
+"city": true,
+"province": "1401100000"
+},
+{
+"code": "1401103000",
+"name": "Bakun",
+"official": "Bakun",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401104000",
+"name": "Bokod",
+"official": "Bokod",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401105000",
+"name": "Buguias",
+"official": "Buguias",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401106000",
+"name": "Itogon",
+"official": "Itogon",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401107000",
+"name": "Kabayan",
+"official": "Kabayan",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401108000",
+"name": "Kapangan",
+"official": "Kapangan",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401109000",
+"name": "Kibungan",
+"official": "Kibungan",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401110000",
+"name": "La Trinidad",
+"official": "La Trinidad",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401111000",
+"name": "Mankayan",
+"official": "Mankayan",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401112000",
+"name": "Sablan",
+"official": "Sablan",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401113000",
+"name": "Tuba",
+"official": "Tuba",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1401114000",
+"name": "Tublay",
+"official": "Tublay",
+"city": false,
+"province": "1401100000"
+},
+{
+"code": "1402708000",
+"name": "Aguinaldo",
+"official": "Aguinaldo",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402707000",
+"name": "Alfonso Lista",
+"official": "Alfonso Lista",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402711000",
+"name": "Asipulo",
+"official": "Asipulo",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402701000",
+"name": "Banaue",
+"official": "Banaue",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402709000",
+"name": "Hingyon",
+"official": "Hingyon",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402702000",
+"name": "Hungduan",
+"official": "Hungduan",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402703000",
+"name": "Kiangan",
+"official": "Kiangan",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402704000",
+"name": "Lagawe",
+"official": "Lagawe",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402705000",
+"name": "Lamut",
+"official": "Lamut",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402706000",
+"name": "Mayoyao",
+"official": "Mayoyao",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1402710000",
+"name": "Tinoc",
+"official": "Tinoc",
+"city": false,
+"province": "1402700000"
+},
+{
+"code": "1403201000",
+"name": "Balbalan",
+"official": "Balbalan",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403206000",
+"name": "Lubuagan",
+"official": "Lubuagan",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403208000",
+"name": "Pasil",
+"official": "Pasil",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403209000",
+"name": "Pinukpuk",
+"official": "Pinukpuk",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403211000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403213000",
+"name": "Tabuk City",
+"official": "City of Tabuk",
+"city": true,
+"province": "1403200000"
+},
+{
+"code": "1403214000",
+"name": "Tanudan",
+"official": "Tanudan",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1403215000",
+"name": "Tinglayan",
+"official": "Tinglayan",
+"city": false,
+"province": "1403200000"
+},
+{
+"code": "1404401000",
+"name": "Barlig",
+"official": "Barlig",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404402000",
+"name": "Bauko",
+"official": "Bauko",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404403000",
+"name": "Besao",
+"official": "Besao",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404404000",
+"name": "Bontoc",
+"official": "Bontoc",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404405000",
+"name": "Natonin",
+"official": "Natonin",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404406000",
+"name": "Paracelis",
+"official": "Paracelis",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404407000",
+"name": "Sabangan",
+"official": "Sabangan",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404408000",
+"name": "Sadanga",
+"official": "Sadanga",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404409000",
+"name": "Sagada",
+"official": "Sagada",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1404410000",
+"name": "Tadian",
+"official": "Tadian",
+"city": false,
+"province": "1404400000"
+},
+{
+"code": "1408101000",
+"name": "Calanasan",
+"official": "Calanasan",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408102000",
+"name": "Conner",
+"official": "Conner",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408103000",
+"name": "Flora",
+"official": "Flora",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408104000",
+"name": "Kabugao",
+"official": "Kabugao",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408105000",
+"name": "Luna",
+"official": "Luna",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408106000",
+"name": "Pudtol",
+"official": "Pudtol",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1408107000",
+"name": "Santa Marcela",
+"official": "Santa Marcela",
+"city": false,
+"province": "1408100000"
+},
+{
+"code": "1600201000",
+"name": "Buenavista",
+"official": "Buenavista",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1630400000",
+"name": "Butuan City",
+"official": "City of Butuan",
+"city": true,
+"province": "1600200000"
+},
+{
+"code": "1600203000",
+"name": "Cabadbaran City",
+"official": "City of Cabadbaran",
+"city": true,
+"province": "1600200000"
+},
+{
+"code": "1600204000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600205000",
+"name": "Jabonga",
+"official": "Jabonga",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600206000",
+"name": "Kitcharao",
+"official": "Kitcharao",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600207000",
+"name": "Las Nieves",
+"official": "Las Nieves",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600208000",
+"name": "Magallanes",
+"official": "Magallanes",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600209000",
+"name": "Nasipit",
+"official": "Nasipit",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600212000",
+"name": "Remedios T. Romualdez",
+"official": "Remedios T. Romualdez",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600210000",
+"name": "Santiago",
+"official": "Santiago",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600211000",
+"name": "Tubay",
+"official": "Tubay",
+"city": false,
+"province": "1600200000"
+},
+{
+"code": "1600301000",
+"name": "Bayugan City",
+"official": "City of Bayugan",
+"city": true,
+"province": "1600300000"
+},
+{
+"code": "1600302000",
+"name": "Bunawan",
+"official": "Bunawan",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600303000",
+"name": "Esperanza",
+"official": "Esperanza",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600304000",
+"name": "La Paz",
+"official": "La Paz",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600305000",
+"name": "Loreto",
+"official": "Loreto",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600306000",
+"name": "Prosperidad",
+"official": "Prosperidad",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600307000",
+"name": "Rosario",
+"official": "Rosario",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600308000",
+"name": "San Francisco",
+"official": "San Francisco",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600309000",
+"name": "San Luis",
+"official": "San Luis",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600310000",
+"name": "Santa Josefa",
+"official": "Santa Josefa",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600314000",
+"name": "Sibagat",
+"official": "Sibagat",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600311000",
+"name": "Talacogon",
+"official": "Talacogon",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600312000",
+"name": "Trento",
+"official": "Trento",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1600313000",
+"name": "Veruela",
+"official": "Veruela",
+"city": false,
+"province": "1600300000"
+},
+{
+"code": "1606701000",
+"name": "Alegria",
+"official": "Alegria",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606702000",
+"name": "Bacuag",
+"official": "Bacuag",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606704000",
+"name": "Burgos",
+"official": "Burgos",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606706000",
+"name": "Claver",
+"official": "Claver",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606707000",
+"name": "Dapa",
+"official": "Dapa",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606708000",
+"name": "Del Carmen",
+"official": "Del Carmen",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606710000",
+"name": "General Luna",
+"official": "General Luna",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606711000",
+"name": "Gigaquit",
+"official": "Gigaquit",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606714000",
+"name": "Mainit",
+"official": "Mainit",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606715000",
+"name": "Malimono",
+"official": "Malimono",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606716000",
+"name": "Pilar",
+"official": "Pilar",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606717000",
+"name": "Placer",
+"official": "Placer",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606718000",
+"name": "San Benito",
+"official": "San Benito",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606719000",
+"name": "San Francisco",
+"official": "San Francisco",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606720000",
+"name": "San Isidro",
+"official": "San Isidro",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606721000",
+"name": "Santa Monica",
+"official": "Santa Monica",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606722000",
+"name": "Sison",
+"official": "Sison",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606723000",
+"name": "Socorro",
+"official": "Socorro",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606724000",
+"name": "Surigao City",
+"official": "City of Surigao",
+"city": true,
+"province": "1606700000"
+},
+{
+"code": "1606725000",
+"name": "Tagana-An",
+"official": "Tagana-An",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606727000",
+"name": "Tubod",
+"official": "Tubod",
+"city": false,
+"province": "1606700000"
+},
+{
+"code": "1606801000",
+"name": "Barobo",
+"official": "Barobo",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606802000",
+"name": "Bayabas",
+"official": "Bayabas",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606803000",
+"name": "Bislig City",
+"official": "City of Bislig",
+"city": true,
+"province": "1606800000"
+},
+{
+"code": "1606804000",
+"name": "Cagwait",
+"official": "Cagwait",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606805000",
+"name": "Cantilan",
+"official": "Cantilan",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606806000",
+"name": "Carmen",
+"official": "Carmen",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606807000",
+"name": "Carrascal",
+"official": "Carrascal",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606808000",
+"name": "Cortes",
+"official": "Cortes",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606809000",
+"name": "Hinatuan",
+"official": "Hinatuan",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606810000",
+"name": "Lanuza",
+"official": "Lanuza",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606811000",
+"name": "Lianga",
+"official": "Lianga",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606812000",
+"name": "Lingig",
+"official": "Lingig",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606813000",
+"name": "Madrid",
+"official": "Madrid",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606814000",
+"name": "Marihatag",
+"official": "Marihatag",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606815000",
+"name": "San Agustin",
+"official": "San Agustin",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606816000",
+"name": "San Miguel",
+"official": "San Miguel",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606817000",
+"name": "Tagbina",
+"official": "Tagbina",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606818000",
+"name": "Tago",
+"official": "Tago",
+"city": false,
+"province": "1606800000"
+},
+{
+"code": "1606819000",
+"name": "Tandag City",
+"official": "City of Tandag",
+"city": true,
+"province": "1606800000"
+},
+{
+"code": "1608501000",
+"name": "Basilisa",
+"official": "Basilisa",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608502000",
+"name": "Cagdianao",
+"official": "Cagdianao",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608503000",
+"name": "Dinagat",
+"official": "Dinagat",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608504000",
+"name": "Libjo",
+"official": "Libjo",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608505000",
+"name": "Loreto",
+"official": "Loreto",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608506000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1608507000",
+"name": "Tubajon",
+"official": "Tubajon",
+"city": false,
+"province": "1608500000"
+},
+{
+"code": "1704001000",
+"name": "Boac",
+"official": "Boac",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1704002000",
+"name": "Buenavista",
+"official": "Buenavista",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1704003000",
+"name": "Gasan",
+"official": "Gasan",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1704004000",
+"name": "Mogpog",
+"official": "Mogpog",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1704005000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1704006000",
+"name": "Torrijos",
+"official": "Torrijos",
+"city": false,
+"province": "1704000000"
+},
+{
+"code": "1705101000",
+"name": "Abra de Ilog",
+"official": "Abra de Ilog",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705102000",
+"name": "Calintaan",
+"official": "Calintaan",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705103000",
+"name": "Looc",
+"official": "Looc",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705104000",
+"name": "Lubang",
+"official": "Lubang",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705105000",
+"name": "Magsaysay",
+"official": "Magsaysay",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705106000",
+"name": "Mamburao",
+"official": "Mamburao",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705107000",
+"name": "Paluan",
+"official": "Paluan",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705108000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705109000",
+"name": "Sablayan",
+"official": "Sablayan",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705110000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705111000",
+"name": "Santa Cruz",
+"official": "Santa Cruz",
+"city": false,
+"province": "1705100000"
+},
+{
+"code": "1705201000",
+"name": "Baco",
+"official": "Baco",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705202000",
+"name": "Bansud",
+"official": "Bansud",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705203000",
+"name": "Bongabong",
+"official": "Bongabong",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705204000",
+"name": "Bulalacao",
+"official": "Bulalacao",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705205000",
+"name": "Calapan City",
+"official": "City of Calapan",
+"city": true,
+"province": "1705200000"
+},
+{
+"code": "1705206000",
+"name": "Gloria",
+"official": "Gloria",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705207000",
+"name": "Mansalay",
+"official": "Mansalay",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705208000",
+"name": "Naujan",
+"official": "Naujan",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705209000",
+"name": "Pinamalayan",
+"official": "Pinamalayan",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705210000",
+"name": "Pola",
+"official": "Pola",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705211000",
+"name": "Puerto Galera",
+"official": "Puerto Galera",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705212000",
+"name": "Roxas",
+"official": "Roxas",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705213000",
+"name": "San Teodoro",
+"official": "San Teodoro",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705214000",
+"name": "Socorro",
+"official": "Socorro",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705215000",
+"name": "Victoria",
+"official": "Victoria",
+"city": false,
+"province": "1705200000"
+},
+{
+"code": "1705301000",
+"name": "Aborlan",
+"official": "Aborlan",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705302000",
+"name": "Agutaya",
+"official": "Agutaya",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705303000",
+"name": "Araceli",
+"official": "Araceli",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705304000",
+"name": "Balabac",
+"official": "Balabac",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705305000",
+"name": "Bataraza",
+"official": "Bataraza",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705306000",
+"name": "Brooke'S Point",
+"official": "Brooke'S Point",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705307000",
+"name": "Busuanga",
+"official": "Busuanga",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705308000",
+"name": "Cagayancillo",
+"official": "Cagayancillo",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705309000",
+"name": "Coron",
+"official": "Coron",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705322000",
+"name": "Culion",
+"official": "Culion",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705310000",
+"name": "Cuyo",
+"official": "Cuyo",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705311000",
+"name": "Dumaran",
+"official": "Dumaran",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705312000",
+"name": "El Nido",
+"official": "El Nido",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705321000",
+"name": "Kalayaan",
+"official": "Kalayaan",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705313000",
+"name": "Linapacan",
+"official": "Linapacan",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705314000",
+"name": "Magsaysay",
+"official": "Magsaysay",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705315000",
+"name": "Narra",
+"official": "Narra",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1731500000",
+"name": "Puerto Princesa City",
+"official": "City of Puerto Princesa",
+"city": true,
+"province": "1705300000"
+},
+{
+"code": "1705317000",
+"name": "Quezon",
+"official": "Quezon",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705323000",
+"name": "Rizal",
+"official": "Rizal",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705318000",
+"name": "Roxas",
+"official": "Roxas",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705319000",
+"name": "San Vicente",
+"official": "San Vicente",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705324000",
+"name": "Sofronio Española",
+"official": "Sofronio Española",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705320000",
+"name": "Taytay",
+"official": "Taytay",
+"city": false,
+"province": "1705300000"
+},
+{
+"code": "1705901000",
+"name": "Alcantara",
+"official": "Alcantara",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705902000",
+"name": "Banton",
+"official": "Banton",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705903000",
+"name": "Cajidiocan",
+"official": "Cajidiocan",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705904000",
+"name": "Calatrava",
+"official": "Calatrava",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705905000",
+"name": "Concepcion",
+"official": "Concepcion",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705906000",
+"name": "Corcuera",
+"official": "Corcuera",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705916000",
+"name": "Ferrol",
+"official": "Ferrol",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705907000",
+"name": "Looc",
+"official": "Looc",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705908000",
+"name": "Magdiwang",
+"official": "Magdiwang",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705909000",
+"name": "Odiongan",
+"official": "Odiongan",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705910000",
+"name": "Romblon",
+"official": "Romblon",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705911000",
+"name": "San Agustin",
+"official": "San Agustin",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705912000",
+"name": "San Andres",
+"official": "San Andres",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705913000",
+"name": "San Fernando",
+"official": "San Fernando",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705914000",
+"name": "San Jose",
+"official": "San Jose",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705915000",
+"name": "Santa Fe",
+"official": "Santa Fe",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1705917000",
+"name": "Santa Maria",
+"official": "Santa Maria",
+"city": false,
+"province": "1705900000"
+},
+{
+"code": "1900708000",
+"name": "Akbar",
+"official": "Akbar",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900709000",
+"name": "Al-Barka",
+"official": "Al-Barka",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900710000",
+"name": "Hadji Mohammad Ajul",
+"official": "Hadji Mohammad Ajul",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900712000",
+"name": "Hadji Muhtamad",
+"official": "Hadji Muhtamad",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "0990101000",
+"name": "Isabela City",
+"official": "City of Isabela",
+"city": true,
+"province": "1900700000"
+},
+{
+"code": "1900702000",
+"name": "Lamitan City",
+"official": "City of Lamitan",
+"city": true,
+"province": "1900700000"
+},
+{
+"code": "1900703000",
+"name": "Lantawan",
+"official": "Lantawan",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900704000",
+"name": "Maluso",
+"official": "Maluso",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900705000",
+"name": "Sumisip",
+"official": "Sumisip",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900713000",
+"name": "Tabuan-Lasa",
+"official": "Tabuan-Lasa",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900706000",
+"name": "Tipo-Tipo",
+"official": "Tipo-Tipo",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900707000",
+"name": "Tuburan",
+"official": "Tuburan",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1900711000",
+"name": "Ungkaya Pukan",
+"official": "Ungkaya Pukan",
+"city": false,
+"province": "1900700000"
+},
+{
+"code": "1903637000",
+"name": "Amai Manabilang",
+"official": "Amai Manabilang",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903601000",
+"name": "Bacolod-Kalawi",
+"official": "Bacolod-Kalawi",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903602000",
+"name": "Balabagan",
+"official": "Balabagan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903603000",
+"name": "Balindong",
+"official": "Balindong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903604000",
+"name": "Bayang",
+"official": "Bayang",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903605000",
+"name": "Binidayan",
+"official": "Binidayan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903633000",
+"name": "Buadiposo-Buntong",
+"official": "Buadiposo-Buntong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903606000",
+"name": "Bubong",
+"official": "Bubong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903607000",
+"name": "Butig",
+"official": "Butig",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903632000",
+"name": "Calanogas",
+"official": "Calanogas",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903624000",
+"name": "Ditsaan-Ramain",
+"official": "Ditsaan-Ramain",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903609000",
+"name": "Ganassi",
+"official": "Ganassi",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903610000",
+"name": "Kapai",
+"official": "Kapai",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903639000",
+"name": "Kapatagan",
+"official": "Kapatagan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903611000",
+"name": "Lumba-Bayabao",
+"official": "Lumba-Bayabao",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903641000",
+"name": "Lumbaca-Unayan",
+"official": "Lumbaca-Unayan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903612000",
+"name": "Lumbatan",
+"official": "Lumbatan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903636000",
+"name": "Lumbayanague",
+"official": "Lumbayanague",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903613000",
+"name": "Madalum",
+"official": "Madalum",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903614000",
+"name": "Madamba",
+"official": "Madamba",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903634000",
+"name": "Maguing",
+"official": "Maguing",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903615000",
+"name": "Malabang",
+"official": "Malabang",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903616000",
+"name": "Marantao",
+"official": "Marantao",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903617000",
+"name": "Marawi City",
+"official": "City of Marawi",
+"city": true,
+"province": "1903600000"
+},
+{
+"code": "1903631000",
+"name": "Marogong",
+"official": "Marogong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903618000",
+"name": "Masiu",
+"official": "Masiu",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903619000",
+"name": "Mulondo",
+"official": "Mulondo",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903620000",
+"name": "Pagayawan",
+"official": "Pagayawan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903621000",
+"name": "Piagapo",
+"official": "Piagapo",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903635000",
+"name": "Picong",
+"official": "Picong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903622000",
+"name": "Poona Bayabao",
+"official": "Poona Bayabao",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903623000",
+"name": "Pualas",
+"official": "Pualas",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903625000",
+"name": "Saguiaran",
+"official": "Saguiaran",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903640000",
+"name": "Sultan Dumalondong",
+"official": "Sultan Dumalondong",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903638000",
+"name": "Tagoloan Ii",
+"official": "Tagoloan Ii",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903626000",
+"name": "Tamparan",
+"official": "Tamparan",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903627000",
+"name": "Taraka",
+"official": "Taraka",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903628000",
+"name": "Tubaran",
+"official": "Tubaran",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903629000",
+"name": "Tugaya",
+"official": "Tugaya",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1903630000",
+"name": "Wao",
+"official": "Wao",
+"city": false,
+"province": "1903600000"
+},
+{
+"code": "1906606000",
+"name": "Hadji Panglima Tahil",
+"official": "Hadji Panglima Tahil",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906601000",
+"name": "Indanan",
+"official": "Indanan",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906602000",
+"name": "Jolo",
+"official": "Jolo",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906603000",
+"name": "Kalingalan Caluang",
+"official": "Kalingalan Caluang",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906617000",
+"name": "Lugus",
+"official": "Lugus",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906604000",
+"name": "Luuk",
+"official": "Luuk",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906605000",
+"name": "Maimbung",
+"official": "Maimbung",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906607000",
+"name": "Old Panamao",
+"official": "Old Panamao",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906619000",
+"name": "Omar",
+"official": "Omar",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906618000",
+"name": "Pandami",
+"official": "Pandami",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906616000",
+"name": "Panglima Estino",
+"official": "Panglima Estino",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906608000",
+"name": "Pangutaran",
+"official": "Pangutaran",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906609000",
+"name": "Parang",
+"official": "Parang",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906610000",
+"name": "Pata",
+"official": "Pata",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906611000",
+"name": "Patikul",
+"official": "Patikul",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906612000",
+"name": "Siasi",
+"official": "Siasi",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906613000",
+"name": "Talipao",
+"official": "Talipao",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906614000",
+"name": "Tapul",
+"official": "Tapul",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1906615000",
+"name": "Tongkil",
+"official": "Tongkil",
+"city": false,
+"province": "1906600000"
+},
+{
+"code": "1907002000",
+"name": "Bongao",
+"official": "Bongao",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907009000",
+"name": "Languyan",
+"official": "Languyan",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907003000",
+"name": "Mapun",
+"official": "Mapun",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907001000",
+"name": "Panglima Sugala",
+"official": "Panglima Sugala",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907010000",
+"name": "Sapa-Sapa",
+"official": "Sapa-Sapa",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907011000",
+"name": "Sibutu",
+"official": "Sibutu",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907004000",
+"name": "Simunul",
+"official": "Simunul",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907005000",
+"name": "Sitangkai",
+"official": "Sitangkai",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907006000",
+"name": "South Ubian",
+"official": "South Ubian",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907007000",
+"name": "Tandubas",
+"official": "Tandubas",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1907008000",
+"name": "Turtle Islands",
+"official": "Turtle Islands",
+"city": false,
+"province": "1907000000"
+},
+{
+"code": "1908701000",
+"name": "Barira",
+"official": "Barira",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908702000",
+"name": "Buldon",
+"official": "Buldon",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908703000",
+"name": "Cotabato City",
+"official": "City of Cotabato",
+"city": true,
+"province": "1908700000"
+},
+{
+"code": "1908704000",
+"name": "Datu Blah T. Sinsuat",
+"official": "Datu Blah T. Sinsuat",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908705000",
+"name": "Datu Odin Sinsuat",
+"official": "Datu Odin Sinsuat",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908706000",
+"name": "Kabuntalan",
+"official": "Kabuntalan",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908707000",
+"name": "Matanog",
+"official": "Matanog",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908708000",
+"name": "Northern Kabuntalan",
+"official": "Northern Kabuntalan",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908709000",
+"name": "Parang",
+"official": "Parang",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908710000",
+"name": "Sultan Kudarat",
+"official": "Sultan Kudarat",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908711000",
+"name": "Sultan Mastura",
+"official": "Sultan Mastura",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908712000",
+"name": "Talitay",
+"official": "Talitay",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908713000",
+"name": "Upi",
+"official": "Upi",
+"city": false,
+"province": "1908700000"
+},
+{
+"code": "1908801000",
+"name": "Ampatuan",
+"official": "Ampatuan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908802000",
+"name": "Buluan",
+"official": "Buluan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908803000",
+"name": "Datu Abdullah Sangki",
+"official": "Datu Abdullah Sangki",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908804000",
+"name": "Datu Anggal Midtimbang",
+"official": "Datu Anggal Midtimbang",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908805000",
+"name": "Datu Hoffer Ampatuan",
+"official": "Datu Hoffer Ampatuan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908806000",
+"name": "Datu Paglas",
+"official": "Datu Paglas",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908807000",
+"name": "Datu Piang",
+"official": "Datu Piang",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908808000",
+"name": "Datu Salibo",
+"official": "Datu Salibo",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908809000",
+"name": "Datu Saudi Ampatuan",
+"official": "Datu Saudi Ampatuan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908810000",
+"name": "Datu Unsay",
+"official": "Datu Unsay",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908811000",
+"name": "Gen. S.K. Pendatun",
+"official": "Gen. S.K. Pendatun",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908812000",
+"name": "Guindulungan",
+"official": "Guindulungan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908813000",
+"name": "Mamasapano",
+"official": "Mamasapano",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908814000",
+"name": "Mangudadatu",
+"official": "Mangudadatu",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908815000",
+"name": "Pagagawan",
+"official": "Pagagawan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908816000",
+"name": "Pagalungan",
+"official": "Pagalungan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908817000",
+"name": "Paglat",
+"official": "Paglat",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908818000",
+"name": "Pandag",
+"official": "Pandag",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908819000",
+"name": "Rajah Buayan",
+"official": "Rajah Buayan",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908820000",
+"name": "Shariff Aguak",
+"official": "Shariff Aguak",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908821000",
+"name": "Shariff Saydona Mustapha",
+"official": "Shariff Saydona Mustapha",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908822000",
+"name": "South Upi",
+"official": "South Upi",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908823000",
+"name": "Sultan Sa Barongis",
+"official": "Sultan Sa Barongis",
+"city": false,
+"province": "1908800000"
+},
+{
+"code": "1908824000",
+"name": "Talayan",
+"official": "Talayan",
+"city": false,
+"province": "1908800000"
+}
+]
+}

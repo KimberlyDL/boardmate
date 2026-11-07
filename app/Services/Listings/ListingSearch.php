@@ -31,6 +31,7 @@ class ListingSearch
     /**
      * @param  array{q?: string, min_price?: int, max_price?: int, rental_mode?: string, includes?: list<string>,
      *               who?: string, who_can_stay?: string, available?: bool, near?: array{0: float, 1: float},
+     *               province?: string, city?: string,
      *               bbox?: array{0: float, 1: float, 2: float, 3: float}, sort?: string}  $filters
      */
     public function search(array $filters, int $perPage = 20): LengthAwarePaginator
@@ -52,6 +53,8 @@ class ListingSearch
                     ->orWhereRaw('lower(properties.province) like ?', [$term])
                     ->orWhereRaw('lower(properties.name) like ?', [$term]));
             })
+            ->when($filters['province'] ?? null, fn (Builder $q, string $province) => $q->whereRaw('lower(properties.province) = ?', [mb_strtolower(trim($province))]))
+            ->when($filters['city'] ?? null, fn (Builder $q, string $city) => $q->whereRaw('lower(properties.city) = ?', [mb_strtolower(trim($city))]))
             ->when(isset($filters['min_price']), fn (Builder $q) => $q->where($price, '>=', $filters['min_price']))
             ->when(isset($filters['max_price']), fn (Builder $q) => $q->where($price, '<=', $filters['max_price']))
             ->when($filters['rental_mode'] ?? null, fn (Builder $q, string $mode) => $q->whereHas('rooms', fn (Builder $r) => $r->where('rental_mode', $mode)))
@@ -75,6 +78,35 @@ class ListingSearch
             ->orderBy('properties.id')
             ->with(['photos', 'rooms', 'units', 'utilityAccounts', 'owner.ownerProfile'])
             ->paginate(min($perPage, self::MAX_PER_PAGE));
+    }
+
+    /**
+     * The provinces and cities that have places on the Finder, with how many,
+     * for the Finder's location filters (Phase 4): nobody picks a city with
+     * nothing in it.
+     *
+     * @return list<array{name: string, count: int, cities: list<array{name: string, count: int}>}>
+     */
+    public function places(): array
+    {
+        return Property::query()
+            ->onFinder()
+            ->whereNotNull('province')
+            ->toBase()
+            ->selectRaw('province, city, count(*) as total')
+            ->groupBy('province', 'city')
+            ->get()
+            ->groupBy('province')
+            ->map(fn ($rows, $province) => [
+                'name' => (string) $province,
+                'count' => (int) $rows->sum('total'),
+                'cities' => $rows->whereNotNull('city')
+                    ->map(fn ($r) => ['name' => (string) $r->city, 'count' => (int) $r->total])
+                    ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)->values()->all(),
+            ])
+            ->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)
+            ->values()
+            ->all();
     }
 
     /**

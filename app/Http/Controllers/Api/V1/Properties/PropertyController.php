@@ -12,11 +12,14 @@ use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Properties\PropertyResource;
 use App\Http\Responses\ApiResponse;
+use App\Models\City;
 use App\Models\Property;
+use App\Models\Province;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
 use App\Services\Booking\BookingService;
 use App\Services\Properties\PropertySetup;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -62,7 +65,7 @@ class PropertyController extends Controller
         $user = $request->user();
         abort_unless($user->hasAccountRole(UserRole::Owner), 403, 'Only owners can add properties.');
 
-        $data = $request->validate($this->detailRules($request, true) + [
+        $data = $request->validate($this->detailRules($request, true, null) + [
             'type' => ['required', Rule::enum(PropertyType::class)],
             'rental_mode' => ['required', Rule::enum(RentalMode::class)],
             'floor' => ['sometimes', 'nullable', 'integer', 'between:-5,100'],
@@ -100,7 +103,7 @@ class PropertyController extends Controller
     {
         $this->authorizeProperty($request, $property, A::EditDetails);
 
-        $data = $request->validate($this->detailRules($request, false) + [
+        $data = $request->validate($this->detailRules($request, false, $property) + [
             'type' => ['sometimes', Rule::enum(PropertyType::class)],
         ]);
 
@@ -194,7 +197,7 @@ class PropertyController extends Controller
         return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts.room', 'photos', 'owner.ownerProfile']), detail: true);
     }
 
-    private function detailRules(Request $request, bool $creating): array
+    private function detailRules(Request $request, bool $creating, ?Property $property): array
     {
         $required = $creating ? 'required' : 'sometimes';
 
@@ -205,11 +208,47 @@ class PropertyController extends Controller
             'emergency_numbers' => ['sometimes', 'nullable', 'string', 'max:500'],
             'street' => ['sometimes', 'nullable', 'string', 'max:255'],
             'barangay' => ['sometimes', 'nullable', 'string', 'max:120'],
-            'city' => ['sometimes', 'nullable', 'string', 'max:120'],
-            'province' => ['sometimes', 'nullable', 'string', 'max:120'],
+            'city' => ['sometimes', 'nullable', 'string', 'max:120', $this->listedCity($request, $property)],
+            'province' => ['sometimes', 'nullable', 'string', 'max:120', $this->listedProvince($property)],
             'latitude' => ['sometimes', 'nullable', 'numeric', 'between:4,22', 'required_with:longitude'],   // Philippines
             'longitude' => ['sometimes', 'nullable', 'numeric', 'between:116,127', 'required_with:latitude'],
         ];
+    }
+
+    /**
+     * The province must be on the official list (Phase 4). A location saved
+     * before the list keeps working until it is changed, so other edits are
+     * never blocked by it.
+     */
+    private function listedProvince(?Property $property): Closure
+    {
+        return function (string $attribute, mixed $value, Closure $fail) use ($property) {
+            if ($value === null || $value === $property?->province) {
+                return;
+            }
+            if (! Province::where('name', $value)->exists()) {
+                $fail('Pick the province from the list.');
+            }
+        };
+    }
+
+    /** The city must be on the official list, under the chosen (or saved) province. */
+    private function listedCity(Request $request, ?Property $property): Closure
+    {
+        return function (string $attribute, mixed $value, Closure $fail) use ($request, $property) {
+            $province = $request->has('province') ? $request->input('province') : $property?->province;
+            if ($value === null || ($value === $property?->city && $province === $property?->province)) {
+                return;
+            }
+            if (blank($province)) {
+                $fail('Pick the province first.');
+
+                return;
+            }
+            if (! City::where('name', $value)->whereHas('province', fn ($q) => $q->where('name', $province))->exists()) {
+                $fail("Pick the city or municipality from the list for {$province}.");
+            }
+        };
     }
 
     private function unitSpecRules(): array
