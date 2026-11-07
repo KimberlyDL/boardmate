@@ -191,7 +191,7 @@ class PropertyController extends Controller
 
     private function detail(Property $property): PropertyResource
     {
-        return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts', 'photos', 'owner.ownerProfile']), detail: true);
+        return new PropertyResource($property->load(['rooms', 'units', 'utilityAccounts.room', 'photos', 'owner.ownerProfile']), detail: true);
     }
 
     private function detailRules(Request $request, bool $creating): array

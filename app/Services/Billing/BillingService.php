@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\DB;
  *   period's first day, minus the agreed-rate discount in force that day;
  * - fixed utilities for the period just finished (in arrears), at their price
  *   on that period's first day: "fixed per bedspace" on bedspace tenancies,
- *   "fixed per property" on whole-room tenancies; only accounts the owner
+ *   "fixed per whole room" (fixed_per_property) on whole-room tenancies; only accounts the owner
  *   bills, for the whole property or the tenancy's room.
  *
  * Period 1 rent was paid at move-in, so the first bill is period 2. Issuing
@@ -54,6 +54,7 @@ class BillingService
         private readonly AuditService $audit,
         private readonly PaymentLedger $ledger,
         private readonly OwnerBillPoster $groupLines,
+        private readonly UtilityCoverage $coverage,
     ) {}
 
     /**
@@ -253,9 +254,9 @@ class BillingService
 
     /**
      * The fixed utilities this tenancy pays for a period, with the price in
-     * force on its first day: "per bedspace" for bedspaces, "per property"
+     * force on its first day: "per bedspace" for bedspaces, "per whole room"
      * for a whole room; only those the owner bills; a room's own account
-     * only for that room.
+     * only for that room, and in place of the property's for that utility.
      *
      * @return Collection<int, array{0: UtilityAccount, 1: PriceRule}>
      */
@@ -263,13 +264,9 @@ class BillingService
     {
         $method = $tenancy->unit->kind === UnitKind::Whole ? UtilityMethod::FixedPerProperty : UtilityMethod::FixedPerBedspace;
 
-        return UtilityAccount::query()
-            ->where('property_id', $tenancy->property_id)
-            ->where('method', $method->value)
-            ->where('billed_by', BilledBy::Owner->value)
-            ->where(fn ($q) => $q->whereNull('room_id')->orWhere('room_id', $tenancy->room_id))
-            ->orderBy('id')
-            ->get()
+        return $this->coverage->forRoom($tenancy->property_id, $tenancy->room_id)
+            ->filter(fn (UtilityAccount $account) => $account->method === $method && $account->billed_by === BilledBy::Owner)
+            ->values()
             ->map(fn (UtilityAccount $account) => [$account, $this->prices->ruleOn($account, $period->startsOn)])
             ->filter(fn (array $pair) => $pair[1] && $pair[1]->amount_centavos > 0)
             ->values();

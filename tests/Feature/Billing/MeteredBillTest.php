@@ -92,6 +92,18 @@ it('bills a room\'s own meter to that room only', function () {
         ->and(Bill::sole()->lines()->value('description'))->toBe("Room B meter, Sep 10 – Oct 9, 2026: room B's share");
 });
 
+it('leaves a room with its own meter out of the property meter\'s split', function () {
+    $this->property->utilityAccounts()->create(['room_id' => $this->roomB->id, 'type' => 'electricity', 'name' => 'Room B meter', 'method' => 'actual_bill', 'billed_by' => 'owner']);
+    // A room meter for another utility does not take the room out of the electricity split.
+    $this->property->utilityAccounts()->create(['room_id' => $this->roomA->id, 'type' => 'water', 'name' => 'Room A water', 'method' => 'actual_bill', 'billed_by' => 'owner']);
+
+    enterMeralco()->assertCreated();
+
+    expect(Bill::sole()->payer_id)->toBe($this->kim->id)
+        ->and(Bill::sole()->totalCentavos())->toBe(180000)
+        ->and(collect(UtilityBill::sole()->shares)->pluck('room_id')->all())->toBe([$this->roomA->id]);
+});
+
 it('stops when a room with a share has no leader, until it gets one or its share is waived', function () {
     RoomLeader::where('room_id', $this->roomA->id)->delete();
 

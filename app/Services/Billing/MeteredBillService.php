@@ -40,7 +40,8 @@ use Illuminate\Validation\ValidationException;
  * is billed to that room's leader as its own bill, due N days after entry.
  *
  * - A room's own meter bills that room in full.
- * - A whole-property meter is split across rooms by occupant-days within the
+ * - A whole-property meter skips rooms with their own meter for that utility
+ *   (UtilityCoverage) and is split across the others by occupant-days within the
  *   bill's coverage dates: everyone staying (bedspace tenants, and the people
  *   listed in a room rented whole) counts the days they were there.
  * - A room with a share but no leader stops the bill until a leader is
@@ -58,6 +59,7 @@ class MeteredBillService
         private readonly PaymentLedger $ledger,
         private readonly OwnerBillPoster $groupLines,
         private readonly FileService $files,
+        private readonly UtilityCoverage $coverage,
     ) {}
 
     /**
@@ -262,7 +264,7 @@ class MeteredBillService
      */
     public function occupantDays(UtilityAccount $account, string $from, string $to): array
     {
-        $roomIds = $account->room_id ? [$account->room_id] : $account->property->rooms()->pluck('id')->all();
+        $roomIds = $this->coverage->roomIdsFor($account);
         // Everyone who stayed during the coverage, including those who moved out since (until their move-out day).
         $tenancies = Tenancy::whereIn('room_id', $roomIds)
             ->where('moved_in_on', '<=', $to)

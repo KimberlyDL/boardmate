@@ -3,6 +3,7 @@
 use App\Enums\BillKind;
 use App\Enums\BillLineKind;
 use App\Enums\NotificationEvent;
+use App\Enums\RentalMode;
 use App\Models\Bill;
 use App\Models\Payment;
 use App\Models\PriceRule;
@@ -13,6 +14,7 @@ use App\Services\Billing\BillingService;
 use App\Services\Billing\PaymentLedger;
 use App\Services\Notifications\DormLinkNotification;
 use App\Services\Pricing\PriceBook;
+use App\Services\Properties\PropertySetup;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
@@ -127,6 +129,38 @@ it('puts "fixed per property" utilities on whole-room tenancies only, and room m
         ->toBe(['Rent, Oct 26 – Nov 25, 2026', 'Water, Sep 26 – Oct 25, 2026'])
         ->and(Bill::where('tenancy_id', $this->tenancy->id)->sole()->lines()->pluck('description')->all())
         ->toBe(['Rent, Oct 26 – Nov 25, 2026', 'Water, Sep 26 – Oct 25, 2026']);
+});
+
+it('bills a room its own fixed utility in place of the property\'s for the same utility', function () {
+    // Room 2 has its own water price; room 3 has water included in rent.
+    $setup = app(PropertySetup::class);
+    $room2 = $setup->createRoom($this->property, RentalMode::Bedspaces, ['count' => 1, 'rent_centavos' => 180000], $this->owner);
+    $room3 = $setup->createRoom($this->property, RentalMode::Bedspaces, ['count' => 1, 'rent_centavos' => 180000], $this->owner);
+    $roomWater = $this->property->utilityAccounts()->create(['room_id' => $room2->id, 'type' => 'water', 'name' => 'Room 2 water', 'method' => 'fixed_per_bedspace', 'billed_by' => 'owner']);
+    app(PriceBook::class)->set($roomWater, 20000, null, $this->owner);
+    $this->property->utilityAccounts()->create(['room_id' => $room3->id, 'type' => 'water', 'name' => 'Water (included)', 'method' => 'included', 'billed_by' => 'owner']);
+    $inRoom2 = Tenancy::factory()->forUnit($room2->units()->first())->movedInOn('2026-09-25')->create();
+    $inRoom3 = Tenancy::factory()->forUnit($room3->units()->first())->movedInOn('2026-09-25')->create();
+
+    billOn('2026-10-25');
+
+    $utilityLines = fn (Tenancy $t) => Bill::where('tenancy_id', $t->id)->sole()->lines()->where('kind', BillLineKind::FixedUtility)
+        ->get()->map(fn ($l) => [$l->description, $l->amount_centavos])->all();
+    expect($utilityLines($inRoom2))->toBe([['Room 2 water, Sep 26 – Oct 25, 2026', 20000]])
+        ->and($utilityLines($inRoom3))->toBe([])
+        ->and($utilityLines($this->tenancy))->toBe([['Water, Sep 26 – Oct 25, 2026', 30000]]);
+});
+
+it('treats "other" utilities with different names as different utilities', function () {
+    $cable = $this->property->utilityAccounts()->create(['type' => 'other', 'name' => 'Cable TV', 'method' => 'fixed_per_bedspace', 'billed_by' => 'owner']);
+    app(PriceBook::class)->set($cable, 5000, null, $this->owner);
+    $lpg = $this->property->utilityAccounts()->create(['room_id' => $this->bed->room_id, 'type' => 'other', 'name' => 'LPG', 'method' => 'fixed_per_bedspace', 'billed_by' => 'owner']);
+    app(PriceBook::class)->set($lpg, 7000, null, $this->owner);
+
+    billOn('2026-10-25');
+
+    expect(Bill::sole()->lines()->where('kind', BillLineKind::FixedUtility)->pluck('description')->all())
+        ->toBe(['Water, Sep 26 – Oct 25, 2026', 'Cable TV, Sep 26 – Oct 25, 2026', 'LPG, Sep 26 – Oct 25, 2026']);
 });
 
 it('runs from the daily scheduler', function () {

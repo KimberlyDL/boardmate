@@ -21,7 +21,7 @@ enum UtilityMethod: string
     {
         return match ($this) {
             self::FixedPerBedspace => 'Fixed per bedspace',
-            self::FixedPerProperty => 'Fixed per property',
+            self::FixedPerProperty => 'Fixed per whole room',
             self::ActualBill => 'Actual bill',
             self::Included => 'Included in rent',
             self::OptIn => 'Opt-in',

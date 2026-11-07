@@ -49,8 +49,9 @@ class UtilityAccountController extends Controller
     /**
      * Add a utility account
      *
-     * Fixed methods (per bedspace, per property, opt-in) need
-     * `amount_centavos`. "Billed by: group" means the boarders handle it among
+     * Fixed methods (per bedspace, per whole room, opt-in) need
+     * `amount_centavos`. With `room_id` the account is that room's own and
+     * replaces the property's account for the same utility in that room. "Billed by: group" means the boarders handle it among
      * themselves and it never appears on the owner's bill.
      */
     public function store(Request $request, Property $property): JsonResponse
