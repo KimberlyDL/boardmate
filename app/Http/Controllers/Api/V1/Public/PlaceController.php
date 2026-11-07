@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\V1\Public;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Models\Province;
+use App\Services\Places\Geocoder;
 use App\Services\Places\PlaceImporter;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -39,5 +41,21 @@ class PlaceController extends Controller
             ->all());
 
         return ApiResponse::ok($provinces)->header('Cache-Control', 'public, max-age=86400');
+    }
+
+    /**
+     * Search an address or place
+     *
+     * Places and addresses in the Philippines matching `q` (a town, barangay,
+     * street, school or landmark), best first, at most six, for measuring
+     * distance on the Finder. From OpenStreetMap; answers are cached.
+     *
+     * @unauthenticated
+     */
+    public function search(Request $request, Geocoder $geocoder): JsonResponse
+    {
+        $data = $request->validate(['q' => ['required', 'string', 'min:3', 'max:120']]);
+
+        return ApiResponse::ok($geocoder->search($data['q']));
     }
 }

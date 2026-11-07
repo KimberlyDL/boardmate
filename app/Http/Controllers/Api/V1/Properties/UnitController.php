@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Properties;
 
 use App\Enums\AuditEvent;
+use App\Enums\NotificationEvent;
 use App\Enums\PropertyAbility as A;
 use App\Enums\RentalMode;
 use App\Http\Controllers\Api\V1\Properties\Concerns\AuthorizesProperty;
@@ -12,13 +13,17 @@ use App\Http\Resources\Properties\UnitResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Property;
 use App\Models\RentableUnit;
+use App\Models\Tenancy;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Pricing\PriceBook;
 use App\Services\Properties\UnitStatusService;
+use App\Support\ManilaDate;
 use App\Support\Money;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
@@ -30,7 +35,11 @@ class UnitController extends Controller
 {
     use AuthorizesProperty;
 
-    public function __construct(private readonly AuditService $audit, private readonly PriceBook $prices) {}
+    public function __construct(
+        private readonly AuditService $audit,
+        private readonly PriceBook $prices,
+        private readonly NotificationService $notifications,
+    ) {}
 
     /**
      * List units
@@ -153,6 +162,8 @@ class UnitController extends Controller
         ]);
 
         $before = $this->prices->amountOn($unit);
+        $staying = Tenancy::query()->current()->where('unit_id', $unit->id)->with('tenant')->get();
+        $this->checkNotice($property, $unit, $staying, $data['amount_centavos'], $data['effective_from'] ?? null);
         try {
             $rule = $this->prices->set($unit, $data['amount_centavos'], $data['effective_from'] ?? null, $request->user());
         } catch (InvalidArgumentException $e) {
@@ -168,7 +179,42 @@ class UnitController extends Controller
             owner: $property->owner,
             note: "{$property->name} · {$unit->label} from ".$rule->effective_from->format('M j, Y'));
 
-        return ApiResponse::ok(new UnitResource($unit), 'Rent saved.');
+        // Whoever stays in this place is told the new rent and when it starts.
+        foreach ($staying as $tenancy) {
+            $this->notifications->send($tenancy->tenant, NotificationEvent::RentChanged, [
+                'property_name' => $property->name,
+                'unit_label' => $unit->label,
+                'before' => $before === null ? '' : Money::format($before),
+                'after' => Money::format($rule->amount_centavos),
+                'from' => $rule->effective_from->format('M j, Y'),
+            ]);
+        }
+
+        return ApiResponse::ok(new UnitResource($unit), $staying->isEmpty() ? 'Rent saved.' : 'Rent saved. The boarders staying here were told.');
+    }
+
+    /**
+     * A rent increase on a place someone stays in starts no sooner than the
+     * property's "notice before a price change" (Settings, default 30 days),
+     * so boarders are told ahead (improvements Phase 6). Lower rents, and
+     * places nobody stays in, can change any day.
+     *
+     * @param  Collection<int, Tenancy>  $staying
+     */
+    private function checkNotice(Property $property, RentableUnit $unit, Collection $staying, int $amount, ?string $from): void
+    {
+        $start = $from ? ManilaDate::parse($from)->startOfDay() : ManilaDate::today();
+        $current = $this->prices->amountOn($unit);
+        if ($staying->isEmpty() || $current === null || $amount <= $current) {
+            return;
+        }
+
+        $days = (int) ($property->settings?->price_change_notice_days ?? 30);
+        $earliest = ManilaDate::today()->addDays($days);
+        if ($start->lessThan($earliest)) {
+            throw ValidationException::withMessages(['effective_from' => "Someone stays here, so a higher rent needs {$days} days' notice. "
+                .'The earliest start is '.$earliest->format('M j, Y').'. (Change the notice in Settings.)']);
+        }
     }
 
     /**

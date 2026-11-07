@@ -1,10 +1,14 @@
 <?php
 
+use App\Enums\NotificationEvent;
 use App\Models\PriceRule;
+use App\Models\Tenancy;
 use App\Models\User;
+use App\Services\Notifications\DormLinkNotification;
 use App\Services\Pricing\PriceBook;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Notification;
 
 /*
 | S4: a price is never overwritten. The old rule closes the day before the
@@ -133,4 +137,33 @@ it('gives the same current and upcoming price when preloaded for a list', functi
     // Changing the price drops the preloaded values instead of serving stale ones.
     $this->prices->set($fresh, 190000, null, $this->owner);
     expect($this->prices->amountOn($fresh))->toBe(190000);
+});
+
+it('needs the notice days before a higher rent where someone stays, and tells them', function () {
+    Notification::fake();
+    $kim = User::factory()->boarder()->create();
+    Tenancy::factory()->forUnit($this->unit)->movedInOn('2026-09-01')->create(['tenant_id' => $kim->id]);
+    $rent = fn (int $amount, string $from) => $this->actingAs($this->owner, 'sanctum')
+        ->putJson("/api/v1/units/{$this->unit->id}/rent", ['amount_centavos' => $amount, 'effective_from' => $from]);
+
+    // Default 30 days: from Oct 4 the earliest start is Nov 3.
+    $rent(200000, '2026-11-02')->assertUnprocessable()
+        ->assertJsonPath('errors.effective_from.0', "Someone stays here, so a higher rent needs 30 days' notice. The earliest start is Nov 3, 2026. (Change the notice in Settings.)");
+    Notification::assertNothingSent();
+
+    $rent(200000, '2026-11-03')->assertOk()->assertJsonPath('message', 'Rent saved. The boarders staying here were told.');
+    Notification::assertSentTo($kim, DormLinkNotification::class, fn (DormLinkNotification $n) => $n->event === NotificationEvent::RentChanged
+        && $n->data['after'] === '₱2,000.00' && $n->data['before'] === '₱1,800.00' && $n->data['from'] === 'Nov 3, 2026');
+
+    // A lower rent can start any day.
+    $rent(150000, '2026-10-05')->assertOk();
+});
+
+it('lets a place nobody stays in change rent any day, without telling anyone', function () {
+    Notification::fake();
+
+    $this->actingAs($this->owner, 'sanctum')
+        ->putJson("/api/v1/units/{$this->unit->id}/rent", ['amount_centavos' => 250000, 'effective_from' => '2026-10-05'])
+        ->assertOk()->assertJsonPath('message', 'Rent saved.');
+    Notification::assertNothingSent();
 });

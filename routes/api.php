@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Account\EmailChangeController;
 use App\Http\Controllers\Api\V1\Account\NotificationController;
 use App\Http\Controllers\Api\V1\Account\ProfileController;
 use App\Http\Controllers\Api\V1\Admin\CampusController as AdminCampusController;
+use App\Http\Controllers\Api\V1\Admin\ExportController as AdminExportController;
 use App\Http\Controllers\Api\V1\Admin\OwnerReviewController;
 use App\Http\Controllers\Api\V1\Admin\PlatformStatsController;
 use App\Http\Controllers\Api\V1\Admin\UserController as AdminUserController;
@@ -114,6 +115,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // CSV reports (A10): a signed, short-lived link from reports/{report}/link.
     Route::get('reports/{report}/download', [ReportController::class, 'download'])
         ->middleware(['signed', 'throttle:30,1'])->where('report', '[a-z_]+')->name('reports.download');
+    // Admin CSV exports: a signed, short-lived link from admin/exports/{export}/link.
+    Route::get('admin/exports/{export}/download', [AdminExportController::class, 'download'])
+        ->middleware(['signed', 'throttle:30,1'])->where('export', '[a-z_]+')->name('admin.exports.download');
 
     Route::middleware(['auth:sanctum', EnsureAccountIsActive::class])->group(function () {
         Route::post('auth/logout', [SessionController::class, 'destroy'])->name('auth.logout');
@@ -408,6 +412,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             Route::get('audit-log', [AuditLogController::class, 'admin'])->name('audit-log');
             Route::get('stats', [PlatformStatsController::class, 'index'])->name('stats');
+            Route::get('exports', [AdminExportController::class, 'index'])->name('exports.index');
+            Route::get('exports/{export}/link', [AdminExportController::class, 'link'])->where('export', '[a-z_]+')->name('exports.link');
             Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
             Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
             Route::post('users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');
@@ -425,6 +431,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('listings/places', [ListingController::class, 'places'])->name('listings.places');
         Route::get('campuses', [CampusController::class, 'index'])->name('campuses.index');
         Route::get('places', [PlaceController::class, 'index'])->name('places.index');
+        Route::get('places/search', [PlaceController::class, 'search'])->middleware('throttle:20,1')->name('places.search');
         Route::get('listings/{property}', [ListingController::class, 'show'])->whereNumber('property')->name('listings.show');
     });
 

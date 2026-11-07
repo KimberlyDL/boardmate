@@ -39,6 +39,15 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
     ],
 
+    // Address search on the Finder: OpenStreetMap's Nominatim by default
+    // (free, fair use: about one lookup a second, a real app name in the
+    // User-Agent). LocationIQ speaks the same language: set its URL and key.
+    'geocoder' => [
+        'url' => env('GEOCODER_URL') ?: 'https://nominatim.openstreetmap.org',
+        'key' => env('GEOCODER_KEY'),
+        'user_agent' => env('GEOCODER_USER_AGENT') ?: 'DormLink/1.0 (+https://dormlink.vercel.app)',
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
