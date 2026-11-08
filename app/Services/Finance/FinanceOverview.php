@@ -18,6 +18,7 @@ class FinanceOverview
     public function __construct(
         private readonly FinanceFigures $figures,
         private readonly StayFinance $stays,
+        private readonly HouseFigures $house,
     ) {}
 
     /**
@@ -37,6 +38,8 @@ class FinanceOverview
             'previous' => $this->previous($prevFrom, $prevTo, $this->figures->total($this->figures->grouped($ids, $prevFrom, $prevTo))),
             'by_property' => $properties->map(fn (Property $p) => ['property' => ['id' => $p->id, 'name' => $p->name]] + $grouped[$p->id])->values()->all(),
             'series' => $this->figures->series($ids, $to),
+            'occupancy_series' => $this->figures->occupancySeries($ids, $to),
+            'house' => $this->house($ids, $from, $to),
         ];
     }
 
@@ -64,6 +67,8 @@ class FinanceOverview
             'previous' => $this->previous($prevFrom, $prevTo, $this->figures->total($this->figures->grouped([$property->id], $prevFrom, $prevTo))),
             'rooms' => $rooms->values()->all(),
             'series' => $this->figures->series([$property->id], $to),
+            'occupancy_series' => $this->figures->occupancySeries([$property->id], $to),
+            'house' => $this->house([$property->id], $from, $to),
         ];
     }
 
@@ -98,7 +103,23 @@ class FinanceOverview
                 ],
             ] + $totals[$t->id])->values()->all(),
             'series' => $this->figures->series([$room->property_id], $to, roomId: $room->id),
+            'occupancy_series' => $this->figures->occupancySeries([$room->property_id], $to, roomId: $room->id),
+            'house' => $this->house([$room->property_id], $from, $to, $room->id),
         ];
+    }
+
+    /**
+     * Repairs and late entries in the period, with the period before for "vs before".
+     *
+     * @param  list<int>  $propertyIds
+     * @return array<string, mixed>
+     */
+    private function house(array $propertyIds, CarbonImmutable $from, CarbonImmutable $to, ?int $roomId = null): array
+    {
+        [$prevFrom, $prevTo] = $this->previousPeriod($from, $to);
+
+        return $this->house->figures($propertyIds, $from, $to, $roomId)
+            + ['previous' => $this->house->previous($propertyIds, $prevFrom, $prevTo, $roomId)];
     }
 
     /** @return array<string, mixed> */

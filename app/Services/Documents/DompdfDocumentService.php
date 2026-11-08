@@ -166,6 +166,9 @@ class DompdfDocumentService implements DocumentService
 
         return [
             'trend' => $this->charts->trend($page['series']),
+            'occupancy' => isset($page['occupancy_series']) && collect($page['occupancy_series'])->contains(fn ($m) => $m['places'] > 0)
+                ? $this->charts->occupancy($page['occupancy_series'])
+                : null,
             'billed' => $this->charts->bars([
                 'Rent' => $t['billed']['rent'],
                 'Fixed utilities' => $t['billed']['fixed_utilities'],

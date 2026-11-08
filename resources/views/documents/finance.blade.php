@@ -49,6 +49,34 @@
         <img src="{{ $charts['trend'] }}" style="width: 100%">
     </div>
 
+    @if ($charts['occupancy'])
+        <div style="page-break-inside: avoid">
+            <h3>Places taken, last 12 months</h3>
+            <img src="{{ $charts['occupancy'] }}" style="width: 100%">
+        </div>
+    @endif
+
+    @isset($page['house'])
+        @php $r = $page['house']['repairs']; $l = $page['house']['late_entries']; $p = $page['house']['previous']; @endphp
+        <table class="lines" style="page-break-inside: avoid">
+            <thead><tr><th>Repairs and late entries</th><th class="right">In the period</th><th class="right">Period before</th></tr></thead>
+            <tbody>
+                <tr><td>Repairs reported{{ $r['by_kind'] ? ' ('.collect($r['by_kind'])->map(fn ($k) => $k['label'].' '.$k['count'])->implode(', ').')' : '' }}</td>
+                    <td class="right">{{ $r['reported'] }}</td><td class="right">{{ $p['repairs_reported'] }}</td></tr>
+                <tr><td>Repairs fixed{{ $r['average_days_to_fix'] !== null ? ', '.$r['average_days_to_fix'].' days on average' : '' }}</td>
+                    <td class="right">{{ $r['fixed'] }}</td><td class="right">{{ $p['repairs_fixed'] }}</td></tr>
+                <tr><td>Repairs open today ({{ $r['urgent_open_now'] }} urgent)</td><td class="right">{{ $r['open_now'] }}</td><td class="right"></td></tr>
+                <tr><td>Late-entry requests (approved {{ $l['requests']['approved'] }}, declined {{ $l['requests']['declined'] }}, waiting {{ $l['requests']['waiting'] }})</td>
+                    <td class="right">{{ array_sum($l['requests']) }}</td><td class="right">{{ $p['late_requests'] }}</td></tr>
+                <tr><td>Late without asking (curfew violations)</td><td class="right">{{ $l['curfew_violations'] }}</td><td class="right">{{ $p['curfew_violations'] }}</td></tr>
+                @foreach ($l['repeated'] as $stay)
+                    <tr><td class="muted">&nbsp;&nbsp;{{ $stay['stay']['tenant'] ?? 'Former boarder' }}{{ $stay['stay']['room'] ? ' · Room '.$stay['stay']['room'] : '' }}</td>
+                        <td class="right">{{ $stay['nights'] }} nights</td><td class="right"></td></tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endisset
+
     <table style="width: 100%; margin-top: 4mm">
         <tr>
             <td style="width: 50%; vertical-align: top; padding-right: 3mm">

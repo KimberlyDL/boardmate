@@ -17,6 +17,8 @@ use App\Models\TenancyPayment;
 use App\Models\User;
 use App\Services\Billing\PaymentLedger;
 use App\Services\Finance\FinanceOverview;
+use App\Services\Properties\PropertySetup;
+use App\Services\Properties\UnitStatusService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 
@@ -254,4 +256,45 @@ it('exports income by month and money by room as CSV', function () {
         ->and($rooms[1][6])->toBe('4000.00')
         ->and($rooms[1][10])->toBe('75.0')
         ->and($rooms[1][11])->toBe('800.00');
+});
+
+it('rebuilds places taken month by month from move-ins and move-outs', function () {
+    $series = $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/properties/{$this->house->id}/finance")
+        ->assertOk()->json('data.occupancy_series');
+    $month = fn (string $m) => collect($series)->firstWhere('month', $m);
+
+    // Both beds were added today; before that a bed counts only in a month someone stayed in it.
+    expect($series)->toHaveCount(12)
+        ->and($month('2026-05'))->toBe(['month' => '2026-05', 'places' => 0, 'occupied' => 0, 'rate' => null])
+        ->and($month('2026-06'))->toBe(['month' => '2026-06', 'places' => 1, 'occupied' => 1, 'rate' => 1])
+        // Ana moved out on 30 September, so only Kim is in at the end of the month.
+        ->and($month('2026-09'))->toBe(['month' => '2026-09', 'places' => 2, 'occupied' => 1, 'rate' => 0.5])
+        ->and($month('2026-10'))->toBe(['month' => '2026-10', 'places' => 2, 'occupied' => 2, 'rate' => 1]);
+
+    // Every property, and one room, get the same series.
+    $all = $this->actingAs($this->owner, 'sanctum')->getJson('/api/v1/finance')->assertOk()->json('data.occupancy_series');
+    expect(end($all))->toBe(['month' => '2026-10', 'places' => 3, 'occupied' => 3, 'rate' => 1]);
+    $room = $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/rooms/{$this->kimStay->room_id}/finance")->assertOk()->json('data.occupancy_series');
+    expect(end($room)['occupied'])->toBe(2);
+});
+
+it('counts a whole-room stay as all the room places and leaves out removed places', function () {
+    $dorm = makeProperty($this->owner, ['details' => ['name' => 'Dorm'], 'units' => ['count' => 3, 'rent_centavos' => 200000]]);
+    $room = $dorm->rooms()->first();
+    $whole = app(PropertySetup::class)->offerWhole($room, 500000, null, $this->owner);
+    Tenancy::factory()->forUnit($whole)->movedInOn('2026-10-01')->create();
+    $whole->forceFill(['status' => UnitStatus::Occupied])->save();
+    $dorm->units()->where('is_whole_option', false)->latest('id')->first()->delete();
+    UnitStatusService::syncWholeOption($room->id);
+
+    $finance = $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/properties/{$dorm->id}/finance")->assertOk()->json('data');
+
+    expect(end($finance['occupancy_series']))->toBe(['month' => '2026-10', 'places' => 2, 'occupied' => 2, 'rate' => 1])
+        // Today's figure and the dashboard agree: the blocked bedspaces are taken, not free.
+        ->and($finance['totals']['occupancy'])->toBe(['places' => 2, 'occupied' => 2])
+        ->and($finance['rooms'][0]['occupancy'])->toBe(['places' => 2, 'occupied' => 2]);
+    $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/properties/{$dorm->id}/dashboard")->assertOk()
+        ->assertJsonPath('data.occupancy.places', 2)
+        ->assertJsonPath('data.occupancy.occupied', 2)
+        ->assertJsonPath('data.occupancy.available', 0);
 });

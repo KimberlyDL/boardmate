@@ -81,7 +81,17 @@ class PropertyDashboard
     private function occupancy(Property $property): array
     {
         // Places: bedspaces and whole rooms; a bedspace room's whole-room option is not an extra place.
-        $units = RentableUnit::where('property_id', $property->id)->where('is_whole_option', false)->get(['status', 'not_ready']);
+        // While the room is rented whole, its bedspaces are blocked and take the whole-room stay's status.
+        $all = RentableUnit::where('property_id', $property->id)->get(['room_id', 'status', 'not_ready', 'blocked', 'is_whole_option']);
+        $options = $all->where('is_whole_option', true)->keyBy('room_id');
+        $units = $all->where('is_whole_option', false)->map(function (RentableUnit $u) use ($options) {
+            $option = $options->get($u->room_id);
+            if ($u->blocked && $option?->status->isInUse()) {
+                $u->status = $option->status;
+            }
+
+            return $u;
+        });
         $occupied = [UnitStatus::Occupied, UnitStatus::Leaving, UnitStatus::Overstaying];
 
         return [
@@ -89,7 +99,7 @@ class PropertyDashboard
             'places' => $units->count(),
             'occupied' => $units->filter(fn ($u) => in_array($u->status, $occupied, true))->count(),
             'reserved' => $units->where('status', UnitStatus::Reserved)->count(),
-            'available' => $units->filter(fn ($u) => $u->status === UnitStatus::Available && ! $u->not_ready)->count(),
+            'available' => $units->filter(fn ($u) => $u->status === UnitStatus::Available && ! $u->not_ready && ! $u->blocked)->count(),
             'not_ready' => $units->filter(fn ($u) => $u->status === UnitStatus::Available && $u->not_ready)->count(),
         ];
     }

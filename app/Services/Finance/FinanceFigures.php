@@ -123,6 +123,61 @@ class FinanceFigures
     }
 
     /**
+     * Places taken at the end of each month (today for this month), oldest
+     * first, rebuilt from move-in and move-out dates: of the properties, or of
+     * one room of them. Nothing is stored, so a month shows the places that
+     * existed then (added before the month ended, or with a stay that month;
+     * not yet removed). A stay in a room's whole-room option takes all of the
+     * room's places. `rate` is null when there were no places.
+     *
+     * @param  list<int>  $propertyIds
+     * @return list<array{month: string, places: int, occupied: int, rate: ?float}>
+     */
+    public function occupancySeries(array $propertyIds, CarbonImmutable $to, int $months = 12, ?int $roomId = null): array
+    {
+        $from = $to->startOfMonth()->subMonths($months - 1);
+        $today = ManilaDate::today()->toDateString();
+
+        $units = DB::table('rentable_units')->whereIn('property_id', $propertyIds)
+            ->when($roomId !== null, fn ($q) => $q->where('room_id', $roomId))
+            ->get(['id', 'room_id', 'is_whole_option', 'created_at', 'deleted_at']);
+        $stays = DB::table('tenancies')->whereIn('unit_id', $units->pluck('id'))
+            ->where('moved_in_on', '<=', min($today, $to->endOfMonth()->toDateString()))
+            ->where(fn ($q) => $q->whereNull('moved_out_on')->orWhere('moved_out_on', '>', $from->toDateString()))
+            ->get(['unit_id', 'moved_in_on', 'moved_out_on']);
+        $byId = $units->keyBy('id');
+
+        return collect(range(0, $months - 1))->map(function (int $i) use ($from, $today, $units, $stays, $byId) {
+            $start = $from->addMonths($i);
+            $end = min($today, $start->endOfMonth()->toDateString());
+            $month = $start->format('Y-m');
+            if ($end < $start->toDateString()) {
+                return ['month' => $month, 'places' => 0, 'occupied' => 0, 'rate' => null];
+            }
+
+            $stayedThisMonth = $stays->filter(fn ($s) => $s->moved_in_on <= $end && ($s->moved_out_on === null || $s->moved_out_on > $start->toDateString()))
+                ->pluck('unit_id')->flip();
+            $places = $units->filter(fn ($u) => ! $u->is_whole_option
+                && (substr((string) $u->created_at, 0, 10) <= $end || $stayedThisMonth->has($u->id))
+                && ($u->deleted_at === null || substr((string) $u->deleted_at, 0, 10) > $end));
+
+            $taken = $stays->filter(fn ($s) => $s->moved_in_on <= $end && ($s->moved_out_on === null || $s->moved_out_on > $end))
+                ->flatMap(fn ($s) => $byId[$s->unit_id]->is_whole_option
+                    ? $places->where('room_id', $byId[$s->unit_id]->room_id)->pluck('id')
+                    : [$s->unit_id])
+                ->unique()
+                ->intersect($places->pluck('id'));
+
+            return [
+                'month' => $month,
+                'places' => $places->count(),
+                'occupied' => $taken->count(),
+                'rate' => $places->isEmpty() ? null : round($taken->count() / $places->count(), 4),
+            ];
+        })->all();
+    }
+
+    /**
      * Collected per property: the same figure as `collected.total`, for the dashboard.
      *
      * @param  list<int>  $propertyIds
@@ -471,17 +526,21 @@ class FinanceFigures
 
     /**
      * Places today (bedspaces and whole rooms, a room's whole-room option not
-     * counted) and how many are taken, as on the dashboard.
+     * counted) and how many are taken, as on the dashboard. While a room is
+     * rented whole, its bedspaces are blocked and count as taken.
      *
      * @return array<int|string, array{places: int, occupied: int}>
      */
     private function occupancy(array $propertyIds, string $by): array
     {
-        $key = $this->key($by, 'property_id', 'room_id', '');
+        $key = $this->key($by, 'u.property_id', 'u.room_id', '');
         $taken = collect([UnitStatus::Occupied, UnitStatus::Leaving, UnitStatus::Overstaying])->map->value->all();
+        $in = implode(',', array_fill(0, count($taken), '?'));
 
-        return DB::table('rentable_units')->whereIn('property_id', $propertyIds)->whereNull('deleted_at')->where('is_whole_option', false)
-            ->selectRaw("{$key} as k, count(*) as places, sum(case when status in (".implode(',', array_fill(0, count($taken), '?')).') then 1 else 0 end) as occupied', $taken)
+        return DB::table('rentable_units as u')
+            ->leftJoin('rentable_units as opt', fn ($j) => $j->on('opt.room_id', '=', 'u.room_id')->where('opt.is_whole_option', true)->whereNull('opt.deleted_at'))
+            ->whereIn('u.property_id', $propertyIds)->whereNull('u.deleted_at')->where('u.is_whole_option', false)
+            ->selectRaw("{$key} as k, count(*) as places, sum(case when u.status in ({$in}) or (u.blocked and opt.status in ({$in})) then 1 else 0 end) as occupied", [...$taken, ...$taken])
             ->groupByRaw($key)->get()
             ->mapWithKeys(fn ($r) => [$r->k => ['places' => (int) $r->places, 'occupied' => (int) $r->occupied]])->all();
     }

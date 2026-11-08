@@ -45,6 +45,40 @@ class FinanceChart
     }
 
     /**
+     * Share of places taken each month, as columns from 0 to 100% with the
+     * percent above each; a month without places shows no column.
+     *
+     * @param  list<array{month: string, places: int, occupied: int, rate: ?float}>  $series
+     */
+    public function occupancy(array $series, int $width = 640, int $height = 200): string
+    {
+        $left = 44;
+        $bottom = 28;
+        $top = 16;
+        $plotW = $width - $left - 8;
+        $plotH = $height - $top - $bottom;
+
+        $svg = '';
+        foreach ([0, 0.25, 0.5, 0.75, 1] as $f) {
+            $y = $top + $plotH - $f * $plotH;
+            $svg .= sprintf('<line x1="%d" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#e5e7eb" stroke-width="1"/>', $left, $y, $left + $plotW, $y);
+            $svg .= $this->text($left - 6, $y + 4, ($f * 100).'%', 'end');
+        }
+        $slot = $plotW / max(1, count($series));
+        $barW = min(24, $slot * 0.5);
+        foreach ($series as $i => $m) {
+            $x = $left + $i * $slot + ($slot - $barW) / 2;
+            if ($m['rate'] !== null) {
+                $svg .= $this->column($x, $top, $plotH, $barW, $m['rate'], self::COLLECTED);
+                $svg .= $this->text($x + $barW / 2, $top + $plotH - $m['rate'] * $plotH - 4, round($m['rate'] * 100).'%', 'middle');
+            }
+            $svg .= $this->text($left + $i * $slot + $slot / 2, $height - 10, date('M', strtotime($m['month'].'-01')), 'middle');
+        }
+
+        return $this->dataUri($svg, $width, $height);
+    }
+
+    /**
      * Horizontal bars, one per label (e.g. what was billed, or unpaid by age).
      *
      * @param  array<string, int>  $values  label => centavos
