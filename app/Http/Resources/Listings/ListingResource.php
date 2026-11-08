@@ -11,6 +11,7 @@ use App\Models\Property;
 use App\Models\RentableUnit;
 use App\Models\Room;
 use App\Models\UtilityAccount;
+use App\Services\Billing\UtilityCoverage;
 use App\Services\Files\Contracts\FileService;
 use App\Services\Pricing\PriceBook;
 use Illuminate\Http\Request;
@@ -101,6 +102,54 @@ class ListingResource extends JsonResource
                 'rent_centavos' => $prices->amountOn($option),
                 'capacity' => $option->capacity,
             ] : null,
+            'utilities' => $this->roomUtilities($room, $option !== null, $prices),
+        ];
+    }
+
+    /**
+     * What a room pays for utilities, by the same rule as its bills
+     * (UtilityCoverage, BillingService): the room's own accounts, plus the
+     * property's for every utility the room has none of its own for. A
+     * bedspace room shows "fixed per bedspace" prices and a whole room "fixed
+     * per whole room" ones; a bedspace room that can also be rented whole
+     * shows both, each marked with what it applies to.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function roomUtilities(Room $room, bool $hasWholeOption, PriceBook $prices): array
+    {
+        $accounts = $this->utilityAccounts->filter(fn (UtilityAccount $a) => $a->room_id === null || $a->room_id === $room->id);
+        $roomOwn = $accounts->whereNotNull('room_id')->map(fn (UtilityAccount $a) => UtilityCoverage::utilityKey($a))->unique();
+        $whole = $room->rental_mode === RentalMode::Whole;
+
+        return $accounts
+            ->reject(fn (UtilityAccount $a) => $a->room_id === null && $roomOwn->contains(UtilityCoverage::utilityKey($a)))
+            ->reject(fn (UtilityAccount $a) => match ($a->method) {
+                UtilityMethod::FixedPerBedspace => $whole,
+                UtilityMethod::FixedPerProperty => ! $whole && ! $hasWholeOption,
+                default => false,
+            })
+            ->sortBy('id')
+            ->map(fn (UtilityAccount $a) => $this->utility($a, $prices) + [
+                'applies_to' => $hasWholeOption ? match ($a->method) {
+                    UtilityMethod::FixedPerBedspace => 'bedspace',
+                    UtilityMethod::FixedPerProperty => 'whole_room',
+                    default => null,
+                } : null,
+            ])
+            ->values()->all();
+    }
+
+    /** @return array<string, mixed> */
+    private function utility(UtilityAccount $account, PriceBook $prices): array
+    {
+        return [
+            'type' => $account->type->value,
+            'name' => $account->name,
+            'method' => $account->method->value,
+            'method_label' => $account->method->label(),
+            'billed_by' => $account->billed_by->value,
+            'amount_centavos' => $account->method->hasFixedAmount() ? $prices->amountOn($account) : null,
         ];
     }
 
@@ -172,13 +221,9 @@ class ListingResource extends JsonResource
                 'rent_centavos' => $prices->amountOn($u),
             ]),
             'rooms' => $rooms->values()->map(fn (Room $room) => $this->publicRoom($room, $prices)),
-            'utilities' => $this->utilityAccounts->map(fn (UtilityAccount $a) => [
-                'type' => $a->type->value,
-                'name' => $a->name,
-                'method' => $a->method->value,
-                'method_label' => $a->method->label(),
-                'billed_by' => $a->billed_by->value,
-                'amount_centavos' => $a->method->hasFixedAmount() ? $prices->amountOn($a) : null,
+            // Every account of the property; what one room pays is in `rooms[].utilities`.
+            'utilities' => $this->utilityAccounts->map(fn (UtilityAccount $a) => $this->utility($a, $prices) + [
+                'for_room' => $a->room_id !== null,
             ])->values(),
             'deposit' => [
                 'rule' => $settings?->deposit_rule?->value,

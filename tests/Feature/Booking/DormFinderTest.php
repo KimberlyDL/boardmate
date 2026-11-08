@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Pricing\PriceBook;
+use App\Services\Properties\PropertySetup;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 
@@ -177,4 +178,42 @@ it('lists every room with its status, price and free places, but never who lives
     // The owner's own rooms show who lives where.
     $units = collect($this->getJson("/api/v1/properties/{$property->id}")->assertOk()->json('data.rooms'))->firstWhere('id', $beds->id)['units'];
     expect(collect($units)->pluck('tenant_name')->all())->toBe(['Kim Santos', null]);
+});
+
+it('lists what each room pays for utilities, by the same rule as its bills', function () {
+    $owner = User::factory()->owner()->create();
+    $property = listed($owner);
+    $room = $property->rooms()->first();
+    $prices = app(PriceBook::class);
+    $add = function (array $attrs, ?int $amount = null) use ($property, $prices, $owner) {
+        $account = $property->utilityAccounts()->create($attrs + ['billed_by' => 'owner']);
+        if ($amount !== null) {
+            $prices->set($account, $amount, null, $owner);
+        }
+
+        return $account;
+    };
+    $add(['type' => 'water', 'name' => 'Water', 'method' => 'fixed_per_bedspace'], 15000);
+    $add(['type' => 'water', 'name' => 'Water', 'method' => 'fixed_per_property'], 40000);
+    $add(['type' => 'internet', 'name' => 'Wi-Fi', 'method' => 'included']);
+    $add(['type' => 'electricity', 'name' => 'Meralco', 'method' => 'actual_bill']);
+    // The room has its own meter, which replaces the property's for this room.
+    $add(['room_id' => $room->id, 'type' => 'electricity', 'name' => 'Room meter', 'method' => 'actual_bill']);
+
+    $listing = $this->getJson("/api/v1/listings/{$property->id}")->assertOk()->json('data.listing');
+    $roomUtilities = collect($listing['rooms'])->firstWhere('id', $room->id)['utilities'];
+
+    // A bedspace room: the per-bedspace water, not the whole-room price; its own meter, not Meralco.
+    expect(collect($roomUtilities)->map(fn ($u) => [$u['name'], $u['method'], $u['amount_centavos'], $u['applies_to']])->all())->toBe([
+        ['Water', 'fixed_per_bedspace', 15000, null],
+        ['Wi-Fi', 'included', null, null],
+        ['Room meter', 'actual_bill', null, null],
+    ])
+        ->and($listing['utilities'])->toHaveCount(5)
+        ->and(collect($listing['utilities'])->firstWhere('name', 'Room meter')['for_room'])->toBeTrue();
+
+    // Rented whole too: both water prices, each marked with what it is for.
+    app(PropertySetup::class)->offerWhole($room, 500000, null, $owner);
+    $roomUtilities = collect($this->getJson("/api/v1/listings/{$property->id}")->json('data.listing.rooms'))->firstWhere('id', $room->id)['utilities'];
+    expect(collect($roomUtilities)->where('type', 'water')->pluck('applies_to')->all())->toBe(['bedspace', 'whole_room']);
 });
