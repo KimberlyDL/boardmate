@@ -23,7 +23,9 @@ use App\Models\TenancyPayment;
 use App\Models\User;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Billing\ChargeService;
 use App\Services\BillingCalendar\BillingCalendar;
+use App\Services\BillingCalendar\RentPeriod;
 use App\Services\Booking\BookingService;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Services\Pricing\PriceBook;
@@ -50,7 +52,16 @@ use Illuminate\Validation\ValidationException;
  * Move-in takes the same locks, in the same order, as booking approval:
  * boarder, property, application, unit.
  *
- * Move-in data (`$data`): moved_in_on, emergency_contact{name,relationship,phone},
+ * Existing tenants (walk-ins only, `existing_tenant: true`): someone already
+ * living here before the place used DormLink. Their real move-in date is kept
+ * (up to 10 years back), the rent periods up to today count as settled
+ * outside DormLink, and billing starts with the next period: the first bill
+ * comes on the next due date. No first rent is recorded and the activation
+ * requirement does not apply; a deposit they paid back then may be recorded.
+ * Money they still owe from before (`opening_balance_centavos`) becomes one
+ * one-time charge, due like any other (the utility due days from today).
+ *
+ * Move-in data (`$data`): moved_in_on, existing_tenant, opening_balance_centavos, emergency_contact{name,relationship,phone},
  * discount{kind,value}, deposit{amount_centavos,method,received_on,reference},
  * first_rent{...same}, override_reason, leader_consent, make_leader, occupants[].
  */
@@ -58,6 +69,14 @@ class TenancyService
 {
     /** A move-in may be recorded up to this many days after it happened. */
     public const MAX_DAYS_BACK = 30;
+
+    /** An existing tenant's move-in date may be up to this many years back. */
+    public const EXISTING_MAX_YEARS_BACK = 10;
+
+    /** The one-time charge for what an existing tenant still owes from before DormLink. */
+    public const OPENING_BALANCE_DESCRIPTION = 'Unpaid balance from before DormLink';
+
+    public const OPENING_BALANCE_REASON = 'Owed before the place used DormLink (recorded when adding the existing tenant)';
 
     public function __construct(
         private readonly AuditService $audit,
@@ -67,6 +86,7 @@ class TenancyService
         private readonly PriceBook $prices,
         private readonly NotificationService $notifications,
         private readonly HouseRuleAcceptances $houseRules,
+        private readonly ChargeService $charges,
     ) {}
 
     /**
@@ -116,6 +136,16 @@ class TenancyService
     }
 
     /**
+     * For an existing tenant: the first rent period DormLink bills, the one
+     * right after the period holding today (that one was settled outside
+     * DormLink). Its due date is when the first bill comes.
+     */
+    public function firstBilledPeriod(CarbonImmutable $movedInOn, CarbonImmutable $today): RentPeriod
+    {
+        return BillingCalendar::firstPeriodStartingOnOrAfter($movedInOn, $today->addDay(), BillingCalendar::anchorDay($movedInOn));
+    }
+
+    /**
      * Move a boarder in from their reservation.
      *
      * @param  array<string, mixed>  $data
@@ -159,7 +189,7 @@ class TenancyService
      */
     public function moveInWalkIn(Property $property, User $tenant, int $unitId, array $data, User $actor): Tenancy
     {
-        [$tenancy, $override, $withdrawn] = DB::transaction(function () use ($property, $tenant, $unitId, $data, $actor) {
+        [$tenancy, $override, $withdrawn, $opening] = DB::transaction(function () use ($property, $tenant, $unitId, $data, $actor) {
             $tenant = User::whereKey($tenant->id)->lockForUpdate()->firstOrFail();
             $property = Property::withTrashed()->whereKey($property->id)->lockForUpdate()->firstOrFail();
             $unit = RentableUnit::whereKey($unitId)->where('property_id', $property->id)->lockForUpdate()->first();
@@ -181,10 +211,19 @@ class TenancyService
             [$tenancy, $override] = $this->start($property, $unit, $tenant, null, $data, $actor);
             $withdrawn = $this->bookings->withdrawPendingFor($tenant, null, "You moved into {$property->name}.");
 
-            return [$tenancy, $override, $withdrawn];
+            // In the same transaction, so the stay is never saved without the balance it was added with.
+            $owed = (int) ($data['opening_balance_centavos'] ?? 0);
+            $opening = $tenancy->isExistingTenant() && $owed > 0
+                ? $this->charges->charge($tenancy, $owed, self::OPENING_BALANCE_DESCRIPTION, self::OPENING_BALANCE_REASON, null, $actor, notify: false)
+                : null;
+
+            return [$tenancy, $override, $withdrawn, $opening];
         }, attempts: 3);
 
         $this->recordMoveIn($tenancy, $override, $actor, $withdrawn);
+        if ($opening) {
+            $this->charges->announce($opening, $tenancy, self::OPENING_BALANCE_DESCRIPTION, self::OPENING_BALANCE_REASON);
+        }
 
         return $tenancy;
     }
@@ -236,16 +275,33 @@ class TenancyService
 
         $today = ManilaDate::today();
         $movedInOn = ManilaDate::parse($data['moved_in_on'])->startOfDay();
-        if ($movedInOn->gt($today)) {
-            throw ValidationException::withMessages(['moved_in_on' => 'The move-in date cannot be in the future. The reservation holds the place until then.']);
+        $existing = (bool) ($data['existing_tenant'] ?? false);
+        if ($existing && $application) {
+            throw ValidationException::withMessages(['existing_tenant' => 'Only a walk-in can be added as an existing tenant.']);
         }
-        if ($movedInOn->lt($today->subDays(self::MAX_DAYS_BACK))) {
-            throw ValidationException::withMessages(['moved_in_on' => 'The move-in date can be at most '.self::MAX_DAYS_BACK.' days ago.']);
+        if (! $existing && (int) ($data['opening_balance_centavos'] ?? 0) > 0) {
+            throw ValidationException::withMessages(['opening_balance_centavos' => 'A balance from before DormLink is only for an existing tenant.']);
+        }
+        if ($existing) {
+            if ($movedInOn->gte($today)) {
+                throw ValidationException::withMessages(['moved_in_on' => 'For an existing tenant, the move-in date must be before today.']);
+            }
+            if ($movedInOn->lt($today->subYears(self::EXISTING_MAX_YEARS_BACK))) {
+                throw ValidationException::withMessages(['moved_in_on' => 'The move-in date can be at most '.self::EXISTING_MAX_YEARS_BACK.' years ago.']);
+            }
+        } else {
+            if ($movedInOn->gt($today)) {
+                throw ValidationException::withMessages(['moved_in_on' => 'The move-in date cannot be in the future. The reservation holds the place until then.']);
+            }
+            if ($movedInOn->lt($today->subDays(self::MAX_DAYS_BACK))) {
+                throw ValidationException::withMessages(['moved_in_on' => 'The move-in date can be at most '.self::MAX_DAYS_BACK.' days ago. For someone who moved in earlier, add them as an existing tenant.']);
+            }
         }
 
         $room = Room::whereKey($unit->room_id)->lockForUpdate()->firstOrFail();
         $settings = $property->settings ?? new PropertySettings;
-        $quote = $this->quote($unit, $movedInOn, $data['discount'] ?? null, $settings);
+        // An existing tenant's rent is today's price: there may be no price set back on the move-in day.
+        $quote = $this->quote($unit, $existing ? $today : $movedInOn, $data['discount'] ?? null, $settings);
 
         $becomesLeader = $unit->kind === UnitKind::Whole
             ? true
@@ -259,8 +315,9 @@ class TenancyService
         $occupants = $this->occupantsFor($unit, $application, $data);
 
         $deposit = $data['deposit'] ?? null;
-        $firstRent = $data['first_rent'] ?? null;
-        $overridden = $this->checkActivation($quote, $deposit, $firstRent, $data['override_reason'] ?? null);
+        // An existing tenant's first rent was paid long ago, outside DormLink.
+        $firstRent = $existing ? null : ($data['first_rent'] ?? null);
+        $overridden = $existing ? false : $this->checkActivation($quote, $deposit, $firstRent, $data['override_reason'] ?? null);
 
         $tenancy = Tenancy::create([
             'property_id' => $property->id,
@@ -270,6 +327,7 @@ class TenancyService
             'booking_application_id' => $application?->id,
             'moved_in_on' => $movedInOn->toDateString(),
             'anchor_day' => BillingCalendar::anchorDay($movedInOn),
+            'billing_starts_on' => $existing ? $this->firstBilledPeriod($movedInOn, $today)->startsOn->toDateString() : null,
             'emergency_contact_name' => $data['emergency_contact']['name'],
             'emergency_contact_relationship' => $data['emergency_contact']['relationship'] ?? null,
             'emergency_contact_phone' => $data['emergency_contact']['phone'],
@@ -442,6 +500,11 @@ class TenancyService
     {
         $tenancy->load('property.owner', 'tenant', 'unit');
         $note = "{$tenancy->tenant->name} → {$tenancy->property->name} · {$tenancy->unit->label} from ".$tenancy->moved_in_on->format('M j, Y');
+
+        if ($tenancy->isExistingTenant()) {
+            // A period is due the day before it starts.
+            $note .= ' · existing tenant, first bill due '.$tenancy->billing_starts_on->subDay()->format('M j, Y');
+        }
 
         $this->audit->record(AuditEvent::TenancyStarted, $tenancy, owner: $tenancy->property->owner, actor: $actor,
             note: $note.($withdrawn->isNotEmpty() ? ' · '.$withdrawn->count().' other application(s) withdrawn' : ''));

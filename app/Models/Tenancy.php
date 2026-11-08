@@ -6,6 +6,7 @@ use App\Enums\NoticeStatus;
 use App\Enums\TenancyPaymentKind;
 use App\Enums\TenancyStatus;
 use App\Services\BillingCalendar\BillingCalendar;
+use App\Services\BillingCalendar\RentPeriod;
 use Carbon\CarbonImmutable;
 use Database\Factories\TenancyFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,6 +38,7 @@ class Tenancy extends Model
             'end_on' => 'immutable_date',
             'moved_out_on' => 'immutable_date',
             'anchor_day' => 'integer',
+            'billing_starts_on' => 'immutable_date',
             'house_rules_accepted_at' => 'datetime',
             'curfew_reminders_muted' => 'boolean',
         ];
@@ -143,6 +145,26 @@ class Tenancy extends Model
         }
 
         return $last->endsOn;
+    }
+
+    /** Added as an existing tenant: already living here before the place used DormLink. */
+    public function isExistingTenant(): bool
+    {
+        return $this->billing_starts_on !== null;
+    }
+
+    /**
+     * Does DormLink bill this rent period? Period 1 is paid at move-in. For
+     * an existing tenant, the periods before billing started were settled
+     * outside DormLink.
+     */
+    public function billsPeriod(RentPeriod $period): bool
+    {
+        if ($period->number < 2) {
+            return false;
+        }
+
+        return $this->billing_starts_on === null || $period->startsOn->greaterThanOrEqualTo($this->billing_starts_on);
     }
 
     /** Total recorded for a kind of move-in payment, in centavos. */

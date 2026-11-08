@@ -78,17 +78,28 @@ class ChargeService
             note: "{$bill->number} · {$tenancy->tenant->name} · {$description} · ".Money::format($amountCentavos));
 
         if ($notify) {
-            $this->notifications->send($tenancy->tenant, NotificationEvent::BillIssued, [
-                'property_name' => $property->name,
-                'bill_number' => $bill->number,
-                'total' => Money::format($amountCentavos),
-                'due_on' => $bill->due_on->format('M j, Y'),
-                'period' => $bill->issued_on->format('M j, Y'),
-                'summary' => "a one-time charge: {$description} ({$reason})",
-            ]);
+            $this->announce($bill, $tenancy, $description, $reason);
         }
 
         return $bill;
+    }
+
+    /**
+     * Tell the tenant about a one-time charge. Called by charge(), or by a
+     * caller that charged inside its own transaction and tells them after it.
+     */
+    public function announce(Bill $bill, Tenancy $tenancy, string $description, string $reason): void
+    {
+        $tenancy->loadMissing('property', 'tenant');
+
+        $this->notifications->send($tenancy->tenant, NotificationEvent::BillIssued, [
+            'property_name' => $tenancy->property->name,
+            'bill_number' => $bill->number,
+            'total' => Money::format($bill->totalCentavos()),
+            'due_on' => $bill->due_on->format('M j, Y'),
+            'period' => $bill->issued_on->format('M j, Y'),
+            'summary' => "a one-time charge: {$description} ({$reason})",
+        ]);
     }
 
     /**

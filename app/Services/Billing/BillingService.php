@@ -39,7 +39,10 @@ use Illuminate\Support\Facades\DB;
  *   "fixed per whole room" (fixed_per_property) on whole-room tenancies; only accounts the owner
  *   bills, for the whole property or the tenancy's room.
  *
- * Period 1 rent was paid at move-in, so the first bill is period 2. Issuing
+ * Period 1 rent was paid at move-in, so the first bill is period 2. For an
+ * existing tenant (already living here before DormLink) the first bill is
+ * the period starting on `billing_starts_on`; it still carries the fixed
+ * utilities of the period before, which were not collected yet. Issuing
  * locks the prices and discount used and takes the bill number in the same
  * transaction. It works out what is due AS OF a day, so a rerun or a missed
  * day never duplicates or skips a bill (the database also refuses a second
@@ -85,7 +88,7 @@ class BillingService
                         if ($tenancy->end_on && $period->startsOn->greaterThan($tenancy->end_on)) {
                             break;
                         }
-                        if ($period->number >= 2 && ! $billed->has($period->startsOn->toDateString())) {
+                        if ($tenancy->billsPeriod($period) && ! $billed->has($period->startsOn->toDateString())) {
                             $bill = $this->issuePeriodic($tenancy, $period, $previous, $day);
                             $bill ? $issued++ : $skipped[] = "{$tenancy->tenant->name} ({$tenancy->property->name}): no rent set for ".$period->startsOn->format('M j, Y');
                         }
@@ -258,16 +261,23 @@ class BillingService
      * for a whole room; only those the owner bills; a room's own account
      * only for that room, and in place of the property's for that utility.
      *
+     * An existing tenant's last period before DormLink billing (the one their
+     * first bill carries in arrears) may have begun before the place priced
+     * its utilities in DormLink; prices cannot be back-dated, so a utility
+     * with no price on that day uses its price on the day billing starts.
+     *
      * @return Collection<int, array{0: UtilityAccount, 1: PriceRule}>
      */
     private function fixedUtilities(Tenancy $tenancy, RentPeriod $period): Collection
     {
         $method = $tenancy->unit->kind === UnitKind::Whole ? UtilityMethod::FixedPerProperty : UtilityMethod::FixedPerBedspace;
+        $beforeBillingStarts = $tenancy->billing_starts_on !== null && $period->endsOn->addDay()->isSameDay($tenancy->billing_starts_on);
 
         return $this->coverage->forRoom($tenancy->property_id, $tenancy->room_id)
             ->filter(fn (UtilityAccount $account) => $account->method === $method && $account->billed_by === BilledBy::Owner)
             ->values()
-            ->map(fn (UtilityAccount $account) => [$account, $this->prices->ruleOn($account, $period->startsOn)])
+            ->map(fn (UtilityAccount $account) => [$account, $this->prices->ruleOn($account, $period->startsOn)
+                ?? ($beforeBillingStarts ? $this->prices->ruleOn($account, $tenancy->billing_starts_on) : null)])
             ->filter(fn (array $pair) => $pair[1] && $pair[1]->amount_centavos > 0)
             ->values();
     }

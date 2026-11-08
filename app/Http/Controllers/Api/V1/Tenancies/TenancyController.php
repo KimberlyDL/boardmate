@@ -117,6 +117,10 @@ class TenancyController extends Controller
      * with an optional discount (`discount_kind`: fixed or percent, and
      * `discount_value` in centavos or basis points). The first rent is the
      * rent after the discount, with no utilities.
+     *
+     * With `existing_tenant: true` (someone already living here) the rent is
+     * today's price, and the answer adds `billing_starts_on` and
+     * `first_bill_due_on`: when DormLink starts billing them.
      */
     public function preview(Request $request, Property $property): JsonResponse
     {
@@ -124,6 +128,7 @@ class TenancyController extends Controller
         $data = $request->validate([
             'unit_id' => ['required', 'integer'],
             'moved_in_on' => ['sometimes', 'date_format:Y-m-d'],
+            'existing_tenant' => ['sometimes', 'boolean'],
             'discount_kind' => ['required_with:discount_value', 'nullable', Rule::in(['fixed', 'percent'])],
             'discount_value' => ['required_with:discount_kind', 'nullable', 'integer', 'min:1', 'max:100000000'],
         ]);
@@ -136,9 +141,19 @@ class TenancyController extends Controller
             ? ['kind' => $data['discount_kind'], 'value' => (int) $data['discount_value']]
             : null;
 
-        return ApiResponse::ok($this->tenancies->quote(
-            $unit, ManilaDate::parse($data['moved_in_on'] ?? ManilaDate::today()->toDateString())->startOfDay(), $discount, $property->settings,
-        ));
+        $today = ManilaDate::today();
+        $movedInOn = ManilaDate::parse($data['moved_in_on'] ?? $today->toDateString())->startOfDay();
+        if (! ($data['existing_tenant'] ?? false)) {
+            return ApiResponse::ok($this->tenancies->quote($unit, $movedInOn, $discount, $property->settings));
+        }
+
+        $quote = $this->tenancies->quote($unit, $today, $discount, $property->settings);
+        $first = $movedInOn->lt($today) ? $this->tenancies->firstBilledPeriod($movedInOn, $today) : null;
+
+        return ApiResponse::ok($quote + [
+            'billing_starts_on' => $first?->startsOn->toDateString(),
+            'first_bill_due_on' => $first?->dueOn->toDateString(),
+        ]);
     }
 
     /**

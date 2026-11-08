@@ -149,6 +149,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/{report}/link', [ReportController::class, 'link'])->where('report', '[a-z_]+')->name('reports.link');
+        Route::get('reports/{report}/preview', [ReportController::class, 'preview'])->middleware('throttle:30,1')->where('report', '[a-z_]+')->name('reports.preview');
         Route::get('finance', [FinanceController::class, 'summary'])->name('finance.summary');
         Route::get('finance/pdf-link', [FinanceController::class, 'summaryPdfLink'])->name('finance.pdf-link');
         Route::get('rooms/{room}/finance', [FinanceController::class, 'room'])->name('rooms.finance');
@@ -414,6 +415,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('stats', [PlatformStatsController::class, 'index'])->name('stats');
             Route::get('exports', [AdminExportController::class, 'index'])->name('exports.index');
             Route::get('exports/{export}/link', [AdminExportController::class, 'link'])->where('export', '[a-z_]+')->name('exports.link');
+            Route::get('exports/{export}/preview', [AdminExportController::class, 'preview'])->where('export', '[a-z_]+')->name('exports.preview');
             Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
             Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
             Route::post('users/{user}/unsuspend', [AdminUserController::class, 'unsuspend'])->name('users.unsuspend');

@@ -6,8 +6,9 @@ FROM serversideup/php:8.4-fpm-nginx
 
 USER root
 
-# GD with WebP for photo resizing (intervention/image); pdo_pgsql is built in.
-RUN install-php-extensions gd
+# GD with WebP for photo resizing (intervention/image); zip for Excel reports
+# (openspout; skipped if the base image has it); pdo_pgsql is built in.
+RUN install-php-extensions gd zip
 
 # Makes sure the uploads folders exist on the mounted disk before autorun.
 COPY --chmod=755 docker/entrypoint.d/ /etc/entrypoint.d/

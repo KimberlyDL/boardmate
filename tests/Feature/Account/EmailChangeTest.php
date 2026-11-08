@@ -31,7 +31,7 @@ it('keeps the old email, mails a link to the new one and a notice to the old one
         function (DormLinkNotification $n, array $channels, AnonymousNotifiable $notifiable) {
             return $n->event === NotificationEvent::EmailChangeConfirm
                 && $notifiable->routes['mail'] === 'kim.new@gmail.com'
-                && str_contains($n->data['url'], '/api/v1/auth/email-change/verify/');
+                && str_starts_with($n->data['url'], config('app.frontend_url').'/confirm-new-email/');
         });
 
     Notification::assertSentTo($this->user, DormLinkNotification::class,

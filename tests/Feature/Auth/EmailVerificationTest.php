@@ -82,3 +82,28 @@ it('answers the same for unknown or already verified emails, and sends nothing',
     expect($unknown)->toBe($verified);
     Notification::assertNothingSent();
 });
+
+it('links the email to the website, whose page confirms through the API', function () {
+    Notification::fake();
+    $user = User::factory()->unverified()->create(['email' => 'kim@example.com']);
+    $user->sendEmailVerificationNotification();
+
+    $url = null;
+    Notification::assertSentTo($user, DormLinkNotification::class, function (DormLinkNotification $n) use (&$url) {
+        $url = $n->data['url'];
+
+        return $n->event === NotificationEvent::VerifyEmail;
+    });
+
+    // https://<website>/verify-email/{id}/{hash}?expires=…&signature=…, which the app can open.
+    $prefix = config('app.frontend_url')."/verify-email/{$user->id}/".sha1('kim@example.com').'?';
+    expect($url)->toStartWith($prefix);
+
+    // The page sends the same path and query to the API and gets the status back.
+    $api = "/api/v1/auth/email/verify/{$user->id}/".sha1('kim@example.com').'?'.parse_url($url, PHP_URL_QUERY);
+    $this->getJson($api)->assertOk()->assertJsonPath('data.status', 'success');
+    $this->getJson($api)->assertOk()->assertJsonPath('data.status', 'already');
+    $this->getJson(str_replace('signature=', 'signature=x', $api))->assertOk()->assertJsonPath('data.status', 'invalid');
+
+    expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
+});

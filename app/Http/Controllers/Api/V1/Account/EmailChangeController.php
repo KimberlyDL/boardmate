@@ -92,12 +92,14 @@ class EmailChangeController extends Controller
     /**
      * Confirm a new email
      *
-     * Opened from the link sent to the new address. Redirects to the app's
-     * /email-verified page with status=changed or invalid.
+     * Called by the website's /confirm-new-email page (the link sent to the
+     * new address points there, so it can open the app): answers `{status}`
+     * as JSON, changed, taken or invalid. Opened directly (links sent before
+     * the change), it redirects to /email-verified with the same status.
      *
      * @unauthenticated
      */
-    public function verify(Request $request, int $id, string $hash): RedirectResponse
+    public function verify(Request $request, int $id, string $hash): JsonResponse|RedirectResponse
     {
         $user = User::find($id);
 
@@ -107,7 +109,7 @@ class EmailChangeController extends Controller
             && hash_equals(sha1($user->pending_email), $hash);
 
         if (! $valid) {
-            return EmailVerificationController::toApp('invalid');
+            return EmailVerificationController::answer($request, 'invalid');
         }
 
         $changed = DB::transaction(function () use ($user) {
@@ -129,7 +131,7 @@ class EmailChangeController extends Controller
             return true;
         });
 
-        return EmailVerificationController::toApp($changed ? 'changed' : 'taken');
+        return EmailVerificationController::answer($request, $changed ? 'changed' : 'taken');
     }
 
     /** kim.santos@gmail.com → k***@gmail.com */

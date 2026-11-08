@@ -157,10 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /** Email verification link, sent through the Notifications module. */
     public function sendEmailVerificationNotification(): void
     {
-        $url = URL::temporarySignedRoute('api.v1.auth.verification.verify', now()->addHours(config('dormlink.email_link_hours')), [
-            'id' => $this->getKey(),
-            'hash' => sha1($this->getEmailForVerification()),
-        ]);
+        $url = $this->websiteSignedLink('api.v1.auth.verification.verify', 'verify-email', sha1($this->getEmailForVerification()));
 
         app(NotificationService::class)->send($this, NotificationEvent::VerifyEmail, ['url' => $url]);
     }
@@ -168,11 +165,25 @@ class User extends Authenticatable implements MustVerifyEmail
     /** Confirmation link to the pending (new) email address. */
     public function sendEmailChangeVerification(): void
     {
-        $url = URL::temporarySignedRoute('api.v1.auth.email-change.verify', now()->addHours(config('dormlink.email_link_hours')), [
-            'id' => $this->getKey(),
-            'hash' => sha1((string) $this->pending_email),
-        ]);
+        $url = $this->websiteSignedLink('api.v1.auth.email-change.verify', 'confirm-new-email', sha1((string) $this->pending_email));
 
         app(NotificationService::class)->sendToAddress($this->pending_email, $this, NotificationEvent::EmailChangeConfirm, ['url' => $url]);
+    }
+
+    /**
+     * A confirmation link on the website (FRONTEND_URL), e.g.
+     * https://dormlink.vercel.app/verify-email/12/{hash}?expires=…&signature=…,
+     * so the installed app opens it (App Links) and the website otherwise. The
+     * page sends the same path and signature to the API route, which checks
+     * the signature as if the email had linked to it.
+     */
+    private function websiteSignedLink(string $route, string $page, string $hash): string
+    {
+        $signed = URL::temporarySignedRoute($route, now()->addHours(config('dormlink.email_link_hours')), [
+            'id' => $this->getKey(),
+            'hash' => $hash,
+        ]);
+
+        return rtrim(config('app.frontend_url'), '/')."/{$page}/{$this->getKey()}/{$hash}?".parse_url($signed, PHP_URL_QUERY);
     }
 }

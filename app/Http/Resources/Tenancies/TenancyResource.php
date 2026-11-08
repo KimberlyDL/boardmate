@@ -55,6 +55,9 @@ class TenancyResource extends JsonResource
             'first_day_on' => $this->moved_in_on->addDay()->toDateString(),
             'anchor_day' => $this->anchor_day,
             'next_rent_due_on' => $this->nextRentDueOn($today)->toDateString(),
+            // Added as an existing tenant: DormLink bills the periods from this day on.
+            'is_existing_tenant' => $this->isExistingTenant(),
+            'billing_starts_on' => $this->billing_starts_on?->toDateString(),
             // C1: the approved last day of stay, a notice still waiting, and the move-out.
             'end_on' => $this->end_on?->toDateString(),
             'is_overstaying' => $this->isOverstaying($today),

@@ -40,12 +40,15 @@ class EmailVerificationController extends Controller
     /**
      * Confirm an email address
      *
-     * Opened from the link in the email. Redirects to the app's
-     * /email-verified page with status=success, already or invalid.
+     * Called by the website's /verify-email page (the link in the email
+     * points there, so it can open the app) with the link's expires and
+     * signature: answers `{status}` as JSON, success, already or invalid.
+     * Opened directly (links sent before the change), it redirects to the
+     * /email-verified page with the same status.
      *
      * @unauthenticated
      */
-    public function verify(Request $request, int $id, string $hash): RedirectResponse
+    public function verify(Request $request, int $id, string $hash): JsonResponse|RedirectResponse
     {
         $user = User::find($id);
 
@@ -54,21 +57,26 @@ class EmailVerificationController extends Controller
             && hash_equals(sha1($user->getEmailForVerification()), $hash);
 
         if (! $valid) {
-            return self::toApp('invalid');
+            return self::answer($request, 'invalid');
         }
 
         if ($user->hasVerifiedEmail()) {
-            return self::toApp('already');
+            return self::answer($request, 'already');
         }
 
         $user->markEmailAsVerified();
         event(new Verified($user));
 
-        return self::toApp('success');
+        return self::answer($request, 'success');
     }
 
-    public static function toApp(string $status): RedirectResponse
+    /** JSON for the website page; a redirect to /email-verified for a link opened directly. */
+    public static function answer(Request $request, string $status): JsonResponse|RedirectResponse
     {
+        if ($request->expectsJson()) {
+            return ApiResponse::ok(['status' => $status]);
+        }
+
         return redirect()->away(rtrim(config('app.frontend_url'), '/').'/email-verified?status='.$status);
     }
 }
