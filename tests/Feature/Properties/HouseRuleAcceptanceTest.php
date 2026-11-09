@@ -35,7 +35,7 @@ function publishRules(string $body = 'Keep quiet from 10:00 PM to 6:00 AM.', ?st
 function applyAndReserve(?int $version): int
 {
     $id = test()->actingAs(test()->kim, 'sanctum')->postJson('/api/v1/listings/'.test()->property->id.'/applications', [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'house_rules_version' => $version,
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000', 'house_rules_version' => $version,
     ])->assertCreated()->json('data.id');
     test()->actingAs(test()->owner, 'sanctum')->postJson("/api/v1/applications/{$id}/approve", ['unit_id' => test()->property->units()->first()->id])->assertOk();
 
@@ -56,7 +56,7 @@ it('asks the boarder to accept the rules in force when applying, and carries tha
     publishRules();
 
     $apply = fn (?int $version) => $this->actingAs($this->kim, 'sanctum')->postJson("/api/v1/listings/{$this->property->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'house_rules_version' => $version,
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000', 'house_rules_version' => $version,
     ]);
     $apply(null)->assertUnprocessable()->assertJsonPath('errors.house_rules_version.0', 'Read and accept the house rules first.');
     $apply(0)->assertUnprocessable()->assertJsonPath('errors.house_rules_version.0', 'The house rules changed. Read version 1 and accept it.');

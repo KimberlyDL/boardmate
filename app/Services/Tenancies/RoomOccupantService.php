@@ -3,9 +3,11 @@
 namespace App\Services\Tenancies;
 
 use App\Authorization\RoomAccess;
+use App\Enums\ApplicationStatus;
 use App\Enums\AuditEvent;
 use App\Enums\NotificationEvent;
 use App\Enums\PropertyAbility;
+use App\Models\BookingApplication;
 use App\Models\Property;
 use App\Models\Room;
 use App\Models\RoomOccupant;
@@ -13,6 +15,7 @@ use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Booking\BookingService;
 use App\Services\Notifications\Contracts\NotificationService;
 use App\Support\ManilaDate;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +38,7 @@ class RoomOccupantService
     public function __construct(
         private readonly AuditService $audit,
         private readonly NotificationService $notifications,
+        private readonly BookingService $bookings,
     ) {}
 
     /**
@@ -48,6 +52,10 @@ class RoomOccupantService
             $this->assertJoinDate($data['joined_on'], $tenancy);
 
             $linked = $this->linkedAccount($data['email'] ?? null, $room);
+            if ($linked) {
+                // Now staying here: their applications elsewhere are withdrawn, as at a move-in.
+                $this->bookings->withdrawPendingFor($linked, null, "You were added to Room {$room->label()} at {$room->property->name}.");
+            }
 
             return RoomOccupant::create([
                 'room_id' => $room->id,
@@ -227,6 +235,18 @@ class RoomOccupantService
         }
         if (RoomOccupant::where('room_id', $room->id)->whereNull('left_on')->where('user_id', $user->id)->exists()) {
             throw ValidationException::withMessages(['email' => 'This person is already listed in the room.']);
+        }
+        // One person, one stay: not someone living, listed or reserved somewhere else.
+        $stay = Tenancy::current()->where('tenant_id', $user->id)->with('property:id,name')->first();
+        if ($stay) {
+            throw ValidationException::withMessages(['email' => "{$user->name} is staying at {$stay->property->name}. They need to move out there first."]);
+        }
+        $elsewhere = RoomOccupant::staying()->where('user_id', $user->id)->whereNull('tenancy_id')->where('room_id', '!=', $room->id)->with('room.property:id,name')->first();
+        if ($elsewhere) {
+            throw ValidationException::withMessages(['email' => "{$user->name} is listed in another room at {$elsewhere->room->property->name}."]);
+        }
+        if (BookingApplication::where('boarder_id', $user->id)->where('status', ApplicationStatus::Approved)->exists()) {
+            throw ValidationException::withMessages(['email' => "{$user->name} has a reservation somewhere. It must be cancelled first."]);
         }
 
         return $user;

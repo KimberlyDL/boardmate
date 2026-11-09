@@ -28,6 +28,8 @@ class GroupExpense extends Model
             'kind' => GroupExpenseKind::class,
             'amount_centavos' => 'integer',
             'spent_on' => 'immutable_date',
+            'due_on' => 'immutable_date',
+            'paid_on' => 'immutable_date',
             'split_method' => SplitMethod::class,
             'split_params' => 'array',
         ];
@@ -62,6 +64,12 @@ class GroupExpense extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /** A "collect first" line whose bill the collector has not paid yet. */
+    public function isCollecting(): bool
+    {
+        return $this->kind === GroupExpenseKind::Collection && $this->paid_on === null;
     }
 
     /** An owner bill's amount comes from the bill and never changes here; only its split does. */

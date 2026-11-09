@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Tenancies;
 
 use App\Models\Property;
+use App\Models\User;
 
 /**
  * Moving in someone who never applied: the same details as a reservation
@@ -14,6 +15,16 @@ class WalkInRequest extends MoveInRequest
     protected function targetProperty(): Property
     {
         return $this->route('property');
+    }
+
+    /** The emergency contact in the profile of the account being moved in. */
+    protected function savedEmergencyContact(): ?array
+    {
+        $email = $this->input('email');
+
+        return is_string($email) && $email !== ''
+            ? self::fromProfile(User::where('email', mb_strtolower($email))->first()?->boarderProfile)
+            : null;
     }
 
     /** @return array<string, mixed> */

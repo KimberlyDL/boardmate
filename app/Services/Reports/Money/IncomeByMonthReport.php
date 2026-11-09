@@ -33,6 +33,11 @@ class IncomeByMonthReport extends Report
         return PropertyAbility::ViewCollections;
     }
 
+    public function hasTotals(): bool
+    {
+        return true;
+    }
+
     /** The 12 months up to this one. */
     public function defaultPeriod(CarbonImmutable $today): array
     {

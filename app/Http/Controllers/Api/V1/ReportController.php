@@ -167,7 +167,7 @@ class ReportController extends Controller
     /**
      * The title, and the line under it: which properties and which period.
      *
-     * @return array{title: string, subtitle: string}
+     * @return array{title: string, subtitle: string, totals: bool}
      */
     private function info(Report $report, Collection $properties, ?CarbonImmutable $from, ?CarbonImmutable $to): array
     {
@@ -178,7 +178,7 @@ class ReportController extends Controller
             default => $from->format('M j, Y').' – '.$to->format('M j, Y'),
         };
 
-        return ['title' => $report->label(), 'subtitle' => "{$where} · {$when}"];
+        return ['title' => $report->label(), 'subtitle' => "{$where} · {$when}", 'totals' => $report->hasTotals()];
     }
 
     /** "dormlink-collections-santos-house-2026-10-01_to_2026-10-31", without the extension. */

@@ -36,6 +36,11 @@ class CollectionsReport extends Report
         return 'Every confirmed payment and first rent at move-in between two dates, with its receipt number.';
     }
 
+    public function hasTotals(): bool
+    {
+        return true;
+    }
+
     public function ability(): PropertyAbility
     {
         return PropertyAbility::RecordPayments;

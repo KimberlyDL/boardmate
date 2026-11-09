@@ -29,6 +29,11 @@ class RoomFinanceReport extends Report
         return 'Each room\'s billed and collected amounts, how much of what was due is paid, and unpaid balances and deposits held today.';
     }
 
+    public function hasTotals(): bool
+    {
+        return true;
+    }
+
     public function ability(): PropertyAbility
     {
         return PropertyAbility::ViewCollections;

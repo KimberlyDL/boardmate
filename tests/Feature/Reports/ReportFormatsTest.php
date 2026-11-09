@@ -75,12 +75,17 @@ it('downloads a report as Excel with numbers, dates and text kept apart', functi
     $reader->close();
     unlink($path);
 
-    expect($rows[0][7])->toBe('Amount (PHP)')
-        ->and($rows[1][7])->toEqual(2000)                                  // money is a number
-        ->and($rows[2][7])->toBe(1500.5)
-        ->and($rows[1][0])->toBeInstanceOf(DateTimeImmutable::class)       // a real date
-        ->and($rows[1][0]->format('Y-m-d'))->toBe('2026-10-05')
-        ->and($rows[1][6])->toBe('0091');                                  // a reference keeps its zeros
+    // The title and subtitle on top, the headers on row 4 (the reader skips the empty row 3), then the rows and a total.
+    expect($rows[0][0])->toBe('Collections')
+        ->and($rows[1][0])->toStartWith('Santos House · Oct 1, 2026 – Oct 31, 2026 · Made Oct 20, 2026')
+        ->and($rows[2][7])->toBe('Amount (PHP)')
+        ->and($rows[3][7])->toEqual(2000)                                  // money is a number
+        ->and($rows[4][7])->toBe(1500.5)
+        ->and($rows[3][0])->toBeInstanceOf(DateTimeImmutable::class)       // a real date
+        ->and($rows[3][0]->format('Y-m-d'))->toBe('2026-10-05')
+        ->and($rows[3][6])->toBe('0091')                                   // a reference keeps its zeros
+        ->and($rows[5][0])->toBe('Total')
+        ->and($rows[5][7])->toBe('=SUM(H5:H6)');                          // a live total of the two rows
 })->skip(! extension_loaded('zip'), 'Needs PHP zip (turn it on in Laragon: PHP > Extensions > zip)');
 
 it('gives the admin exports the same formats and a preview', function () {
@@ -98,4 +103,33 @@ it('gives the admin exports the same formats and a preview', function () {
     expect(substr($this->get($link->json('data.url'))->assertOk()->getContent(), 0, 4))->toBe('%PDF');
 
     $this->actingAs($admin, 'sanctum')->getJson('/api/v1/admin/exports/owners/link?format=doc')->assertUnprocessable();
+});
+
+it('lets a boarder download their own spending, bills and payments', function () {
+    $kim = User::where('name', 'Kim')->sole();
+    $this->actingAs($kim, 'sanctum')->getJson('/api/v1/me/exports')->assertOk()
+        ->assertJsonPath('data.*.key', ['spending', 'bills', 'payments']);
+
+    $preview = $this->getJson('/api/v1/me/exports/payments/preview')->assertOk()->json('data');
+    expect($preview['title'])->toBe('My payments')
+        ->and($preview['total'])->toBe(2)
+        ->and(array_column($preview['rows'], 5))->toBe(['2,000.00', '1,500.50']);
+    expect($this->getJson('/api/v1/me/exports/spending/preview')->json('data.total'))->toBe(12);
+
+    $link = $this->getJson('/api/v1/me/exports/payments/link?format=pdf')->assertOk();
+    expect($link->json('data.filename'))->toBe('dormlink-my-payments-2026-10-20.pdf');
+    auth()->forgetGuards();
+    expect(substr($this->get($link->json('data.url'))->assertOk()->getContent(), 0, 4))->toBe('%PDF');
+
+    // Only through a signed link, and never someone else's.
+    $this->get('/api/v1/me/exports/payments/download?user='.$kim->id)->assertForbidden();
+    $this->actingAs($kim, 'sanctum')->getJson('/api/v1/me/exports/everything/preview')->assertNotFound();
+});
+
+it('keeps text that looks like a formula as text in CSV files', function () {
+    Payment::query()->first()->update(['reference' => '=HYPERLINK("x")']);
+    $link = $this->actingAs(User::where('name', 'Kim')->sole(), 'sanctum')->getJson('/api/v1/me/exports/payments/link')->assertOk();
+    auth()->forgetGuards();
+
+    expect($this->get($link->json('data.url'))->assertOk()->streamedContent())->toContain("'=HYPERLINK");
 });

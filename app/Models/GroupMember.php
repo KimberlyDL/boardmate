@@ -28,6 +28,7 @@ class GroupMember extends Model
             'role' => GroupRole::class,
             'joined_on' => 'immutable_date',
             'left_on' => 'immutable_date',
+            'hidden_at' => 'immutable_datetime',
         ];
     }
 

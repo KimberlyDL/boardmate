@@ -12,11 +12,14 @@ use App\Models\Bill;
 use App\Models\GroupMember;
 use App\Models\LateEntryRequest;
 use App\Models\MaintenanceRequest;
+use App\Models\RoomOccupant;
 use App\Models\Tenancy;
 use App\Models\User;
 use App\Models\Visitor;
 use App\Services\Billing\PaymentLedger;
+use App\Services\Billing\UpcomingBills;
 use App\Services\Groups\GroupBalances;
+use App\Services\Groups\MemberShares;
 use App\Services\Properties\HouseRuleAcceptances;
 use App\Support\ManilaDate;
 
@@ -31,19 +34,61 @@ class TenantDashboard
         private readonly PaymentLedger $ledger,
         private readonly GroupBalances $balances,
         private readonly HouseRuleAcceptances $houseRules,
+        private readonly UpcomingBills $upcoming,
+        private readonly MemberShares $shares,
     ) {}
 
     /** @return array<string, mixed> */
     public function for(User $user): array
     {
         $stay = Tenancy::current()->where('tenant_id', $user->id)->with(['property', 'room', 'unit'])->first();
+        if (! $stay && ($listed = $this->listedIn($user))) {
+            return $this->forMember($listed, $user);
+        }
 
         return [
             'stay' => $stay ? $this->stay($stay) : null,
             'money' => $stay ? $this->money($stay) : null,
             'requests' => $stay ? $this->requests($stay, $user) : null,
-            'group' => $stay ? $this->group($stay, $user) : null,
+            'group' => $stay ? $this->group($stay->room_id, $user) : null,
             'house_rules_to_accept' => $stay && ! $this->houseRules->isUpToDate($stay, $this->houseRules->current($stay->property)),
+            'unread_notifications' => $user->unreadNotifications()->count(),
+        ];
+    }
+
+    /** Where the renter listed me as staying in their whole room (I have no stay of my own there). */
+    private function listedIn(User $user): ?RoomOccupant
+    {
+        return RoomOccupant::staying()->where('user_id', $user->id)->whereNull('tenancy_id')
+            ->with('room.property')->latest('joined_on')->first();
+    }
+
+    /**
+     * Home for someone the renter listed in their whole room: the room as my
+     * stay (`is_member`, who rents it), no bills of my own (the owner bills
+     * the renter), and my room group with what I have to pay in.
+     *
+     * @return array<string, mixed>
+     */
+    private function forMember(RoomOccupant $listed, User $user): array
+    {
+        $renter = Tenancy::current()->where('room_id', $listed->room_id)->with('tenant:id,name')->first();
+
+        return [
+            'stay' => [
+                'id' => null,
+                'is_member' => true,
+                'renter_name' => $renter?->tenant?->name,
+                'property' => ['id' => $listed->room->property_id, 'name' => $listed->room->property->name],
+                'room_label' => $listed->room->label(),
+                'unit_label' => null,
+                'emergency_numbers' => $listed->room->property->emergency_numbers,
+                'leaving' => null,
+            ],
+            'money' => null,
+            'requests' => null,
+            'group' => $this->group($listed->room_id, $user),
+            'house_rules_to_accept' => false,
             'unread_notifications' => $user->unreadNotifications()->count(),
         ];
     }
@@ -57,6 +102,8 @@ class TenantDashboard
 
         return [
             'id' => $stay->id,
+            'is_member' => false,
+            'renter_name' => null,
             'property' => ['id' => $stay->property_id, 'name' => $stay->property->name],
             'room_label' => $stay->room?->label(),
             'unit_label' => $stay->unit?->label,
@@ -87,7 +134,22 @@ class TenantDashboard
                 'due_on' => $next->due_on->toDateString(),
                 'balance_centavos' => $next->balanceCentavos(),
             ] : null,
+            // Not billed yet: the next rent, so "nothing to pay" still says when the next bill comes.
+            'upcoming_rent' => $this->upcoming->nextRent($stay->loadMissing(['unit', 'discounts']), $today),
         ];
+    }
+
+    /**
+     * My share of the soonest shared bill not paid yet (owner bill or
+     * "collect first") that I still have to pay in, or null.
+     *
+     * @return array{description: string, due_on: string, my_left_centavos: int, is_overdue: bool}|null
+     */
+    private function nextDue(GroupMember $me): ?array
+    {
+        $first = $this->shares->items($me)[0] ?? null;
+
+        return $first ? ['description' => $first['description'], 'due_on' => $first['due_on'], 'my_left_centavos' => $first['my_left_centavos'], 'is_overdue' => $first['is_overdue']] : null;
     }
 
     /** @return array<string, int> */
@@ -109,10 +171,10 @@ class TenantDashboard
      *
      * @return array<string, mixed>|null
      */
-    private function group(Tenancy $stay, User $user): ?array
+    private function group(int $roomId, User $user): ?array
     {
         $me = GroupMember::where('user_id', $user->id)->whereNull('left_on')
-            ->whereHas('group', fn ($q) => $q->where('room_id', $stay->room_id))->with('group')->first();
+            ->whereHas('group', fn ($q) => $q->where('room_id', $roomId))->with('group')->first();
         if (! $me) {
             return null;
         }
@@ -126,6 +188,7 @@ class TenantDashboard
             'owe_centavos' => (int) $pairs->where('from', $me->id)->sum('amount_centavos'),
             'owed_to_me_centavos' => (int) $owingMe->sum('amount_centavos'),
             'is_leader' => $me->role === GroupRole::Admin,
+            'next_due' => $this->nextDue($me),
             'members_owing_me' => $me->role === GroupRole::Admin
                 ? $owingMe->sortByDesc('amount_centavos')->map(fn ($p) => ['name' => $names[$p['from']] ?? null, 'amount_centavos' => (int) $p['amount_centavos']])->values()->all()
                 : null,

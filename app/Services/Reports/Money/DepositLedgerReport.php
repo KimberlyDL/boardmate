@@ -33,6 +33,11 @@ class DepositLedgerReport extends Report
         return PropertyAbility::ViewCollections;
     }
 
+    public function hasTotals(): bool
+    {
+        return true;
+    }
+
     public function usesDates(): bool
     {
         return false;

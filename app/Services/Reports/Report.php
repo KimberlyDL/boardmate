@@ -32,6 +32,12 @@ abstract class Report
         return true;
     }
 
+    /** Whether the money columns add up to a meaningful total (shown as a total row in Excel and PDF). */
+    public function hasTotals(): bool
+    {
+        return false;
+    }
+
     /**
      * The dates used when none are sent: this month, unless a report looks ahead.
      *

@@ -95,6 +95,12 @@ class ApplicationResource extends JsonResource
                 'phone' => $this->contact_phone,
                 'photo_url' => $files->url($boarder->photo_path, FilePurpose::ProfilePhoto),
             ];
+            // Given by the applicant; the move-in form starts from it.
+            $data['emergency_contact'] = $this->emergency_contact_name ? [
+                'name' => $this->emergency_contact_name,
+                'relationship' => $this->emergency_contact_relationship,
+                'phone' => $this->emergency_contact_phone,
+            ] : null;
             $data['id_document_url'] = $files->url($this->id_document_path, FilePurpose::IdDocument);
             $data['id_document_purged'] = $this->id_document_purged_at !== null;
             $data['decided_by'] = $this->decider?->name;

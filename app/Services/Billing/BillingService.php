@@ -76,26 +76,49 @@ class BillingService
             ->with(['property.owner', 'unit', 'room', 'tenant'])
             ->chunkById(100, function (Collection $tenancies) use ($day, &$issued, &$skipped) {
                 foreach ($tenancies as $tenancy) {
-                    $billed = $tenancy->bills()->where('kind', BillKind::Periodic->value)
-                        ->pluck('period_start_on')->map(fn ($d) => CarbonImmutable::parse($d)->toDateString())->flip();
-
-                    $previous = null;
-                    foreach (BillingCalendar::periods($tenancy->moved_in_on, $tenancy->anchor_day) as $period) {
-                        if ($period->dueOn->greaterThan($day)) {
-                            break;
-                        }
-                        // Leaving: no period starts after the last day of stay (C1).
-                        if ($tenancy->end_on && $period->startsOn->greaterThan($tenancy->end_on)) {
-                            break;
-                        }
-                        if ($tenancy->billsPeriod($period) && ! $billed->has($period->startsOn->toDateString())) {
-                            $bill = $this->issuePeriodic($tenancy, $period, $previous, $day);
-                            $bill ? $issued++ : $skipped[] = "{$tenancy->tenant->name} ({$tenancy->property->name}): no rent set for ".$period->startsOn->format('M j, Y');
-                        }
-                        $previous = $period;
-                    }
+                    $r = $this->issueDueFor($tenancy, $day);
+                    $issued += $r['issued'];
+                    array_push($skipped, ...$r['skipped']);
                 }
             });
+
+        return ['issued' => $issued, 'skipped' => $skipped];
+    }
+
+    /**
+     * One tenancy's anniversary bills due on or before $day that are missing.
+     * The daily job runs this for everyone; a move-in runs it at once, so a
+     * stay added after the day's run is not left without the bill due today.
+     *
+     * @return array{issued: int, skipped: list<string>}
+     */
+    public function issueDueFor(Tenancy $tenancy, CarbonImmutable $day): array
+    {
+        $issued = 0;
+        $skipped = [];
+        if (! $tenancy->moved_in_on->lt($day) || ! in_array($tenancy->status->value, TenancyStatus::currentValues(), true)) {
+            return ['issued' => 0, 'skipped' => []];
+        }
+        $tenancy->loadMissing(['property.owner', 'unit', 'room', 'tenant']);
+
+        $billed = $tenancy->bills()->where('kind', BillKind::Periodic->value)
+            ->pluck('period_start_on')->map(fn ($d) => CarbonImmutable::parse($d)->toDateString())->flip();
+
+        $previous = null;
+        foreach (BillingCalendar::periods($tenancy->moved_in_on, $tenancy->anchor_day) as $period) {
+            if ($period->dueOn->greaterThan($day)) {
+                break;
+            }
+            // Leaving: no period starts after the last day of stay (C1).
+            if ($tenancy->end_on && $period->startsOn->greaterThan($tenancy->end_on)) {
+                break;
+            }
+            if ($tenancy->billsPeriod($period) && ! $billed->has($period->startsOn->toDateString())) {
+                $bill = $this->issuePeriodic($tenancy, $period, $previous, $day);
+                $bill ? $issued++ : $skipped[] = "{$tenancy->tenant->name} ({$tenancy->property->name}): no rent set for ".$period->startsOn->format('M j, Y');
+            }
+            $previous = $period;
+        }
 
         return ['issued' => $issued, 'skipped' => $skipped];
     }

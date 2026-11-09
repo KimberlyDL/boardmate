@@ -62,6 +62,33 @@ class NotificationController extends Controller
     }
 
     /**
+     * Clear one
+     *
+     * Removes the notification from my list (only mine; the record it was about stays).
+     */
+    public function destroy(Request $request, string $id): JsonResponse
+    {
+        $request->user()->notifications()->findOrFail($id)->delete();
+
+        return ApiResponse::message('Notification cleared.');
+    }
+
+    /**
+     * Clear all
+     *
+     * Empties my notification list. `read_only: true` clears only the ones already read.
+     */
+    public function clear(Request $request): JsonResponse
+    {
+        $data = $request->validate(['read_only' => ['sometimes', 'boolean']]);
+        $request->user()->notifications()
+            ->when($data['read_only'] ?? false, fn ($q) => $q->whereNotNull('read_at'))
+            ->delete();
+
+        return ApiResponse::message('Notifications cleared.');
+    }
+
+    /**
      * Notification preferences
      *
      * Lists the notifications a user may turn off, and which are off.

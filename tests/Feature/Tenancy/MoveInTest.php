@@ -39,7 +39,7 @@ function reservedFor(User $boarder, $property, ?int $unitIndex = 0, array $appro
 {
     $id = test()->actingAs($boarder, 'sanctum')->postJson("/api/v1/listings/{$property->id}/applications", [
         'planned_move_in_on' => '2026-10-27',
-        'contact_phone' => '0917 123 4567',
+        'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->assertCreated()->json('data.id');
 
     test()->actingAs(test()->owner, 'sanctum')->postJson("/api/v1/applications/{$id}/approve", [
@@ -185,7 +185,7 @@ it('checks the reservation and the date', function () {
 
     // A pending application is not a reservation.
     $pending = $this->actingAs($this->ben, 'sanctum')->postJson("/api/v1/listings/{$this->bedProperty->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->json('data.id');
     moveIn($pending, moveInBody())->assertUnprocessable()->assertJsonValidationErrors(['application']);
 });
@@ -271,7 +271,7 @@ it('withdraws the tenant\'s pending applications when a walk-in moves in', funct
     $other = makeProperty(User::factory()->owner()->create(), ['units' => ['count' => 1, 'rent_centavos' => 150000]]);
     $other->forceFill(['latitude' => 14.6, 'longitude' => 121.0, 'is_published' => true, 'published_at' => now()])->save();
     $pending = $this->actingAs($this->kim, 'sanctum')->postJson("/api/v1/listings/{$other->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->assertCreated()->json('data.id');
 
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/properties/{$this->bedProperty->id}/tenancies", moveInBody([

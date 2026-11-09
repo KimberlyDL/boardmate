@@ -25,7 +25,7 @@ function attendancePending(User $boarder, $property): int
 {
     return test()->actingAs($boarder, 'sanctum')->postJson("/api/v1/listings/{$property->id}/applications", [
         'planned_move_in_on' => now('Asia/Manila')->addDays(5)->toDateString(),
-        'contact_phone' => '0917 123 4567',
+        'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->assertCreated()->json('data.id');
 }
 

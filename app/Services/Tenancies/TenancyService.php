@@ -23,6 +23,7 @@ use App\Models\TenancyPayment;
 use App\Models\User;
 use App\Services\Audit\AuditDiff;
 use App\Services\Audit\Contracts\AuditService;
+use App\Services\Billing\BillingService;
 use App\Services\Billing\ChargeService;
 use App\Services\BillingCalendar\BillingCalendar;
 use App\Services\BillingCalendar\RentPeriod;
@@ -87,6 +88,7 @@ class TenancyService
         private readonly NotificationService $notifications,
         private readonly HouseRuleAcceptances $houseRules,
         private readonly ChargeService $charges,
+        private readonly BillingService $billing,
     ) {}
 
     /**
@@ -177,6 +179,7 @@ class TenancyService
         }, attempts: 3);
 
         $this->recordMoveIn($tenancy, $override, $actor, $withdrawn);
+        $this->billing->issueDueFor($tenancy->fresh(), ManilaDate::today());
 
         return $tenancy;
     }
@@ -224,6 +227,8 @@ class TenancyService
         if ($opening) {
             $this->charges->announce($opening, $tenancy, self::OPENING_BALANCE_DESCRIPTION, self::OPENING_BALANCE_REASON);
         }
+        // Bills already due (an existing tenant whose rent is due today) are issued now, not at the next daily run.
+        $this->billing->issueDueFor($tenancy->fresh(), ManilaDate::today());
 
         return $tenancy;
     }

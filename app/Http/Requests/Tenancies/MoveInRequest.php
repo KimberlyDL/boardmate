@@ -6,6 +6,7 @@ use App\Authorization\PropertyAccess;
 use App\Enums\DiscountKind;
 use App\Enums\PaymentMethod;
 use App\Enums\PropertyAbility;
+use App\Models\BoarderProfile;
 use App\Models\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,6 +33,43 @@ class MoveInRequest extends FormRequest
         abort_unless(PropertyAccess::can($user, PropertyAbility::ManageTenancies, $property), 403, 'You do not have permission to do this for this property.');
 
         return true;
+    }
+
+    /**
+     * No emergency contact typed: use the one the tenant gave (on the
+     * application, else in their profile), so the owner need not ask for it.
+     */
+    protected function prepareForValidation(): void
+    {
+        $typed = (array) $this->input('emergency_contact', []);
+        if (filled($typed['name'] ?? null) || filled($typed['phone'] ?? null)) {
+            return;
+        }
+        $saved = $this->savedEmergencyContact();
+        if ($saved && filled($saved['name']) && filled($saved['phone'])) {
+            $this->merge(['emergency_contact' => $saved]);
+        }
+    }
+
+    /** @return array{name: ?string, relationship: ?string, phone: ?string}|null */
+    protected function savedEmergencyContact(): ?array
+    {
+        $application = $this->route('application');
+        if ($application->emergency_contact_name) {
+            return ['name' => $application->emergency_contact_name, 'relationship' => $application->emergency_contact_relationship, 'phone' => $application->emergency_contact_phone];
+        }
+
+        return self::fromProfile($application->boarder?->boarderProfile);
+    }
+
+    /** @return array{name: ?string, relationship: ?string, phone: ?string}|null */
+    protected static function fromProfile(?BoarderProfile $profile): ?array
+    {
+        return $profile ? [
+            'name' => $profile->emergency_contact_name,
+            'relationship' => $profile->emergency_contact_relationship,
+            'phone' => $profile->emergency_contact_phone,
+        ] : null;
     }
 
     /** The property the move-in is for: the reservation's. */

@@ -16,6 +16,7 @@ use App\Services\Files\Contracts\FileService;
 use App\Services\Groups\GroupService;
 use App\Services\Groups\MemberExpenseService;
 use App\Services\Groups\OwnerBillPoster;
+use App\Services\Groups\ShareProgress;
 use App\Support\ManilaDate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,14 +34,17 @@ class GroupExpenseController extends Controller
         private readonly OwnerBillPoster $poster,
         private readonly MemberExpenseService $expenses,
         private readonly FileService $files,
+        private readonly ShareProgress $progress,
     ) {}
 
     /**
      * The group's lines
      *
      * Newest first. Members see every line with each member's share and
-     * their own. The owner and caretakers see only the owner's bills posted
-     * to the group, without the shares.
+     * their own, and how much of each share is paid (`paid_centavos`).
+     * Lines with a due date (owner bills, "collect first") add `due_on`,
+     * `is_settled` and `is_overdue`. The owner and caretakers see only the
+     * owner's bills posted to the group, without the shares.
      */
     public function index(Request $request, ContributionGroup $group): JsonResponse
     {
@@ -52,9 +56,10 @@ class GroupExpenseController extends Controller
 
         $lines = $group->expenses()
             ->when(! $me, fn ($q) => $q->where('kind', GroupExpenseKind::OwnerBill->value))
-            ->with(['paidBy', 'shares.member', 'bill:id,number'])
+            ->with(['paidBy', 'shares.member', 'bill' => fn ($q) => $q->withBalance()])
             ->limit(200)
             ->get();
+        $this->paid = $me ? $this->progress->paid($group) : [];
 
         return ApiResponse::ok($lines->map(fn (GroupExpense $e) => $this->present($e, $me)), meta: ['view' => $me ? 'member' : 'staff']);
     }
@@ -85,15 +90,20 @@ class GroupExpenseController extends Controller
 
         $expense = $this->poster->resplit($expense, $method, $params);
 
-        return ApiResponse::ok($this->present($expense->load(['paidBy', 'shares.member', 'bill:id,number']), GroupAccess::member($request->user(), $group)), 'Split saved.');
+        $this->paid = $this->progress->paid($group);
+
+        return ApiResponse::ok($this->present($this->fresh($expense), GroupAccess::member($request->user(), $group)), 'Split saved.');
     }
 
     /**
-     * Add a shared expense
+     * Add a shared bill
      *
      * Something a member paid for the room (SC-31: e.g. internet the boarders
-     * pay themselves). `participants` (member ids) default to everyone there
-     * now; `method` equal (default), weights (`weights`) or custom
+     * pay themselves), or, with `due_on`, a bill due later to "collect first"
+     * (leader or moderator only): members pay their share to the collector
+     * (`paid_by_member_id`, default the one adding it) before it is due, then
+     * the collector marks it paid. `participants` (member ids) default to
+     * everyone there now; `method` equal (default), weights (`weights`) or custom
      * (`amounts`, adding up). `paid_by_member_id`: the leader or a moderator
      * may record someone else's. Optional `proof` (photo or PDF, private).
      */
@@ -103,14 +113,38 @@ class GroupExpenseController extends Controller
         $this->groups->sync($group); // "everyone there now" includes whoever just joined the room
         $today = ManilaDate::today();
         $data = $request->validate($this->rules(true) + [
-            'spent_on' => ['required', 'date_format:Y-m-d', 'before_or_equal:'.$today->toDateString(), 'after_or_equal:'.$today->subDays(90)->toDateString()],
+            'spent_on' => ['required_without:due_on', 'nullable', 'date_format:Y-m-d', 'before_or_equal:'.$today->toDateString(), 'after_or_equal:'.$today->subDays(90)->toDateString()],
+            'due_on' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:'.$today->toDateString(), 'before_or_equal:'.$today->addYear()->toDateString()],
             'paid_by_member_id' => ['nullable', 'integer'],
             'proof' => ['nullable', ...array_slice($this->files->rules(FilePurpose::GroupProof), 1)],
         ]);
 
         $expense = $this->expenses->add($group, $me, $data, $request->file('proof'), $request->user());
+        $this->paid = $this->progress->paid($group);
 
-        return ApiResponse::created($this->present($this->fresh($expense), $me), 'Expense added.');
+        return ApiResponse::created($this->present($this->fresh($expense), $me),
+            $expense->due_on ? 'Bill added. Everyone sees their share to pay before it is due.' : 'Expense added.');
+    }
+
+    /**
+     * Mark a "collect first" bill as paid
+     *
+     * The collector (or the leader or a moderator) paid the bill: `paid_on`
+     * and an optional `proof` (the receipt). Members who have not paid their
+     * share yet still owe it to the collector.
+     */
+    public function markPaid(Request $request, ContributionGroup $group, GroupExpense $expense): JsonResponse
+    {
+        $me = $this->currentMember($request, $group);
+        abort_unless($me->role->canManage() || $me->id === $expense->paid_by_member_id, 403, 'Only the collector, the room leader or a moderator can mark this paid.');
+        $data = $request->validate([
+            'paid_on' => ['required', 'date_format:Y-m-d', 'before_or_equal:'.ManilaDate::today()->toDateString(), 'after_or_equal:'.$expense->spent_on->toDateString()],
+            'proof' => ['nullable', ...array_slice($this->files->rules(FilePurpose::GroupProof), 1)],
+        ]);
+        $expense = $this->expenses->markPaid($expense, $data['paid_on'], $request->file('proof'));
+        $this->paid = $this->progress->paid($group);
+
+        return ApiResponse::ok($this->present($this->fresh($expense), $me), 'Marked as paid.');
     }
 
     /**
@@ -123,9 +157,14 @@ class GroupExpenseController extends Controller
     {
         $me = $this->currentMember($request, $group);
         $this->allowEdit($me, $expense, $request);
-        $data = $request->validate($this->rules(false) + ['spent_on' => ['sometimes', 'date_format:Y-m-d', 'before_or_equal:'.ManilaDate::today()->toDateString()]]);
+        $data = $request->validate($this->rules(false) + [
+            'spent_on' => ['sometimes', 'date_format:Y-m-d', 'before_or_equal:'.ManilaDate::today()->toDateString()],
+            'due_on' => ['sometimes', 'date_format:Y-m-d', 'before_or_equal:'.ManilaDate::today()->addYear()->toDateString()],
+        ]);
+        $expense = $this->expenses->edit($expense, $data);
+        $this->paid = $this->progress->paid($group);
 
-        return ApiResponse::ok($this->present($this->fresh($this->expenses->edit($expense, $data)), $me), 'Expense saved.');
+        return ApiResponse::ok($this->present($this->fresh($expense), $me), 'Saved.');
     }
 
     /**
@@ -159,6 +198,8 @@ class GroupExpenseController extends Controller
         ]);
 
         $fix = $this->expenses->correct($expense, $data['changes'], $data['reason'], $request->user());
+
+        $this->paid = $this->progress->paid($group);
 
         return ApiResponse::created($this->present($this->fresh($fix), GroupAccess::member($request->user(), $group)), 'Correction added.');
     }
@@ -196,12 +237,22 @@ class GroupExpenseController extends Controller
 
     private function fresh(GroupExpense $expense): GroupExpense
     {
-        return $expense->fresh(['paidBy', 'shares.member', 'bill:id,number']);
+        return $expense->fresh(['paidBy', 'shares.member', 'bill' => fn ($q) => $q->withBalance()]);
     }
+
+    /** @var array<int, array<int, int>> line id => member id => paid of their share (see ShareProgress) */
+    private array $paid = [];
 
     /** @return array<string, mixed> */
     private function present(GroupExpense $e, ?GroupMember $me): array
     {
+        // When the bill itself must be paid: the owner's bill's due date, or a "collect first" line's.
+        $dueOn = $e->kind === GroupExpenseKind::OwnerBill ? $e->bill?->due_on : $e->due_on;
+        $settled = match ($e->kind) {
+            GroupExpenseKind::OwnerBill => ! $e->bill || $e->bill->balanceCentavos() <= 0,
+            GroupExpenseKind::Collection => $e->paid_on !== null,
+            default => true,
+        };
         $data = [
             'id' => $e->id,
             'kind' => $e->kind->value,
@@ -214,6 +265,11 @@ class GroupExpenseController extends Controller
             'paid_by' => ['id' => $e->paid_by_member_id, 'name' => $e->paidBy->name],
             'adjusts_expense_id' => $e->adjusts_expense_id,
             'reason' => $e->reason,
+            'due_on' => $dueOn?->toDateString(),
+            'paid_on' => $e->paid_on?->toDateString(),
+            // The bill itself is paid: to the owner (owner bill) or by the collector (collect first).
+            'is_settled' => $settled,
+            'is_overdue' => ! $settled && $dueOn !== null && $dueOn->lt(ManilaDate::today()),
         ];
         if (! $me) {
             return $data; // staff: the owner's own bills, no shares
@@ -228,8 +284,19 @@ class GroupExpenseController extends Controller
                 'member_id' => $s->member_id,
                 'name' => $s->member->name,
                 'amount_centavos' => $s->amount_centavos,
+                'paid_centavos' => $this->sharePaid($e, $s),
             ])->values(),
             'my_share_centavos' => (int) $e->shares->firstWhere('member_id', $me->id)?->amount_centavos,
+            'my_paid_centavos' => ($mine = $e->shares->firstWhere('member_id', $me->id)) ? $this->sharePaid($e, $mine) : 0,
+            // Collected so far: the collector's own share plus what the others paid them.
+            'collected_centavos' => (int) $e->shares->sum(fn (ExpenseShare $s) => max(0, $this->sharePaid($e, $s))),
+            'can_mark_paid' => $e->isCollecting() && $me->isCurrent() && ($me->role->canManage() || $me->id === $e->paid_by_member_id),
         ];
+    }
+
+    /** The paid part of a share; the payer's own share counts as paid. */
+    private function sharePaid(GroupExpense $e, ExpenseShare $s): int
+    {
+        return $s->member_id === $e->paid_by_member_id ? $s->amount_centavos : ($this->paid[$e->id][$s->member_id] ?? 0);
     }
 }

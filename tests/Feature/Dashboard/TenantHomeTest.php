@@ -83,3 +83,21 @@ it('has nothing but notifications for someone not staying anywhere', function ()
         ->assertJsonPath('data.house_rules_to_accept', false)
         ->assertJsonPath('data.unread_notifications', 0);
 });
+
+it('says when the next rent comes when nothing is billed yet', function () {
+    $data = $this->actingAs($this->ben, 'sanctum')->getJson('/api/v1/me/home')->assertOk()->json('data.money');
+
+    expect($data['next_bill'])->toBeNull()
+        ->and($data['upcoming_rent'])->toMatchArray([
+            'kind' => 'rent',
+            'due_on' => '2026-11-01',
+            'period_start_on' => '2026-11-02',
+            'estimate_centavos' => 200000,
+        ]);
+
+    // Leaving before that period starts: no more rent is coming.
+    $this->benStay->update(['status' => 'notice_given', 'end_on' => '2026-10-31']);
+    expect($this->getJson('/api/v1/me/home')->json('data.money.upcoming_rent'))->toBeNull();
+
+    $this->getJson('/api/v1/me/bills')->assertOk()->assertJsonPath('meta.places.0.upcoming_rent', null);
+});

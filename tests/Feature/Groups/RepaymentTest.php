@@ -116,8 +116,35 @@ it('lets a moderator decide for others, and someone who left still settle up', f
     $id = $this->actingAs($this->ana, 'sanctum')->postJson("{$this->g}/repayments", ['to_member_id' => $kim->id, 'amount_centavos' => 30000, 'method' => 'cash'])->json('data.id');
     $this->actingAs($this->ben, 'sanctum')->postJson("{$this->g}/repayments/{$id}/confirm")->assertOk();
 
+    Tenancy::where('tenant_id', $this->ana->id)->update(['status' => 'ended', 'moved_out_on' => '2026-10-15']);
     $ana->update(['left_on' => '2026-10-15']);
     $this->actingAs($this->ana, 'sanctum')->getJson("{$this->g}/balances")->assertOk()->assertJsonPath('data.me.owe_centavos', 20000);
     $this->postJson("{$this->g}/repayments", ['to_member_id' => $ben->id, 'amount_centavos' => 20000, 'method' => 'online'])->assertCreated();
     expect(GroupRepayment::where('status', RepaymentStatus::Pending)->count())->toBe(1);
+});
+
+it('lets a member hide an old room group only after leaving and settling up', function () {
+    [$kim, $ana] = [$this->m['Kim'], $this->m['Ana']];
+    $hide = fn () => $this->actingAs($this->ana, 'sanctum')->postJson("{$this->g}/hide");
+
+    $hide()->assertUnprocessable()->assertJsonPath('errors.group.0', 'You can hide a room group only after you leave the room.');
+
+    Tenancy::where('tenant_id', $this->ana->id)->update(['status' => 'ended', 'moved_out_on' => '2026-10-15']);
+    $ana->update(['left_on' => '2026-10-15']);
+    $hide()->assertUnprocessable()->assertJsonPath('errors.group.0', 'Settle up first: you still owe someone in this group, or someone owes you.');
+
+    foreach ([[$kim, 30000], [$this->m['Ben'], 20000]] as [$to, $amount]) {
+        GroupRepayment::create(['group_id' => $this->group->id, 'from_member_id' => $ana->id, 'to_member_id' => $to->id,
+            'amount_centavos' => $amount, 'method' => 'cash', 'status' => RepaymentStatus::Confirmed]);
+    }
+    $this->getJson('/api/v1/me/groups')->assertJsonPath('data.0.can_hide', true);
+    $hide()->assertOk();
+
+    // Gone from Ana's list (still there with hidden=1), nothing deleted for the others.
+    $this->getJson('/api/v1/me/groups')->assertJsonCount(0, 'data')->assertJsonPath('meta.hidden_count', 1);
+    $this->getJson('/api/v1/me/groups?hidden=1')->assertJsonPath('data.0.is_hidden', true);
+    $this->actingAs($this->kim, 'sanctum')->getJson('/api/v1/me/groups')->assertJsonCount(1, 'data');
+
+    $this->actingAs($this->ana, 'sanctum')->postJson("{$this->g}/unhide")->assertOk();
+    $this->getJson('/api/v1/me/groups')->assertJsonCount(1, 'data');
 });

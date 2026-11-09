@@ -32,6 +32,11 @@ class OutstandingReport extends Report
         return PropertyAbility::ViewArrears;
     }
 
+    public function hasTotals(): bool
+    {
+        return true;
+    }
+
     public function usesDates(): bool
     {
         return false;

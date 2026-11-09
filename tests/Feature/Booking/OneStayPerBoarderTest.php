@@ -4,6 +4,7 @@ use App\Enums\ApplicationStatus;
 use App\Enums\NoticeStatus;
 use App\Enums\UnitStatus;
 use App\Models\BookingApplication;
+use App\Models\RoomOccupant;
 use App\Models\Tenancy;
 use App\Models\TenancyNotice;
 use App\Models\User;
@@ -38,7 +39,7 @@ afterEach(fn () => Date::setTestNow());
 function applyElsewhere()
 {
     return test()->actingAs(test()->kim, 'sanctum')->postJson('/api/v1/listings/'.test()->other->id.'/applications', [
-        'planned_move_in_on' => '2026-11-01', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-11-01', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ]);
 }
 
@@ -85,4 +86,21 @@ it('refuses a second move-in while a stay is running, from a reservation or as a
     expect(Tenancy::count())->toBe(1)
         ->and($bed->fresh()->status)->toBe(UnitStatus::Reserved)
         ->and($walkInUnit->fresh()->status)->toBe(UnitStatus::Available);
+});
+
+it('refuses to apply while listed as staying in someone else\'s whole room, until marked as left', function () {
+    // Kim moves out; Mia rents a whole room at Reyes Dorm and lists Kim as staying with her.
+    $this->stay->update(['status' => 'ended', 'moved_out_on' => '2026-10-01']);
+    $wholeRoom = makeProperty($this->owner, ['details' => ['name' => 'Cruz Rooms'], 'rental_mode' => 'whole', 'units' => ['capacity' => 3, 'rent_centavos' => 400000]]);
+    $room = $wholeRoom->rooms()->first();
+    $mia = User::factory()->boarder()->create(['name' => 'Mia']);
+    Tenancy::factory()->forUnit($room->units->first())->movedInOn('2026-10-01')->create(['tenant_id' => $mia->id]);
+    $listed = RoomOccupant::factory()->create(['room_id' => $room->id, 'user_id' => $this->kim->id, 'name' => 'Kim', 'joined_on' => '2026-10-02']);
+
+    applyElsewhere()->assertUnprocessable()
+        ->assertJsonPath('code', 'listed_in_room')
+        ->assertJsonPath('message', "You are listed as staying in Room {$room->label()} at Cruz Rooms. Ask Mia to mark you as left first.");
+
+    $listed->update(['left_on' => '2026-10-20']);
+    applyElsewhere()->assertCreated();
 });

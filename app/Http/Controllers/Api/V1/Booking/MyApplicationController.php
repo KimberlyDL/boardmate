@@ -36,6 +36,10 @@ class MyApplicationController extends Controller
      * more than one room) and must have a free place; `whole: true` asks for
      * the whole room where the owner offers it. The owner picks the
      * bedspace when approving and may place the boarder in another room.
+     * The applicant's emergency contact (`emergency_contact_name`, `_phone`,
+     * optional `_relationship`) is required; the app fills it in from the
+     * profile, and `save_to_profile: true` stores it there too. The owner's
+     * move-in form starts from it.
      * Optional ID photo (`id_document`: jpg/png/webp/pdf, up to 5 MB) is seen
      * only by the owner and the property's Managers, and deleted 30 days after
      * the application closes.
@@ -57,7 +61,14 @@ class MyApplicationController extends Controller
             'whole' => ['sometimes', 'boolean'],
             'id_document' => ['nullable', ...array_slice($files->rules(FilePurpose::IdDocument), 1)],
             'house_rules_version' => ['nullable', 'integer'],
+            'emergency_contact_name' => ['required', 'string', 'max:120'],
+            'emergency_contact_relationship' => ['nullable', 'string', 'max:50'],
+            'emergency_contact_phone' => ['required', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
+            'save_to_profile' => ['sometimes', 'boolean'],
         ], [
+            'emergency_contact_name.required' => 'Add someone we can call in an emergency.',
+            'emergency_contact_phone.required' => 'Add your emergency contact\'s phone number.',
+            'emergency_contact_phone.regex' => 'Enter a valid phone number.',
             'planned_move_in_on.after_or_equal' => 'Choose today or a later date.',
             'planned_move_in_on.before_or_equal' => 'Choose a date within the next 6 months.',
             'contact_phone.regex' => 'Enter a valid phone number.',
@@ -65,7 +76,14 @@ class MyApplicationController extends Controller
 
         $rules = $this->houseRules->requireForApplication($listing, isset($data['house_rules_version']) ? (int) $data['house_rules_version'] : null);
         $data['wants_whole'] = (bool) ($data['whole'] ?? false);
-        unset($data['whole'], $data['house_rules_version']);
+        if ($data['save_to_profile'] ?? false) {
+            $request->user()->boarderProfile()->updateOrCreate([], [
+                'emergency_contact_name' => $data['emergency_contact_name'],
+                'emergency_contact_relationship' => $data['emergency_contact_relationship'] ?? null,
+                'emergency_contact_phone' => $data['emergency_contact_phone'],
+            ]);
+        }
+        unset($data['whole'], $data['house_rules_version'], $data['save_to_profile']);
         $data['room_id'] = $this->chosenRoom($listing, $data['room_id'] ?? null, $data['wants_whole'])->id;
 
         $application = $this->bookings->apply($request->user(), $listing, $data, $request->file('id_document'));

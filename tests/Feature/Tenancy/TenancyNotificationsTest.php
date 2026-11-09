@@ -46,7 +46,7 @@ function sentOf(User $user, NotificationEvent $event)
 
 it('welcomes a tenant who moves in and says when the rent is due', function () {
     $applicationId = $this->actingAs($this->kim, 'sanctum')->postJson("/api/v1/listings/{$this->property->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->json('data.id');
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/applications/{$applicationId}/approve", ['unit_id' => $this->property->units()->first()->id])->assertOk();
 
@@ -75,7 +75,7 @@ it('tells a walk-in that their other applications were withdrawn', function () {
     $other = makeProperty(User::factory()->owner()->create(), ['units' => ['count' => 1, 'rent_centavos' => 150000]]);
     $other->forceFill(['latitude' => 14.6, 'longitude' => 121.0, 'is_published' => true, 'published_at' => now()])->save();
     $this->actingAs($this->ben, 'sanctum')->postJson("/api/v1/listings/{$other->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->assertCreated();
 
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/properties/{$this->bedProperty->id}/tenancies", [
@@ -158,7 +158,7 @@ it('tells the tenant when the discount is set or ended, and stays quiet when not
 
 it('mentions the leader role when a reservation is approved', function () {
     $id = $this->actingAs($this->kim, 'sanctum')->postJson("/api/v1/listings/{$this->bedProperty->id}/applications", [
-        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567',
+        'planned_move_in_on' => '2026-10-27', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
     ])->json('data.id');
 
     $this->actingAs($this->owner, 'sanctum')->postJson("/api/v1/applications/{$id}/approve", [

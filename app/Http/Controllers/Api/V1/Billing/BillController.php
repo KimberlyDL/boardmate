@@ -9,9 +9,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Billing\BillResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Bill;
+use App\Models\GroupMember;
 use App\Models\Property;
 use App\Models\Tenancy;
 use App\Services\Billing\PaymentLedger;
+use App\Services\Billing\UpcomingBills;
+use App\Services\Groups\MemberShares;
+use App\Support\ManilaDate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -71,13 +75,18 @@ class BillController extends Controller
      * The signed-in boarder's bills everywhere they stay or stayed. `status`:
      * `unpaid` (default, oldest due first), `paid` or `all` (newest first).
      * `meta.places` lists each place with what they owe, their credit, and
-     * how to pay the owner (GCash or bank, when the owner gave them).
+     * how to pay the owner (GCash or bank, when the owner gave them), and
+     * `upcoming_rent`: the next rent not billed yet where they stay now.
+     * `meta.room_shares`: per room group I am in now, what I owe there and
+     * my unpaid part of each shared bill, soonest due first.
      */
-    public function mine(Request $request, PaymentLedger $ledger): JsonResponse
+    public function mine(Request $request, PaymentLedger $ledger, UpcomingBills $upcoming, MemberShares $shares): JsonResponse
     {
         $data = $request->validate(['status' => ['nullable', Rule::in(['unpaid', 'paid', 'all'])]]);
         $status = $data['status'] ?? 'unpaid';
         $user = $request->user();
+        $today = ManilaDate::today();
+        $current = Tenancy::current()->where('tenant_id', $user->id)->with(['unit', 'discounts'])->get()->keyBy('property_id');
 
         $page = Bill::where('payer_id', $user->id)
             ->withBalance()
@@ -97,6 +106,8 @@ class BillController extends Controller
                 'property_name' => $p->name,
                 ...$ledger->summary($p->id, $user->id),
                 'pay_to' => $this->payTo($p),
+                // Coming up, not billed yet (only where I stay now).
+                'upcoming_rent' => ($stay = $current->get($p->id)) ? $upcoming->nextRent($stay, $today) : null,
             ])
             ->values();
 
@@ -105,6 +116,11 @@ class BillController extends Controller
             'last_page' => $page->lastPage(),
             'total' => $page->total(),
             'places' => $places,
+            // My room groups now: what I have to pay in (the only money of someone listed in a renter's whole room).
+            'room_shares' => GroupMember::where('user_id', $user->id)->whereNull('left_on')->with('group.room.property')->get()
+                ->map(fn (GroupMember $m) => $shares->for($m))
+                ->filter(fn (array $r) => $r['owe_centavos'] > 0 || $r['items'] !== [] || $r['owed_to_me_centavos'] > 0)
+                ->values(),
         ]);
     }
 

@@ -109,13 +109,18 @@ it('bills a utility priced only today on the existing tenant\'s first bill', fun
         ]);
 });
 
-it('bills today when the existing tenant\'s rent is due today', function () {
-    // Moved in on May 8; today is Nov 8, a due date.
+it('bills at once when the existing tenant\'s rent is due today, even after the daily run', function () {
+    // Today's daily run already happened (nobody was due); then Ana is added. Moved in on May 8; today is Nov 8, a due date.
+    expect(billExistingOn('2026-11-08'))->toBe(0);
+    Date::setTestNow(CarbonImmutable::parse('2026-11-08 18:00', 'Asia/Manila'));
+
     $this->actingAs($this->owner, 'sanctum')->postJson($this->url, existingBody(['moved_in_on' => '2026-05-08']))
         ->assertCreated()
         ->assertJsonPath('data.billing_starts_on', '2026-11-09');
 
-    expect(billExistingOn('2026-11-08'))->toBe(1);
+    // The bill is there without waiting for tomorrow's run, and a rerun adds nothing.
+    expect(Bill::count())->toBe(1)
+        ->and(billExistingOn('2026-11-08'))->toBe(0);
 
     $bill = Bill::sole();
     expect($bill->due_on->toDateString())->toBe('2026-11-08')
@@ -165,4 +170,15 @@ it('records what an existing tenant still owes from before as one one-time charg
     // The balance does not count as a rent bill: the first rent bill still comes on the due date.
     expect(billExistingOn('2026-11-10'))->toBe(1)
         ->and(Bill::where('kind', BillKind::Periodic)->count())->toBe(1);
+});
+
+it('uses the emergency contact from the tenant\'s profile when the owner leaves it empty', function () {
+    $empty = existingBody(['emergency_contact' => ['name' => '', 'phone' => '']]);
+    $this->actingAs($this->owner, 'sanctum')->postJson($this->url, $empty)
+        ->assertUnprocessable()->assertJsonValidationErrors(['emergency_contact.name']);
+
+    $this->ana->boarderProfile()->updateOrCreate([], ['emergency_contact_name' => 'Lorna Santos', 'emergency_contact_phone' => '0918 222 3333']);
+    $this->postJson($this->url, $empty)->assertCreated();
+
+    expect(Tenancy::sole()->emergency_contact_name)->toBe('Lorna Santos');
 });

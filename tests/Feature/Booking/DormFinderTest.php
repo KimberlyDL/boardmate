@@ -53,7 +53,7 @@ it('shows published places of verified, active owners, full ones too but after f
     }
 
     $this->actingAs(User::factory()->boarder()->create(), 'sanctum')
-        ->postJson("/api/v1/listings/{$full->id}/applications", ['planned_move_in_on' => '2026-10-20', 'contact_phone' => '0917 123 4567'])
+        ->postJson("/api/v1/listings/{$full->id}/applications", ['planned_move_in_on' => '2026-10-20', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000'])
         ->assertUnprocessable()->assertJsonValidationErrors(['property']);
 });
 

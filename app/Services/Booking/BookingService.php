@@ -16,6 +16,7 @@ use App\Models\PropertyCaretaker;
 use App\Models\RentableUnit;
 use App\Models\Room;
 use App\Models\RoomLeader;
+use App\Models\RoomOccupant;
 use App\Models\Tenancy;
 use App\Models\User;
 use App\Services\Audit\Contracts\AuditService;
@@ -147,7 +148,7 @@ class BookingService
         return $closed;
     }
 
-    /** @param  array{planned_move_in_on: string, message?: string|null, contact_phone: string}  $data */
+    /** @param  array{planned_move_in_on: string, message?: string|null, contact_phone: string, emergency_contact_name: string, emergency_contact_relationship?: string|null, emergency_contact_phone: string}  $data */
     public function apply(User $boarder, Property $property, array $data, ?UploadedFile $idDocument): BookingApplication
     {
         $this->assertCanApply($boarder, $property);
@@ -403,6 +404,13 @@ class BookingService
             $application->forceFill(['id_document_path' => null, 'id_document_purged_at' => now()])->save();
         }
 
+        // The applicant's emergency contact goes too (a stay keeps its own copy from the move-in).
+        BookingApplication::query()
+            ->whereNotNull('emergency_contact_name')
+            ->whereNotIn('status', Status::openValues())
+            ->where('closed_at', '<', $day->subDays(30)->startOfDay())
+            ->update(['emergency_contact_name' => null, 'emergency_contact_relationship' => null, 'emergency_contact_phone' => null]);
+
         return $old->count();
     }
 
@@ -506,6 +514,14 @@ class BookingService
             ->with('property')->first();
         if ($stay) {
             $fail("You are staying at {$stay->property->name}. To book for someone else, they need their own DormLink account. To move yourself, give notice first.", 'has_stay');
+        }
+        // Listed by a renter as staying in their room counts as a stay too (the renter marks them as left first).
+        $listed = RoomOccupant::staying()->where('user_id', $boarder->id)->whereNull('tenancy_id')
+            ->with('room.property')->first();
+        if ($listed) {
+            $renter = Tenancy::current()->where('room_id', $listed->room_id)->with('tenant:id,name')->first()?->tenant?->name
+                ?? 'the person who rents the room';
+            $fail("You are listed as staying in Room {$listed->room->label()} at {$listed->room->property->name}. Ask {$renter} to mark you as left first.", 'listed_in_room');
         }
         if (BookingApplication::where('boarder_id', $boarder->id)->where('status', Status::Approved)->exists()) {
             $fail('You already have a reservation. Cancel it first to apply somewhere else.', 'has_reservation');

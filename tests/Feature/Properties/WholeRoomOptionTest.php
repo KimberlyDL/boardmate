@@ -32,7 +32,7 @@ function offerWhole(int $rent = 600000, array $extra = [])
 function applyTo(User $boarder, array $data = [])
 {
     return test()->actingAs($boarder, 'sanctum')->postJson('/api/v1/listings/'.test()->property->id.'/applications', $data + [
-        'planned_move_in_on' => '2026-10-20', 'contact_phone' => '0917 123 4567', 'room_id' => test()->room->id,
+        'planned_move_in_on' => '2026-10-20', 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000', 'room_id' => test()->room->id,
     ]);
 }
 

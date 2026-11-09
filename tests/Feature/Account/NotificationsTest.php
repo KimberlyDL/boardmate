@@ -93,3 +93,26 @@ it('only accepts mutable events as preferences', function () {
 
     $this->putJson('/api/v1/me/notification-preferences', ['muted' => []])->assertOk();
 });
+
+it('clears one, the read ones, or all of my notifications, never someone else\'s', function () {
+    $service = app(NotificationService::class);
+    $other = User::factory()->boarder()->create();
+    foreach (range(1, 3) as $i) {
+        $service->send($this->user, NotificationEvent::Welcome);
+    }
+    $service->send($other, NotificationEvent::Welcome);
+    [$first, $second] = $this->user->notifications()->get()->all();
+    $theirs = $other->notifications()->first()->id;
+
+    $this->actingAs($this->user, 'sanctum')->deleteJson("/api/v1/notifications/{$theirs}")->assertNotFound();
+    $this->deleteJson("/api/v1/notifications/{$first->id}")->assertOk();
+    expect($this->user->notifications()->count())->toBe(2);
+
+    $second->markAsRead();
+    $this->postJson('/api/v1/notifications/clear', ['read_only' => true])->assertOk();
+    expect($this->user->notifications()->count())->toBe(1);
+
+    $this->postJson('/api/v1/notifications/clear')->assertOk();
+    expect($this->user->notifications()->count())->toBe(0)
+        ->and($other->notifications()->count())->toBe(1);
+});

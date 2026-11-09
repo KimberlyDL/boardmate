@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /** A boarder's application to a property; once approved, their reservation. */
 class BookingApplication extends Model
 {
-    protected $fillable = ['planned_move_in_on', 'message', 'contact_phone'];
+    protected $fillable = ['planned_move_in_on', 'message', 'contact_phone', 'emergency_contact_name', 'emergency_contact_relationship', 'emergency_contact_phone'];
 
     protected $attributes = ['status' => 'pending', 'wants_whole' => false];
 

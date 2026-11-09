@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Account\ActiveRoleController;
 use App\Http\Controllers\Api\V1\Account\EmailChangeController;
+use App\Http\Controllers\Api\V1\Account\MyExportController;
 use App\Http\Controllers\Api\V1\Account\NotificationController;
 use App\Http\Controllers\Api\V1\Account\ProfileController;
 use App\Http\Controllers\Api\V1\Admin\CampusController as AdminCampusController;
@@ -112,6 +113,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('finance/stays/{tenancy}', [DocumentController::class, 'stayFinance'])->name('finance-stay');
     });
 
+    // A boarder's own data as a file: a signed, short-lived link from me/exports/{export}/link.
+    Route::get('me/exports/{export}/download', [MyExportController::class, 'download'])
+        ->middleware(['signed', 'throttle:30,1'])->where('export', '[a-z_]+')->name('me.exports.download');
+
     // CSV reports (A10): a signed, short-lived link from reports/{report}/link.
     Route::get('reports/{report}/download', [ReportController::class, 'download'])
         ->middleware(['signed', 'throttle:30,1'])->where('report', '[a-z_]+')->name('reports.download');
@@ -144,6 +149,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('collections', [CollectionController::class, 'mine'])->name('collections');
             Route::get('home', [DashboardController::class, 'home'])->name('home');
             Route::get('spending', [DashboardController::class, 'spending'])->name('spending');
+            Route::get('exports', [MyExportController::class, 'index'])->name('exports.index');
+            Route::get('exports/{export}/link', [MyExportController::class, 'link'])->where('export', '[a-z_]+')->name('exports.link');
+            Route::get('exports/{export}/preview', [MyExportController::class, 'preview'])->middleware('throttle:30,1')->where('export', '[a-z_]+')->name('exports.preview');
             Route::post('maintenance-requests', [MaintenanceController::class, 'report'])->middleware('throttle:20,1')->name('maintenance-requests.store');
         });
 
@@ -162,6 +170,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
             Route::post('read-all', [NotificationController::class, 'markAllRead'])->name('read-all');
             Route::post('{id}/read', [NotificationController::class, 'markRead'])->whereUuid('id')->name('read');
+            Route::delete('{id}', [NotificationController::class, 'destroy'])->whereUuid('id')->name('destroy');
+            Route::post('clear', [NotificationController::class, 'clear'])->name('clear');
         });
 
         Route::patch('me/active-role', ActiveRoleController::class)->name('me.active-role');
@@ -267,6 +277,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::prefix('groups/{group}')->name('groups.')->scopeBindings()->group(function () {
             Route::get('/', [GroupController::class, 'show'])->name('show');
             Route::put('default-split', [GroupController::class, 'setDefaultSplit'])->name('default-split');
+            Route::post('hide', [GroupController::class, 'hide'])->name('hide');
+            Route::post('unhide', [GroupController::class, 'unhide'])->name('unhide');
             Route::put('members/{member}/role', [GroupController::class, 'setRole'])->name('members.role');
             Route::get('expenses', [GroupExpenseController::class, 'index'])->name('expenses.index');
             Route::put('expenses/{expense}/split', [GroupExpenseController::class, 'split'])->name('expenses.split');
@@ -274,6 +286,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::patch('expenses/{expense}', [GroupExpenseController::class, 'update'])->name('expenses.update');
             Route::delete('expenses/{expense}', [GroupExpenseController::class, 'destroy'])->name('expenses.destroy');
             Route::post('expenses/{expense}/corrections', [GroupExpenseController::class, 'correct'])->name('expenses.corrections.store');
+            Route::post('expenses/{expense}/paid', [GroupExpenseController::class, 'markPaid'])->name('expenses.paid');
             Route::get('balances', [RepaymentController::class, 'balances'])->name('balances');
             Route::get('repayments', [RepaymentController::class, 'index'])->name('repayments.index');
             Route::post('repayments', [RepaymentController::class, 'store'])->middleware('throttle:30,1')->name('repayments.store');

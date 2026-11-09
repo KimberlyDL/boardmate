@@ -1,6 +1,8 @@
 <?php
 
+use App\Enums\ApplicationStatus;
 use App\Enums\CaretakerAccessLevel;
+use App\Models\BookingApplication;
 use App\Models\RoomLeader;
 use App\Models\RoomOccupant;
 use App\Models\Tenancy;
@@ -186,4 +188,23 @@ it('stops a former leader from adding people', function () {
     RoomLeader::current()->where('room_id', $this->room->id)->update(['ended_on' => now('Asia/Manila')->toDateString()]);
 
     $this->actingAs($this->kim, 'sanctum')->postJson($this->list, ($this->person)())->assertNotFound();
+});
+
+it('refuses to list someone who stays or is reserved elsewhere, and withdraws their waiting applications', function () {
+    $elsewhere = makeProperty($this->owner, ['units' => ['count' => 1, 'rent_centavos' => 200000]]);
+    $busy = User::factory()->boarder()->create(['name' => 'Lito']);
+    Tenancy::factory()->forUnit($elsewhere->units()->first())->movedInOn(now('Asia/Manila')->subDays(10)->toDateString())->create(['tenant_id' => $busy->id]);
+
+    $this->actingAs($this->kim, 'sanctum')->postJson($this->list, ($this->person)(['email' => $busy->email]))
+        ->assertUnprocessable()->assertJsonValidationErrors('email');
+
+    $free = User::factory()->boarder()->create();
+    $listing = makeProperty($this->owner, ['units' => ['count' => 1, 'rent_centavos' => 200000]]);
+    $listing->forceFill(['latitude' => 14.6, 'longitude' => 121.0, 'is_published' => true, 'published_at' => now()])->save();
+    $this->actingAs($free, 'sanctum')->postJson("/api/v1/listings/{$listing->id}/applications", [
+        'planned_move_in_on' => now('Asia/Manila')->addDays(5)->toDateString(), 'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
+    ])->assertCreated();
+    $waiting = BookingApplication::where('boarder_id', $free->id)->sole();
+    $this->actingAs($this->kim, 'sanctum')->postJson($this->list, ($this->person)(['email' => $free->email]))->assertCreated();
+    expect($waiting->fresh()->status)->toBe(ApplicationStatus::Cancelled);
 });

@@ -44,18 +44,24 @@ class MemberExpenseService
      */
     public function add(ContributionGroup $group, GroupMember $me, array $data, ?UploadedFile $proof, User $by): GroupExpense
     {
+        $collect = ! empty($data['due_on']);
+        if ($collect && ! $me->role->canManage()) {
+            throw ValidationException::withMessages(['due_on' => 'Only the room leader or a moderator can collect for a bill due later.']);
+        }
         $payer = $this->payer($group, $me, $data['paid_by_member_id'] ?? null);
         [$method, $params, $participants] = $this->how($group, $data);
         $shares = $this->splitter->splitAmong($data['amount_centavos'], $method, $participants, $params);
 
-        $expense = DB::transaction(function () use ($group, $payer, $data, $method, $params, $proof, $by, $shares) {
+        $expense = DB::transaction(function () use ($group, $payer, $data, $method, $params, $proof, $by, $shares, $collect) {
             $expense = GroupExpense::create([
                 'group_id' => $group->id,
-                'kind' => GroupExpenseKind::MemberExpense,
+                // Collect first: the payer is the collector, who pays the bill once collected.
+                'kind' => $collect ? GroupExpenseKind::Collection : GroupExpenseKind::MemberExpense,
                 'paid_by_member_id' => $payer->id,
                 'description' => $data['description'],
                 'amount_centavos' => $data['amount_centavos'],
-                'spent_on' => $data['spent_on'],
+                'spent_on' => $collect ? ManilaDate::today()->toDateString() : $data['spent_on'],
+                'due_on' => $collect ? $data['due_on'] : null,
                 'split_method' => $method,
                 'split_params' => $params ?: null,
                 'proof_path' => $proof ? $this->files->store($proof, FilePurpose::GroupProof) : null,
@@ -85,11 +91,36 @@ class MemberExpenseService
                 'description' => $data['description'] ?? $expense->description,
                 'amount_centavos' => $amount,
                 'spent_on' => $data['spent_on'] ?? $expense->spent_on->toDateString(),
+                'due_on' => $expense->kind === GroupExpenseKind::Collection ? ($data['due_on'] ?? $expense->due_on?->toDateString()) : null,
                 'split_method' => $method,
                 'split_params' => $params ?: null,
             ]);
             $this->ledger->writeShares($expense, $shares);
         });
+
+        return $expense;
+    }
+
+    /**
+     * The collector paid the bill a "collect first" line was for. Optional
+     * proof (the receipt). Members who have not paid their share still owe it.
+     */
+    public function markPaid(GroupExpense $expense, string $paidOn, ?UploadedFile $proof): GroupExpense
+    {
+        if ($expense->kind !== GroupExpenseKind::Collection) {
+            throw ValidationException::withMessages(['expense' => 'Only a "collect first" bill is marked as paid.']);
+        }
+        if ($expense->paid_on !== null) {
+            throw ValidationException::withMessages(['expense' => 'This bill is already marked as paid.']);
+        }
+        $old = $expense->proof_path;
+        $expense->update([
+            'paid_on' => $paidOn,
+            'proof_path' => $proof ? $this->files->store($proof, FilePurpose::GroupProof) : $old,
+        ]);
+        if ($proof && $old) {
+            $this->files->delete($old, FilePurpose::GroupProof);
+        }
 
         return $expense;
     }
@@ -181,7 +212,7 @@ class MemberExpenseService
 
     private function assertOpen(GroupExpense $expense): void
     {
-        if ($expense->kind !== GroupExpenseKind::MemberExpense) {
+        if (! in_array($expense->kind, [GroupExpenseKind::MemberExpense, GroupExpenseKind::Collection], true)) {
             throw ValidationException::withMessages(['expense' => 'Only a member\'s own expense can be edited or deleted. Owner bills follow the owner; use a correction.']);
         }
         if ($this->ledger->repaidSince($expense)) {
@@ -204,6 +235,7 @@ class MemberExpenseService
                 'description' => $expense->description,
                 'share' => Money::format($share->amount_centavos),
                 'owed_to' => $expense->paidBy->name,
+                'due' => $expense->due_on?->format('M j'),
             ]);
         }
     }

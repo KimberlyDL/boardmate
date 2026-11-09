@@ -14,6 +14,7 @@ use App\Models\GroupMember;
 use App\Models\Room;
 use App\Models\RoomOccupant;
 use App\Models\Tenancy;
+use App\Services\Groups\GroupArchive;
 use App\Services\Groups\GroupService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,10 +34,13 @@ class GroupController extends Controller
     /**
      * My room groups
      *
-     * Every room group I am or was in, the current one first.
+     * Every room group I am or was in, the current one first. Groups I hid
+     * are left out unless `hidden=1`; `can_hide` says whether I may hide one
+     * now (left and settled up).
      */
-    public function mine(Request $request): JsonResponse
+    public function mine(Request $request, GroupArchive $archive): JsonResponse
     {
+        $showHidden = $request->boolean('hidden');
         $user = $request->user();
         $roomIds = Tenancy::where('tenant_id', $user->id)->pluck('room_id')
             ->merge(RoomOccupant::where('user_id', $user->id)->pluck('room_id'))->unique();
@@ -44,7 +48,7 @@ class GroupController extends Controller
         $groups = Room::withTrashed()->whereIn('id', $roomIds)->with('property')->get()
             ->map(fn (Room $room) => $this->groups->forRoom($room))
             ->map(fn (ContributionGroup $g) => ['group' => $g, 'me' => GroupAccess::member($user, $g)])
-            ->filter(fn (array $row) => $row['me'] !== null)
+            ->filter(fn (array $row) => $row['me'] !== null && ($showHidden || $row['me']->hidden_at === null))
             ->sortBy(fn (array $row) => $row['me']->isCurrent() ? 0 : 1)
             ->values();
 
@@ -55,7 +59,36 @@ class GroupController extends Controller
             'my_role' => $row['me']->role->value,
             'my_role_label' => $row['me']->role->label(),
             'is_current' => $row['me']->isCurrent(),
-        ]));
+            'is_hidden' => $row['me']->hidden_at !== null,
+            'can_hide' => $row['me']->hidden_at === null && $archive->blocker($row['me']) === null,
+        ]), meta: ['hidden_count' => $showHidden ? null : GroupMember::where('user_id', $user->id)->whereNotNull('hidden_at')->count()]);
+    }
+
+    /**
+     * Hide an old room group
+     *
+     * From my list only, once I left the room and am settled up. Nothing is
+     * deleted: the other members and the owner keep its records.
+     */
+    public function hide(Request $request, ContributionGroup $group, GroupArchive $archive): JsonResponse
+    {
+        $me = GroupAccess::member($request->user(), $group);
+        abort_unless($me, 404);
+        $archive->hide($me);
+
+        return ApiResponse::message('Room group hidden. Find it again under "Hidden groups".');
+    }
+
+    /**
+     * Show a hidden room group again
+     */
+    public function unhide(Request $request, ContributionGroup $group, GroupArchive $archive): JsonResponse
+    {
+        $me = GroupAccess::member($request->user(), $group);
+        abort_unless($me, 404);
+        $archive->unhide($me);
+
+        return ApiResponse::message('Room group shown again.');
     }
 
     /**

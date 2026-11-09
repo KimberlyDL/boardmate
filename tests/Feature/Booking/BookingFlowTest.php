@@ -38,7 +38,7 @@ function applyFor(User $boarder, int $propertyId, array $data = []): TestRespons
 {
     return test()->actingAs($boarder, 'sanctum')->postJson("/api/v1/listings/{$propertyId}/applications", $data + [
         'planned_move_in_on' => '2026-10-20',
-        'contact_phone' => '0917 123 4567',
+        'contact_phone' => '0917 123 4567', 'emergency_contact_name' => 'Rosa Reyes', 'emergency_contact_phone' => '0917 555 0000',
         'message' => 'Student at UST.',
     ]);
 }
@@ -280,4 +280,20 @@ it('applies to a room, and tells the boarder when the owner places them in anoth
 it('uses the only room of a one-room place without asking', function () {
     applyFor($this->kim, $this->property->id)->assertCreated()
         ->assertJsonPath('data.room.label', $this->property->rooms()->first()->label());
+});
+
+it('asks the applicant for their emergency contact, can save it to the profile, and shows it only to the owner', function () {
+    applyFor($this->kim, $this->property->id, ['emergency_contact_name' => '', 'emergency_contact_phone' => ''])
+        ->assertUnprocessable()->assertJsonValidationErrors(['emergency_contact_name', 'emergency_contact_phone']);
+
+    applyFor($this->kim, $this->property->id, [
+        'emergency_contact_name' => 'Lorna Santos', 'emergency_contact_relationship' => 'Mother',
+        'emergency_contact_phone' => '0918 222 3333', 'save_to_profile' => true,
+    ])->assertCreated()->assertJsonMissingPath('data.emergency_contact');
+
+    expect($this->kim->boarderProfile()->first()->emergency_contact_name)->toBe('Lorna Santos');
+
+    $id = BookingApplication::sole()->id;
+    $this->actingAs($this->owner, 'sanctum')->getJson("/api/v1/applications/{$id}")->assertOk()
+        ->assertJsonPath('data.emergency_contact', ['name' => 'Lorna Santos', 'relationship' => 'Mother', 'phone' => '0918 222 3333']);
 });

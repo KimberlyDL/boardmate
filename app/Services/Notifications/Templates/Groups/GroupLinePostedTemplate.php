@@ -32,6 +32,10 @@ class GroupLinePostedTemplate extends BaseTemplate
 
     private function sentence(array $data): string
     {
+        if (! empty($data['due'])) {
+            return "Room {$data['room_label']}: your share of {$data['description']} is {$data['share']}. Pay it to {$data['owed_to']} before {$data['due']}, when the bill is due.";
+        }
+
         return "Room {$data['room_label']}: your share of {$data['description']} is {$data['share']}, owed to {$data['owed_to']}.";
     }
 }
