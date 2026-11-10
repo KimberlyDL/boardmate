@@ -72,6 +72,8 @@ class MeteredBillService
     {
         $this->assertAccount($account);
         $this->assertDates($from, $to);
+        // A multipart form (the entry with a photo) sends the ids as text.
+        $waivedRoomIds = array_map('intval', $waivedRoomIds);
 
         $days = $this->occupantDays($account, $from, $to);
         if ($days === []) {

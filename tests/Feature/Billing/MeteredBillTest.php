@@ -116,6 +116,14 @@ it('stops when a room with a share has no leader, until it gets one or its share
         ->and(collect(UtilityBill::sole()->shares)->firstWhere('room_id', $this->roomA->id)['waived'])->toBeTrue();
 });
 
+it('waives a room sent as text by a multipart form, as the app does', function () {
+    enterMeralco(['waive_room_ids' => [(string) $this->roomA->id]])->assertCreated();
+
+    expect(Bill::where('room_id', $this->roomA->id)->exists())->toBeFalse()
+        ->and(Bill::sole()->payer_id)->toBe($this->leo->id)
+        ->and(collect(UtilityBill::sole()->shares)->firstWhere('room_id', $this->roomA->id)['waived'])->toBeTrue();
+});
+
 it('corrects a wrong total with the same split and an adjustment line on each bill (SC-14)', function () {
     // Two rooms with equal occupant-days: ₱1,800 is ₱900 each; corrected to ₱1,080 → ₱540 each, ₱360 credit each.
     RoomOccupant::where('name', 'Ericka')->delete();
